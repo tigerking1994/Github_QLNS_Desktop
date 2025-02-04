@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ReleaseNoteModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReleaseDate>2024-11-27T18:00:07.701445+07:00</ReleaseDate>
+	<NoteDetails>
+		<ReleaseNoteDetailModel>
+			<Module>Ngân sách</Module>
+			<Features/>
+			<BugFixes>
+				<string>Cập nhật báo cáo Phương án phân bổ dự toán - Theo Công văn 2344/QĐ-CTC</string>
+			</BugFixes>
+			<Improvements />
+		</ReleaseNoteDetailModel>
+	</NoteDetails>
+</ReleaseNoteModel>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReleaseNoteModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReleaseDate>2024-12-01T09:15:07.701445+07:00</ReleaseDate>
+	<NoteDetails>
+		<ReleaseNoteDetailModel>
+			<Module>Ngân sách</Module>
+			<Features>
+				<string>Thêm công thức cho báo cáo "Thống kê phân bổ dự toán theo đợt"</string>
+			</Features>
+			<Improvements />
+		</ReleaseNoteDetailModel>
+		<ReleaseNoteDetailModel>
+		<Module>Bảo hiểm xã hội</Module>
+			<Features>
+				<string>Quyết toán chi KCB quân y đơn vị: Bổ sung báo cáo "Bảng kê tổng hợp chi KCB tại quân y đơn vị"</string>
+				<string>Quyết toán chi KCB quân y đơn vị: Màn chi tiết chứng từ "Bổ sung cột Ghi chú cho phép nhập"</string>
+			</Features>
+		<Improvements />
+		</ReleaseNoteDetailModel>
+	</NoteDetails>
+</ReleaseNoteModel>

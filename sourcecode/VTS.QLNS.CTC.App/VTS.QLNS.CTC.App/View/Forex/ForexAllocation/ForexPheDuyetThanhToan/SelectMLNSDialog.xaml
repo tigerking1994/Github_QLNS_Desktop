@@ -1,0 +1,306 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Forex.ForexAllocation.ForexPheDuyetThanhToan.SelectMLNSDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Forex.ForexAllocation.ForexPheDuyetThanhToan"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+        xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+        mc:Ignorable="d"
+        Style="{StaticResource MaterialDesignWindow}"
+        x:Name="SelectMLNSDialogView"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Title="{Binding Title}">
+    <materialDesign:DialogHost Identifier="ChuyenQuyetToanDetail" DialogTheme="Inherit">
+        <Grid>
+            <Grid Margin="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <DockPanel>
+                        <materialDesign:PackIcon Kind="Dollar" Style="{StaticResource DialogScreenIconStyle}"/>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                            <TextBlock Text="{Binding Title}" FontWeight="Bold"></TextBlock>
+                            <TextBlock Text="{Binding Description}"></TextBlock>
+                        </StackPanel>
+                    </DockPanel>
+                    <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+                </StackPanel>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Danh sách mục lục ngân sách" FontWeight="SemiBold"></TextBlock>
+                        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
+                            <StackPanel Orientation="Horizontal" Margin="0 0 0 3">
+                                <Grid Width="105"
+                                  Visibility="{Binding ElementName=Lns, Path=Visibility}">
+                                    <TextBox
+                                    Margin="5 0 5 0"
+                                    materialDesign:HintAssist.Hint="--LNS--"
+                                    Text="{Binding ItemsMLNSFilter.Lns, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                </Grid>
+                                <Grid Width="100"
+                                  Visibility="{Binding ElementName=L, Path=Visibility}">
+                                    <TextBox
+                                    Margin="5 0 5 0"
+                                    materialDesign:HintAssist.Hint="--L--"
+                                    Text="{Binding ItemsMLNSFilter.L, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                </Grid>
+                                <Grid Width="100"
+                                  Visibility="{Binding ElementName=K, Path=Visibility}">
+                                    <TextBox
+                                    Margin="5 0 5 0"
+                                    materialDesign:HintAssist.Hint="--K--"
+                                    Text="{Binding ItemsMLNSFilter.sK, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                </Grid>
+                                <Grid Width="100"
+                                  Visibility="{Binding ElementName=M, Path=Visibility}">
+                                    <TextBox
+                                    Margin="5 0 5 0"
+                                    materialDesign:HintAssist.Hint="--M--"
+                                    Text="{Binding ItemsMLNSFilter.M, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                </Grid>
+                                <Grid Width="100"
+                                  Visibility="{Binding ElementName=Tm, Path=Visibility}">
+                                    <TextBox
+                                    Margin="5 0 5 0"
+                                    materialDesign:HintAssist.Hint="--TM--"
+                                    Text="{Binding ItemsMLNSFilter.Tm, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                </Grid>
+                                <Grid Width="100"
+                                  Visibility="{Binding ElementName=Ttm, Path=Visibility}">
+                                    <TextBox
+                                    Margin="5 0 5 0"
+                                    materialDesign:HintAssist.Hint="--TTM--"
+                                    Text="{Binding ItemsMLNSFilter.sTTM, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                </Grid>
+                                <Grid Width="100"
+                                  Visibility="{Binding ElementName=Ng, Path=Visibility}">
+                                    <TextBox
+                                    Margin="5 0 5 0"
+                                    materialDesign:HintAssist.Hint="--NG--"
+                                    Text="{Binding ItemsMLNSFilter.sNG, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                </Grid>
+                                <Grid Width="100"
+                                  Visibility="{Binding ElementName=Tng, Path=Visibility}">
+                                    <TextBox
+                                    Margin="5 0 5 0"
+                                    materialDesign:HintAssist.Hint="--TNG--"
+                                    Text="{Binding ItemsMLNSFilter.Tng, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                </Grid>
+                                <Grid Width="200"
+                                  Visibility="{Binding ElementName=MoTa, Path=Visibility}">
+                                    <TextBox
+                                    Margin="5 0 5 0"
+                                    materialDesign:HintAssist.Hint="--Nội dung--"
+                                    Text="{Binding ItemsMLNSFilter.MoTa, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                </Grid>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ScrollViewer Grid.Row="2" Grid.Column="0"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  Name="ScrollContainer">
+                            <StackPanel Orientation="Vertical">
+                                <component:ExpandedDataGrid 
+                                    x:Name="dgdDataMLNS"
+                                    BorderThickness="1"
+                                    CanUserResizeColumns="True"
+                                    CanUserAddRows="False"
+                                    CanUserDeleteRows="False"
+                                    IsSynchronizedWithCurrentItem="True"
+                                    GridLinesVisibility="All"
+                                    AutoGenerateColumns="False"
+                                    VerticalScrollBarVisibility="Auto"
+                                    HorizontalScrollBarVisibility="Auto"
+                                    Height="{Binding ElementName=ScrollContainer, Path=ViewportHeight}"
+                                    Width="{Binding ElementName=ScrollContainer, Path=ViewportWidth}"
+                                    MinWidth="1280"
+                                    ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                                    ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                                    RowStyle="{StaticResource DataGridRowDetail}"
+                                    CellStyle="{StaticResource DataGridCellDetail}"
+                                    Style="{StaticResource MaterialDesignDataGrid}"
+                                    ScrollViewer.CanContentScroll="True"
+                                    SelectedItem="{Binding SelectedMLNS}"
+                                    ItemsSource="{Binding Items, Mode=TwoWay}">
+                                    <DataGrid.Resources>
+                                        <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+                                    </DataGrid.Resources>
+                                    <DataGrid.Columns>
+                                        <materialDesign:DataGridTextColumn
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                            IsReadOnly="True"
+                                            Header="LNS"
+                                            Width="90"
+                                            x:Name="sLNS"
+                                            Binding="{Binding Lns}">
+                                        </materialDesign:DataGridTextColumn>
+                                        <materialDesign:DataGridTextColumn
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                            IsReadOnly="True"
+                                            Header="L"
+                                            Width="90"
+                                            x:Name="sL"
+                                            Binding="{Binding L}">
+                                        </materialDesign:DataGridTextColumn>
+                                        <materialDesign:DataGridTextColumn
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                            IsReadOnly="True"
+                                            Header="K"
+                                            Width="90"
+                                            x:Name="sK"
+                                            Binding="{Binding K}">
+                                        </materialDesign:DataGridTextColumn>
+                                        <materialDesign:DataGridTextColumn
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                            IsReadOnly="True"
+                                            Header="M"
+                                            Width="90"
+                                            x:Name="sM"
+                                            Binding="{Binding M}">
+                                        </materialDesign:DataGridTextColumn>
+                                        <materialDesign:DataGridTextColumn
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                            IsReadOnly="True"
+                                            Header="TM"
+                                            Width="90"
+                                            x:Name="sTM"
+                                            Binding="{Binding Tm}">
+                                        </materialDesign:DataGridTextColumn>
+                                        <materialDesign:DataGridTextColumn
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                            IsReadOnly="True"
+                                            Header="TTM"
+                                            Width="90"
+                                            x:Name="sTTM"
+                                            Binding="{Binding Ttm}">
+                                        </materialDesign:DataGridTextColumn>
+                                        <materialDesign:DataGridTextColumn
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                            IsReadOnly="True"
+                                            Header="NG"
+                                            Width="90"
+                                            x:Name="sNG"
+                                            Binding="{Binding Ng}">
+                                        </materialDesign:DataGridTextColumn>
+                                        <materialDesign:DataGridTextColumn
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                            IsReadOnly="True"
+                                            Header="TNG"
+                                            Width="90"
+                                            x:Name="sTNG"
+                                            Binding="{Binding Tng}">
+                                        </materialDesign:DataGridTextColumn>
+                                        <materialDesign:DataGridTextColumn
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                            IsReadOnly="True"
+                                            Header="Nội dung"
+                                            Width="*"
+                                            x:Name="sMoTa"
+                                            Binding="{Binding MoTa}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style>
+                                                    <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                                    <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </materialDesign:DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </component:ExpandedDataGrid>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+                <StackPanel Grid.Row="2">
+                    <StackPanel Orientation="Horizontal" Margin="0 10 0 0" HorizontalAlignment="Right">
+                        <Button 
+                            Margin="5 0 0 0"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            IsEnabled="{Binding IsDetail, Converter={StaticResource InvertBooleanConverter}}"
+                            Command="{Binding SaveCommand}"
+                            CommandParameter="{Binding ElementName=SelectMLNSDialogView}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ContentSave" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lưu dữ liệu</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button IsCancel="True" Margin="5 0 0 0" Style="{StaticResource MaterialDesignOutlinedButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="CloseOutline" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+            <component:ProgressDialog/>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

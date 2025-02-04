@@ -1,0 +1,425 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Investment.Initialization.InitializationProcess.InitializationProcessImport"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Investment.Initialization.InitializationProcess"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+        xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+        x:Name="RequestSettlementImportWindow"
+        Style="{StaticResource MaterialDesignWindow}"
+        mc:Ignorable="d"
+        Height="768" Width="1280"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Icon="/favicon.ico">
+    <materialDesign:DialogHost Identifier="RequestSettlementImportlWindow" DialogTheme="Inherit">
+        <Grid Margin="16">
+            <StackPanel Orientation="Vertical">
+                <DockPanel>
+                    <materialDesign:PackIcon Kind="PlaylistPlus" Style="{StaticResource DialogScreenIconStyle}"/>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                        <TextBlock  Text="{Binding Name}" FontWeight="Bold"></TextBlock>
+                        <TextBlock Text="{Binding Description}"></TextBlock>
+                    </StackPanel>
+                </DockPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Margin="0 8" Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" BorderThickness="1" BorderBrush="{DynamicResource MaterialDesignDivider}" Margin="0 10 0 0" Padding="5 0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    IsReadOnly="True"
+                                    materialDesign:HintAssist.Hint="Lựa chọn file Excel"
+                                    materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                    BorderThickness="0"
+                                    VerticalAlignment="Center" 
+                                    Text="{Binding FilePath}"/>
+                                <Button
+                                    Grid.Row="0"
+                                    Style="{DynamicResource MaterialDesignToolButton}"
+                                    Grid.Column="1"
+                                    Command="{Binding UploadFileCommand}">
+                                    <materialDesign:PackIcon Kind="FileUpload" Margin="8 0 0 0" />
+                                </Button>
+                            </Grid>
+                        </Border>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                <TextBox Margin="0 10 0 0" materialDesign:HintAssist.Hint="Năm khởi tạo(*)" Text="{Binding NamKhoiTao}"/>
+                                <ComboBox
+                                    Margin="10 0 0 0"
+                                    materialDesign:HintAssist.Hint="Đơn vị quản lý(*)"
+                                    Width="320px"
+                                    DisplayMemberPath="DisplayItem"
+                                    SelectedItem="{Binding SelectedDonVi}"
+                                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                    ItemsSource="{Binding DataDonVi}">
+                                </ComboBox>
+                                <DatePicker
+                                    Language="vi-VN"
+                                    Margin="10 10 0 0"
+                                    materialDesign:HintAssist.Hint="Ngày khởi tạo"
+                                    SelectedDate="{Binding NgayKhoiTao}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                <Button 
+                                    Width="200"
+                                    IsDefault="True"
+                                    Margin="20 10 0 0"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Command="{Binding ProcessFileCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="ContentSave" />
+                                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Kiểm tra file</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                        
+                    </Grid>
+                    <component:ExpandedDataGrid
+                        MinHeight="760"
+                        Grid.Row="2"
+                        x:Name="dgImportInitializationProcess"
+                        IsReadOnly="True"
+                        FrozenColumnCount="3"
+                        BorderThickness="1"
+                        CanUserResizeColumns="True"
+                        HorizontalScrollBarVisibility="Auto"
+                        CanUserAddRows="False"
+                        IsSynchronizedWithCurrentItem="True"
+                        GridLinesVisibility="All"
+                        RowStyle="{StaticResource DataGridRowIndex}"
+                        Style="{StaticResource MaterialDesignDataGrid}"
+                        ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AutoGenerateColumns="False">
+                        <DataGrid.Resources>
+                            <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Dự án" Binding="{Binding TenDuAn}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Mã loại công trình" Binding="{Binding SMaLoaiCongTrinh}"></DataGridTextColumn>
+
+                            <DataGridTemplateColumn x:Name="cbxCoQuanTaiChinh" Header="Cơ quan thanh toán">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox
+                                    IsEditable="True"
+                                    DisplayMemberPath="DisplayItem"
+                                    SelectedValuePath="ValueItem"
+                                    SelectedValue="{Binding ICoQuanThanhToan, UpdateSourceTrigger=LostFocus}"
+                                    ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.ItemsCoQuanTaiChinh}">
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <component:DataGridTextColumn
+                                x:Name="KHVN_VonBoTriHetNamTruoc"
+                                Header="Vốn bố trí hết năm trước"
+                                StringFormat="{}{0:N0}"
+                                Binding="{Binding FKHVN_VonBoTriHetNamTruocValue, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                                <DataGridColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                                <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                                    <Grid>
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Width">
+                                                                    <Setter.Value>
+                                                                        <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                            <Binding ElementName="KHVN_VonBoTriHetNamTruoc" Path="ActualWidth"/>
+                                                                            <Binding ElementName="KHVN_LKVonDaThanhToanTuKhoiCongDenHetNamTruoc" Path="ActualWidth"/>
+                                                                            <Binding ElementName="KHVN_TrongDoVonTamUngTheoCheDoChuaThuHoi" Path="ActualWidth"/>
+                                                                            <!--<Binding ElementName="KHVN_LKVonTamUngTheoCheDeChuaThuHoiNopDieuChinhGiamDenHetNamTruoc" Path="ActualWidth"/>-->
+                                                                            <Binding ElementName="KHVN_KeHoachVonKeoDaiSangNam" Path="ActualWidth"/>
+                                                                        </MultiBinding>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <TextBlock HorizontalAlignment="Center" Text="Kế hoạch vốn năm"/>
+                                                    </Grid>
+                                                </Canvas>
+                                            </Border>
+                                            <Border
+                                                Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                                <TextBlock Name="HeaderGroup" Text="{Binding}"/>
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridColumn.HeaderTemplate>
+                            </component:DataGridTextColumn>
+                            <component:DataGridTextColumn
+                                HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                HeaderTemplate="{StaticResource CenterHeader}"
+                                x:Name="KHVN_LKVonDaThanhToanTuKhoiCongDenHetNamTruoc"
+                                Header="Lũy kế vốn đã thanh toán từ khởi công đến hết năm trước"
+                                StringFormat="{}{0:N0}"
+                                Binding="{Binding FKHVN_LKVonDaThanhToanTuKhoiCongDenHetNamTruocValue, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                            <component:DataGridTextColumn 
+                                HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                HeaderTemplate="{StaticResource CenterHeader}"
+                                x:Name="KHVN_TrongDoVonTamUngTheoCheDoChuaThuHoi"
+                                Header="Trong đó vốn tạm ứng theo chế độ chưa thu hồi"
+                                StringFormat="{}{0:N0}"
+                                Binding="{Binding FKHVN_TrongDoVonTamUngTheoCheDoChuaThuHoiValue, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                            <!--<component:DataGridTextColumn
+                                HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                HeaderTemplate="{StaticResource CenterHeader}"
+                                x:Name="KHVN_LKVonTamUngTheoCheDeChuaThuHoiNopDieuChinhGiamDenHetNamTruoc"
+                                Header="Lũy kế vốn tạm ứng theo chế độ chưa thu hồi nộp điều chỉnh giảm đến hết năm trước"
+                                StringFormat="{}{0:N0}"
+                                Binding="{Binding FKHVN_LKVonTamUngTheoCheDoChuaThuHoiNopDieuChinhGiamDenHetNamTruocValue, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>-->
+                            <component:DataGridTextColumn 
+                                x:Name="KHVN_KeHoachVonKeoDaiSangNam"
+                                Header="Kế hoạch vốn kéo dài sang năm"
+                                StringFormat="{}{0:N0}"
+                                HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                HeaderTemplate="{StaticResource RightHeader}"
+                                Binding="{Binding FKHVN_KeHoachVonKeoDaiSangNamValue, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                            <component:DataGridTextColumn
+                                x:Name="KHUT_VonBoTriHetNamTruoc"
+                                Header="Vốn bố trí hết năm trước"
+                                StringFormat="{}{0:N0}"
+                                HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                Binding="{Binding FKHUT_VonBoTriHetNamTruocValue, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                                <DataGridColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                                <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                                    <Grid>
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Width">
+                                                                    <Setter.Value>
+                                                                        <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                            <Binding ElementName="KHVN_VonBoTriHetNamTruoc" Path="ActualWidth"/>
+                                                                            <Binding ElementName="KHVN_LKVonDaThanhToanTuKhoiCongDenHetNamTruoc" Path="ActualWidth"/>
+                                                                            <Binding ElementName="KHVN_TrongDoVonTamUngTheoCheDoChuaThuHoi" Path="ActualWidth"/>
+                                                                            
+                                                                            
+                                                                            <Binding ElementName="KHVN_KeHoachVonKeoDaiSangNam" Path="ActualWidth"/>
+                                                                        </MultiBinding>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <TextBlock HorizontalAlignment="Center" Text="Kế hoạch ứng trước"/>
+                                                    </Grid>
+                                                </Canvas>
+                                            </Border>
+                                            <Border
+                                        Grid.Row="1"
+                                        Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                        BorderThickness="0 1 1 0"
+                                        BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                                <TextBlock Name="HeaderGroup" Text="{Binding}"/>
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridColumn.HeaderTemplate>
+                            </component:DataGridTextColumn>
+                            <component:DataGridTextColumn
+                                HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                HeaderTemplate="{StaticResource CenterHeader}"
+                                x:Name="KHUT_LKVonDaThanhToanTuKhoiCongDenHetNamTruoc"
+                                Header="Lũy kế vốn đã thanh toán từ khởi công đến hết năm trước"
+                                StringFormat="{}{0:N0}"
+                                Binding="{Binding FKHUT_LKVonDaThanhToanTuKhoiCongDenHetNamTruocValue, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                            <component:DataGridTextColumn
+                                HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                HeaderTemplate="{StaticResource CenterHeader}"
+                                x:Name="KHUT_TrongDoVonTamUngTheoCheDoChuaThuHoi"
+                                Header="Trong đó vốn tạm ứng theo chế độ chưa thu hồi"
+                                StringFormat="{}{0:N0}"
+                                Binding="{Binding FKHUT_TrongDoVonTamUngTheoCheDoChuaThuHoiValue, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                            <component:DataGridTextColumn
+                                HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                HeaderTemplate="{StaticResource CenterHeader}"
+                                x:Name="KHUT_KeHoachUngTruocKeoDaiSangNam"
+                                Header="Kế hoạch ứng trước kéo dài sang năm"
+                                StringFormat="{}{0:N0}"
+                                Binding="{Binding FKHUT_KeHoachUngTruocKeoDaiSangNamValue, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                            <component:DataGridTextColumn
+                                HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                HeaderTemplate="{StaticResource RightHeader}"
+                                x:Name="KHUT_KeHoachUngTruocChuaThuHoi"
+                                Header="Kế hoạch ứng trước chưa thu hồi"
+                                StringFormat="{}{0:N0}"
+                                Binding="{Binding FKHUT_KeHoachUngTruocChuaThuHoiValue, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                            <DataGridTemplateColumn Header="Trạng thái">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ContentControl x:Name="content"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding ImportStatus}" Value="True">
+                                                <Setter TargetName="content" Property="ContentTemplate">
+                                                    <Setter.Value>
+                                                        <DataTemplate>
+                                                            <materialDesign:PackIcon Kind="CheckCircle" Foreground="Green" HorizontalAlignment="Center"/>
+                                                        </DataTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ImportStatus}" Value="False">
+                                                <Setter TargetName="content" Property="ContentTemplate">
+                                                    <Setter.Value>
+                                                        <DataTemplate>
+                                                            <materialDesign:PackIcon Kind="CloseCircle" Foreground="Red" HorizontalAlignment="Center"/>
+                                                        </DataTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsWarning}" Value="True">
+                                                <Setter TargetName="content" Property="ContentTemplate">
+                                                    <Setter.Value>
+                                                        <DataTemplate>
+                                                            <materialDesign:PackIcon Kind="WarningCircleOutline" Foreground="Orange" HorizontalAlignment="Center"/>
+                                                        </DataTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Lỗi">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ContentControl x:Name="Function"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding ImportStatus}" Value="False">
+                                                <Setter TargetName="Function" Property="ContentTemplate">
+                                                    <Setter.Value>
+                                                        <DataTemplate>
+                                                            <Button
+                                                                Style="{StaticResource MaterialDesignIconButton}"
+                                                                ToolTip="Xem thông tin lỗi"
+                                                                Width="25"
+                                                                Height="25"
+                                                                Command="{Binding Path=DataContext.ShowErrorCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
+                                                                <materialDesign:PackIcon
+                                                                    Foreground="DarkRed"
+                                                                    Width="15"
+                                                                    Height="15"
+                                                                    Kind="EyeRemove"/>
+                                                            </Button>
+                                                        </DataTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsWarning}" Value="True">
+                                                <Setter TargetName="Function" Property="ContentTemplate">
+                                                    <Setter.Value>
+                                                        <DataTemplate>
+                                                        </DataTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </component:ExpandedDataGrid>
+                </Grid>
+                <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+                <StackPanel Orientation="Horizontal" Margin="0 15 0 0" HorizontalAlignment="Right">
+                    <Button 
+                        Margin="5 0 0 0"
+                        Width="120"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding ResetDataCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Hủy bỏ"/>
+                        </StackPanel>
+                    </Button>
+                    <Button 
+                        IsDefault="True"
+                        Margin="5 0 0 0"
+                        IsEnabled="{Binding IsSaveData}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding SaveCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lưu dữ liệu</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button
+                        IsCancel="True"
+                        Margin="5 0 0 0"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        CommandParameter="{Binding ElementName=RequestSettlementImportWindow}"
+                        Command="{Binding CloseCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CloseOutline" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Đóng"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

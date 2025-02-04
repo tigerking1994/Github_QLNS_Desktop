@@ -1,0 +1,171 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.NewSalary.NewTransferData.NewTransferCadres.NewTransferDataDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.NewSalary.NewTransferData.NewTransferCadres"
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:converters="clr-namespace:VTS.QLNS.CTC.App.Converters"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:extensions="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component">
+    <UserControl.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}"/>
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid Margin="16">
+            <StackPanel>
+                <DockPanel>
+                    <materialDesign:PackIcon Kind="FolderSwapOutline" Style="{StaticResource DialogScreenIconStyle}"/>
+                    <StackPanel 
+                        Orientation="Vertical" 
+                        VerticalAlignment="Center" 
+                        Margin="10 0">
+                        <TextBlock  Text="{Binding Title}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Description}"/>
+                    </StackPanel>
+                </DockPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+                <TextBlock
+                    Margin="0 5 0 0"
+                    Text="Chọn file để import"
+                    FontWeight="SemiBold"
+                    extensions:TextBlockTransform.CharacterCasing="Upper">
+                </TextBlock>
+
+                <Grid Margin="0 10 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox
+                        materialDesign:HintAssist.Hint="Chọn tháng để import"
+                        materialDesign:TextFieldAssist.HasClearButton="False"
+                        DisplayMemberPath="DisplayItem"
+                        SelectedValuePath="ValueItem"
+                        ItemsSource="{Binding Months}"
+                        SelectedItem="{Binding MonthSelected}"
+                        Style="{StaticResource SearchBarHorizontalComboBoxStyle}">
+                    </ComboBox>
+                    <ComboBox
+                        Grid.Column="1"
+                        materialDesign:HintAssist.Hint="Chọn năm để import"
+                        materialDesign:TextFieldAssist.HasClearButton="False"
+                        DisplayMemberPath="DisplayItem"
+                        SelectedValuePath="ValueItem"
+                        ItemsSource="{Binding Years}"
+                        SelectedItem="{Binding YearSelected}"
+                        Style="{StaticResource SearchBarHorizontalComboBoxStyle}">
+                    </ComboBox>
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                    <TextBox 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        materialDesign:HintAssist.Hint="Chọn file DBF đối tượng hưởng lương"
+                        TextWrapping="Wrap"
+                        AcceptsReturn="True"
+                        Text="{Binding DoiTuongPath}"
+                        IsReadOnly="True"
+                        MinWidth="350"/>
+                    <Button
+                        Style="{DynamicResource MaterialDesignToolButton}"
+                        Grid.Column="1"
+                        Command="{Binding UploadFileDoiTuongCommand}">
+                        <materialDesign:PackIcon
+                            Kind="Import"
+                            Margin="8 0 0 0" />
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                    <TextBox 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        materialDesign:HintAssist.Hint="Chọn file DONVI.DBF"
+                        Text="{Binding DonViPath}"
+                        IsReadOnly="True"
+                        MinWidth="350"/>
+                    <Button
+                        Style="{DynamicResource MaterialDesignToolButton}"
+                        Grid.Column="1"
+                        Command="{Binding UploadFileDonViCommand}">
+                        <materialDesign:PackIcon
+                            Kind="Import"
+                            Margin="8 0 0 0" />
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                    <TextBox 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        materialDesign:HintAssist.Hint="Chọn file DMLG.DBF"
+                        Text="{Binding DmLuongPath}"
+                        IsReadOnly="True"
+                        MinWidth="350"/>
+                    <Button
+                        Style="{DynamicResource MaterialDesignToolButton}"
+                        Grid.Column="1"
+                        Command="{Binding UploadFileDmLuongCommand}">
+                        <materialDesign:PackIcon
+                            Kind="Import"
+                            Margin="8 0 0 0" />
+                    </Button>
+                </StackPanel>
+                <CheckBox
+                    materialDesign:HintAssist.Hint="Chuyển dữ liệu BTL Biên Phòng"
+                    Content="Chuyển dữ liệu BTL Biên Phòng"
+                    VerticalAlignment="Center"
+                    IsChecked="{Binding IsBienPhong}"
+                    Margin="0 10 0 5">
+                </CheckBox>
+                <CheckBox
+                    materialDesign:HintAssist.Hint="Sử dụng mẫu 2"
+                    Content="Sử dụng mẫu 2"
+                    VerticalAlignment="Center"
+                    IsChecked="{Binding IsMau2}"
+                    Margin="0 10 0 5">
+                </CheckBox>
+                <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+                <StackPanel Orientation="Horizontal" Margin="0 15 0 0" HorizontalAlignment="Right">
+                    <Button
+                        Margin="5 0 0 0"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding RefreshCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Làm mới (F5)</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button
+                        extensions:Permission.Identifier="NEW_SALARY_CHUYEN_DOI_DU_LIEU_DOI_TUONG_DIALOG_CHOOSE"
+                        IsEnabled="{Binding IsSaveData}"
+                        Margin="5 0 0 0"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding ChooseCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Import" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Chọn</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button
+                        IsCancel="True"
+                        Margin="5 0 0 0"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CloseOutline" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                        </StackPanel>
+                        <Button.CommandParameter>
+                            <system:Boolean>False</system:Boolean>
+                        </Button.CommandParameter>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <component:ProgressDialog />
+    </Grid>
+</UserControl>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ReleaseNoteModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReleaseDate>2024-12-01T09:15:07.701445+07:00</ReleaseDate>
+	<NoteDetails>
+		<ReleaseNoteDetailModel>
+			<Module>Ngân sách</Module>
+			<Features>
+				<string>Sửa làm tròn số liệu khi in các báo cáo phân bổ dự toán (Dự toán)</string>
+				<string>Thêm công thức cho báo cáo "Thông báo phân bổ dự toán - tờ bìa"</string>
+			</Features>
+			<BugFixes>
+				<string>Thêm validate bỏ chọn mục lục ngân sách trong màn sửa lập dự toán đầu năm (Thu nộp ngân sách)</string>
+			</BugFixes>
+			<Improvements />
+		</ReleaseNoteDetailModel>
+	</NoteDetails>
+</ReleaseNoteModel>

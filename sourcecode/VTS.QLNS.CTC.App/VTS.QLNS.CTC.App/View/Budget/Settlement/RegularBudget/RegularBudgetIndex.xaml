@@ -1,0 +1,671 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Budget.Settlement.RegularBudget.RegularBudgetIndex"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:utility="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:regularbudget="clr-namespace:VTS.QLNS.CTC.App.ViewModel.Budget.Settlement.RegularBudget"
+             d:DataContext="{d:DesignInstance Type=regularbudget:RegularBudgetIndexViewModel}"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <UserControl.InputBindings>
+        <KeyBinding Key="F3"
+                    Command="{Binding AddCommand}" />
+        <KeyBinding Key="F4"
+                    Command="{Binding DeleteCommand}" />
+        <KeyBinding Key="F5"
+                    Command="{Binding RefreshCommand}" />
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <materialDesign:PackIcon Kind="{Binding IconKind}"
+                                     Style="{StaticResource HeaderIconStyle}" />
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold"
+                           Text="{Binding Name}"
+                           ext:TextBlockTransform.CharacterCasing="Upper" />
+                <TextBlock Text="{Binding Description}" />
+                <Separator Margin="0 5 0 0"
+                           Background="{DynamicResource MaterialDesignDivider}" />
+            </StackPanel>
+        </DockPanel>
+        <ScrollViewer Grid.Row="1"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Disabled">
+            <StackPanel Margin="0 5"
+                        Orientation="Vertical">
+                <StackPanel Orientation="Horizontal"
+                            Margin="0 0 0 3">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type ComboBox}"
+                               BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <Setter Property="Width"
+                                    Value="150" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <StackPanel Orientation="Horizontal"
+                                ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_PANEL_ADD_EDIT">
+                        <Button x:Name="btnAdd"
+                                Command="{Binding AddCommand}"
+                                Style="{StaticResource SearchBarBtnStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Plus" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Tạo mới (F3)" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button Style="{StaticResource SearchBarBtnStyle}"
+                                Command="{Binding UpdateCommand}"
+                                IsEnabled="{Binding IsEdit}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="AccountEdit" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Sửa" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_DELETE"
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding DeleteCommand}"
+                            IsEnabled="{Binding IsDelete}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Delete" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Xóa (F4)" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_DETAIL"
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            ToolTip="Nhập số liệu chứng từ chi tiết (Nhấp đúp chuột)"
+                            Command="{Binding SelectionDoubleClickCommand}"
+                            CommandParameter="{Binding SelectedItem}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="LightningBoltOutline" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Button ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_LOCK"
+                                Style="{StaticResource SearchBarBtnStyle}"
+                                IsEnabled="{Binding IsButtonEnable}"
+                                Command="{Binding LockUnLockCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="{Binding IsLock, Converter={StaticResource InvertBooleanToLockIconConverter}, ConverterParameter='Lock;LockOpen'}" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="{Binding IsLock, Converter={StaticResource InvertBooleanToLockStatusConverter}}" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button Style="{StaticResource SearchBarBtnStyle}"
+                            ToolTip="F5 (Refresh)"
+                            Command="{Binding RefreshCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="(F5)" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <StackPanel Orientation="Horizontal"
+                                ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_PANEL_AGGREGATE">
+                        <Button Style="{StaticResource SearchBarBtnStyle}"
+                                Command="{Binding AggregateCommand}"
+                                IsEnabled="{Binding IsAggregate}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Sigma" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Tổng hợp" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    </StackPanel>
+
+                    <Button Style="{StaticResource SearchBarBtnStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CodeJson" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Json" />
+                            <materialDesign:PopupBox Margin="-10 0 0 0"
+                                                     Grid.Column="1"
+                                                     HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel>
+                                    <Button Command="{Binding ImportJsonCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FileImportOutline" />
+                                            <TextBlock Margin="10 0 10 0"
+                                                       Style="{StaticResource SearchBarBtnTextStyle}"
+                                                       Text="Import từ file Json" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Command="{Binding ExportJsonCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="CodeJson" />
+                                            <TextBlock Margin="10 0 10 0"
+                                                       Style="{StaticResource SearchBarBtnTextStyle}"
+                                                       Text="Export file Json" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+
+                    <!--<Button 
+                        Style="{StaticResource SearchBarBtnStyle}" 
+                        Command="{Binding ExcelCommand}"
+                        ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_EXCEL">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileExcel" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Excel"/>
+                            <materialDesign:PopupBox
+                                Margin="-10 0 0 0"
+                                Grid.Column="1" 
+                                HorizontalAlignment="Right"
+                                IsPopupOpen="{Binding IsOpenExcelPopup, Mode=TwoWay}">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel>
+                                    <Button 
+                                        ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_EXCEL_IMPORT"
+                                        Command="{Binding ImportDataCommand}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FileImportOutline" />
+                                            <TextBlock Margin="10 0 10 0" Style="{StaticResource SearchBarBtnTextStyle}" Text="Nhận dữ liệu từ tệp mã hóa"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button 
+                                        ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_EXCEL_EXPORT"
+                                        IsEnabled="{Binding IsExportAggregateData}"
+                                        Command="{Binding ExportDataCommand}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FileExportOutline" />
+                                            <TextBlock Margin="10 0 10 0" Style="{StaticResource SearchBarBtnTextStyle}" Text="Xuất dữ liệu ra tệp"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button 
+                                        ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_EXCEL_EXPORT"
+                                        IsEnabled="{Binding IsExportAggregateData}"
+                                        Command="{Binding ExportAggregateDataCommand}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FileExportOutline" />
+                                            <TextBlock Margin="10 0 10 0" Style="{StaticResource SearchBarBtnTextStyle}" Text="Xuất dữ liệu ra tệp theo tiêu chí "/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>-->
+
+                    <Button Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding ImportDataCommand}"
+                            ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_EXCEL">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileExcel" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Nhận dữ liệu"></TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+
+                    <Button Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding ExcelCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Uplay" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Gửi dữ liệu" />
+                            <materialDesign:PopupBox Margin="-10 0 0 0"
+                                                     Grid.Column="1"
+                                                     HorizontalAlignment="Right"
+                                                     IsPopupOpen="{Binding IsOpenExcelPopup, Mode=TwoWay}">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel>
+                                    <Button IsEnabled="{Binding IsButtonSendDataEnable}"
+                                            ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_EXCEL_IMPORT_HTTP"
+                                            Command="{Binding UploadFileCommandHTTP}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FileExportOutline" />
+                                            <TextBlock Margin="10 0 10 0"
+                                                       Style="{StaticResource SearchBarBtnTextStyle}"
+                                                       Text="Gửi dữ liệu qua mạng HTTP" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button IsEnabled="{Binding IsButtonSendDataEnable}"
+                                            ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_EXCEL_IMPORT_FTP"
+                                            Command="{Binding UploadFileCommandFTP}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FileExportOutline" />
+                                            <TextBlock Margin="10 0 10 0"
+                                                       Style="{StaticResource SearchBarBtnTextStyle}"
+                                                       Text="Gửi dữ liệu qua mạng FTP" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_EXCEL_EXPORT"
+                                            IsEnabled="{Binding IsExportAggregateData}"
+                                            Command="{Binding ExportDataCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FileExportOutline" />
+                                            <TextBlock Margin="10 0 10 0"
+                                                       Style="{StaticResource SearchBarBtnTextStyle}"
+                                                       Text="Xuất dữ liệu ra tệp" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_EXCEL_EXPORT"
+                                            IsEnabled="{Binding IsExportAggregateData}"
+                                            Command="{Binding ExportAggregateDataCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FileExportOutline" />
+                                            <TextBlock Margin="10 0 10 0"
+                                                       Style="{StaticResource SearchBarBtnTextStyle}"
+                                                       Text="Xuất dữ liệu ra tệp theo tiêu chí " />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+
+                    <!--Gui du lieu-->
+                    <!--<Button
+                            IsEnabled="{Binding IsButtonSendDataEnable}"
+                            Style="{StaticResource SearchBarBtnStyle}" 
+                            Command="{Binding UploadFileCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Uplay" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Gửi dữ liệu"></TextBlock>
+                        </StackPanel>
+                    </Button>-->
+                    <!--End Gui du lieu-->
+                    <!--<Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />-->
+
+                    <Button x:Name="btnPrint"
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding PrintCommand}"
+                            ext:Permission.Identifier="BUDGET_SETTLEMENT_REGULARBUDGET_INDEX_BTN_PRINT_REPORT">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Printer" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="In báo cáo" />
+                            <materialDesign:PopupBox Margin="-10 0 0 0"
+                                                     Grid.Column="1"
+                                                     HorizontalAlignment="Right"
+                                                     IsPopupOpen="{Binding IsOpenPrintPopup, Mode=TwoWay}">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel>
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_COMMUNICATE_SETTLEMENT_LNS}"
+                                            Content="In thông tri quyết toán - LNS" />
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_COMMUNICATE_SETTLEMENT_AGENCY}"
+                                            Content="In thông tri quyết toán - Đơn vị" />
+                                    <Separator Style="{StaticResource MaterialDesignLightSeparator}"
+                                               Background="Gray"
+                                               Margin="20 0 20 0" />
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_REGULARLY_SETTLEMENT}"
+                                            Content="Tổng hợp quý - Quyết toán thường xuyên" />
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_DEFENSE_SETTLEMENT}"
+                                            Content="Tổng hợp quý - Quyết toán nghiệp vụ, quốc phòng khác" />
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_STATE_SETTLEMENT}"
+                                            Content="Tổng hợp quý - Quyết toán nhà nước" />
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_FOREX_SETTLEMENT}"
+                                            Content="Tổng hợp quý - Quyết toán ngoại hối" />
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_EXPENSE_SETTLEMENT}"
+                                            Content="Tổng hợp quý - Quyết toán kinh phí khác" />
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_LNS_SETTLEMENT}"
+                                            Content="Tổng hợp quyết toán - Tất cả LNS" />
+                                    <Separator Style="{StaticResource MaterialDesignLightSeparator}"
+                                               Background="Gray"
+                                               Margin="20 0 20 0" />
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_SUMMARY_AGENCY}"
+                                            Content="Tổng hợp quyết toán (MLNS hàng dọc - Đơn vị hàng ngang)" />
+                                    <Separator Style="{StaticResource MaterialDesignLightSeparator}"
+                                               Background="Gray"
+                                               Margin="20 0 20 0" />
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_ESTIMATE_SETTLEMENT}"
+                                            Content="Tổng hợp số dự toán - quyết toán" />
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_RECEIVE_SETTLEMENT}"
+                                            Content="Báo cáo tình hình nhận và quyết toán kinh phí" />
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_SUMMARY_YEAR_SETTLEMENT}"
+                                            Content="Quyết toán năm - LNS" />
+                                    <Button Command="{Binding PrintActionCommand}"
+                                            CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_REPORT_PUBLIC_SETTLEMENT}"
+                                            Content="Công khai quyết toán thu, chi NSNN - TT57" />
+                                    <!--<Button 
+                                    Command="{Binding PrintActionCommand}"
+                                    CommandParameter="{x:Static localEnum:SettlementPrintType.PRINT_YEAR_SETTLEMENT_SUMARY_BUBGET}"    
+                                    Content="Quyết toán năm - Tổng hợp năm ngân sách"/>-->
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button x:Name="btnShowCol"
+                            Style="{StaticResource SearchBarBtnStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Ẩn/hiện cột" />
+                            <materialDesign:PopupBox Name="pbDynamicColumn"
+                                                     Margin="-10 0 0 0"
+                                                     HorizontalAlignment="Right"
+                                                     StaysOpen="True">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <ComboBox Name="cbFrozenColumn"
+                              materialDesign:HintAssist.Hint="Cố định cột"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem" />
+                </StackPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}" />
+                <StackPanel Orientation="Horizontal"
+                            Margin="0 0 0 3">
+                    <Label VerticalContentAlignment="Bottom"
+                           Style="{StaticResource SearchBarLabelStyle}"
+                           Content="Tìm kiếm" />
+                    <ComboBox Margin="10 0 10 0"
+                              materialDesign:HintAssist.Hint="-- Tháng --"
+                              materialDesign:TextFieldAssist.HasClearButton="True"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              SelectedItem="{Binding MonthSelected}"
+                              ItemsSource="{Binding Months}">
+                    </ComboBox>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <ComboBox Margin="10 0 10 0"
+                              materialDesign:HintAssist.Hint="-- Đơn vị --"
+                              materialDesign:TextFieldAssist.HasClearButton="True"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              SelectedItem="{Binding AgencySelected}"
+                              ItemsSource="{Binding Agencies}"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                    </ComboBox>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <ComboBox materialDesign:HintAssist.Hint="-- Trạng thái khóa --"
+                              materialDesign:TextFieldAssist.HasClearButton="False"
+                              IsEditable="False"
+                              DisplayMemberPath="DisplayItem"
+                              IsTextSearchEnabled="True"
+                              SelectedItem="{Binding LockStatusSelected, UpdateSourceTrigger=PropertyChanged}"
+                              Style="{StaticResource SearchBarHorizontalComboBoxStyle}"
+                              ItemsSource="{Binding LockStatus}">
+                    </ComboBox>
+                </StackPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}" />
+                <StackPanel Margin="0 8 0 0"
+                            Orientation="Horizontal">
+                    <RadioButton x:Name="RbRegularBudgetIndex"
+                                 Style="{StaticResource MaterialDesignTabRadioButton}"
+                                 GroupName="TabIndex"
+                                 IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static utility:ImportTabIndex.Data}}"
+                                 Content="Danh sách chứng từ" />
+                    <RadioButton x:Name="RbRegularBudgetSummaryIndex"
+                                 Visibility="{Binding IsQuanLyDonViCha, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                 Style="{StaticResource MaterialDesignTabRadioButton}"
+                                 GroupName="TabIndex"
+                                 IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static utility:ImportTabIndex.Aggregate}}"
+                                 Content="Chứng từ tổng hợp" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <Grid Row="2">
+            <component:ExpandedDataGrid x:Name="DgRegularBudgetIndex"
+                                        Visibility="{Binding IsChecked, ElementName=RbRegularBudgetIndex, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        VerticalAlignment="Top"
+                                        ItemsSource="{Binding SettlementVouchers}"
+                                        AutoGenerateColumns="False"
+                                        CanUserResizeColumns="True"
+                                        BorderThickness="1"
+                                        HorizontalScrollBarVisibility="Auto"
+                                        FrozenColumnCount="4"
+                                        CanUserAddRows="False"
+                                        IsReadOnly="True"
+                                        GridLinesVisibility="All"
+                                        ColumnInfo="{Binding Columns}"
+                                        ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                                        ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                                        RowStyle="{StaticResource DataGridRowIndex}"
+                                        Style="{StaticResource MaterialDesignDataGrid}"
+                                        ext:DataGridBehavior.LastColumnFill="True"
+                                        SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                <DataGrid.Resources>
+                    <helper:BindingProxy x:Key="DataContextProxy"
+                                         Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn IsReadOnly="False"
+                                            Binding="{Binding Selected,UpdateSourceTrigger=PropertyChanged}"
+                                            ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                        <DataGridCheckBoxColumn.Header>
+                            <Border Background="Transparent">
+                                <CheckBox IsChecked="{Binding Data.IsAllItemsSelected, Source={StaticResource DataContextProxy}}" />
+                            </Border>
+                        </DataGridCheckBoxColumn.Header>
+                        <DataGridCheckBoxColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}"
+                                   BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Center" />
+                            </Style>
+                        </DataGridCheckBoxColumn.HeaderStyle>
+                    </DataGridCheckBoxColumn>
+                    <DataGridTextColumn Header="Số chứng từ"
+                                        Binding="{Binding SSoChungTu}" />
+                    <DataGridTextColumn Header="Đơn vị"
+                                        Width="*"
+                                        Binding="{Binding STenDonViDisplay}" />
+                    <DataGridTextColumn Header="LNS"
+                                        Width="200"
+                                        Binding="{Binding SDslns}"
+                                        ElementStyle="{StaticResource DataGridTextColumnStyle}" />
+                    <DataGridTextColumn Header="Ngày chứng từ"
+                                        Binding="{Binding DNgayChungTu, Converter={StaticResource DateTimeToStringConverter}}" />
+                    <DataGridTextColumn Header="Mô tả"
+                                        Binding="{Binding SMoTa}" />
+                    <DataGridTextColumn Header="Tháng/Quý"
+                                        Binding="{Binding SThangQuyMoTa}" />
+                    <DataGridTextColumn Header="Đề nghị"
+                                        Binding="{Binding FTongTuChiDeNghi, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}" />
+                    <DataGridTextColumn Header="Phê duyệt"
+                                        Binding="{Binding FTongTuChiPheDuyet, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}" />
+                    <DataGridTextColumn Header="Người tạo"
+                                        Binding="{Binding SNguoiTao}" />
+                    <DataGridTextColumn Header="Trạng thái"
+                                        Binding="{Binding BDaTongHopString}"
+                                        Visibility="{Binding Data.IsQuanLyDonViCha, Converter={StaticResource InvertBooleanToVisibilityConverter}, Source={StaticResource DataContextProxy}}" />
+                    <DataGridTemplateColumn Header="Khóa"
+                                            MaxWidth="70"
+                                            Width="70"
+                                            MinWidth="70">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ContentControl x:Name="content"
+                                                HorizontalAlignment="Center" />
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding BKhoa}"
+                                                 Value="True">
+                                        <Setter TargetName="content"
+                                                Property="ContentTemplate">
+                                            <Setter.Value>
+                                                <DataTemplate>
+                                                    <materialDesign:PackIcon Kind="Lock" />
+                                                </DataTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </component:ExpandedDataGrid>
+            <component:ExpandedDataGrid x:Name="DgRegularBudgetSummaryIndex"
+                                        Visibility="{Binding IsChecked, ElementName=RbRegularBudgetSummaryIndex, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        VerticalAlignment="Top"
+                                        ItemsSource="{Binding SettlementVoucherSummaries}"
+                                        AutoGenerateColumns="False"
+                                        CanUserResizeColumns="True"
+                                        BorderThickness="1"
+                                        HorizontalScrollBarVisibility="Auto"
+                                        FrozenColumnCount="4"
+                                        CanUserAddRows="False"
+                                        IsReadOnly="True"
+                                        GridLinesVisibility="All"
+                                        ColumnInfo="{Binding Columns}"
+                                        ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                                        ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                                        RowStyle="{StaticResource DataGridRowIndexExpand}"
+                                        Style="{StaticResource MaterialDesignDataGrid}"
+                                        ext:DataGridBehavior.LastColumnFill="True"
+                                        SelectedItem="{Binding SelectedItemSummary, Mode=TwoWay}">
+                <DataGrid.Resources>
+                    <helper:BindingProxy x:Key="DataContextProxy"
+                                         Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn IsReadOnly="False"
+                                            Binding="{Binding Selected, UpdateSourceTrigger=PropertyChanged}"
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                        <DataGridCheckBoxColumn.Header>
+                            <Border Background="Transparent">
+                                <CheckBox IsChecked="{Binding Data.IsAllItemSummariesSelected, Source={StaticResource DataContextProxy}}" />
+                            </Border>
+                        </DataGridCheckBoxColumn.Header>
+                        <DataGridCheckBoxColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}"
+                                   BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Center" />
+                            </Style>
+                        </DataGridCheckBoxColumn.HeaderStyle>
+                        <DataGridCheckBoxColumn.ElementStyle>
+                            <Style TargetType="CheckBox"
+                                   BasedOn="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChildSummary}"
+                                                 Value="True">
+                                        <Setter Property="Visibility"
+                                                Value="Hidden" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridCheckBoxColumn.ElementStyle>
+                    </DataGridCheckBoxColumn>
+                    <DataGridTemplateColumn Header="Số chứng từ">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <ToggleButton Visibility="{Binding IsChildSummary, Converter={StaticResource InvertBooleanToVisibilityHiddenConverter}}"
+                                                  Template="{StaticResource SimpleExpanderButtonTemp}"
+                                                  IsChecked="{Binding IsCollapse, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Text="{Binding SSoChungTu}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Đơn vị"
+                                        Width="*"
+                                        Binding="{Binding STenDonViDisplay}" />
+                    <DataGridTextColumn Header="LNS"
+                                        Width="200"
+                                        Binding="{Binding SDslns}"
+                                        ElementStyle="{StaticResource DataGridTextColumnStyle}" />
+                    <DataGridTextColumn Header="Ngày chứng từ"
+                                        Binding="{Binding DNgayChungTu, Converter={StaticResource DateTimeToStringConverter}}" />
+                    <DataGridTextColumn Header="Mô tả"
+                                        Binding="{Binding SMoTa}" />
+                    <DataGridTextColumn Header="Tháng/Quý"
+                                        Binding="{Binding SThangQuyMoTa}" />
+                    <DataGridTextColumn Header="Đề nghị"
+                                        Binding="{Binding FTongTuChiDeNghi, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}" />
+                    <DataGridTextColumn Header="Phê duyệt"
+                                        Binding="{Binding FTongTuChiPheDuyet, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}" />
+                    <DataGridTextColumn Header="Người tạo"
+                                        Binding="{Binding SNguoiTao}" />
+                    <DataGridTextColumn Header="Trạng thái"
+                                        Binding="{Binding STrangThai}" />
+                    <DataGridTextColumn Header="Chứng từ tổng hợp"
+                                        Binding="{Binding STongHop}" />
+                    <DataGridTemplateColumn x:Name="TrangThaiGui"
+                                            Header="Trạng thái gửi">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <materialDesign:PackIcon Kind="{Binding TypeIcon}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Khóa"
+                                            MaxWidth="70"
+                                            Width="70"
+                                            MinWidth="70">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ContentControl x:Name="content"
+                                                HorizontalAlignment="Center" />
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding BKhoa}"
+                                                 Value="True">
+                                        <Setter TargetName="content"
+                                                Property="ContentTemplate">
+                                            <Setter.Value>
+                                                <DataTemplate>
+                                                    <materialDesign:PackIcon Kind="Lock" />
+                                                </DataTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </component:ExpandedDataGrid>
+        </Grid>
+        <component:ProgressDialog Grid.Row="2"
+                                  Margin="-200 -200 0 0" />
+    </Grid>
+</UserControl>

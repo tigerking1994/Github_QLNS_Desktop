@@ -1,0 +1,799 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.NewSalary.NewReport.NewReportDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:report="clr-namespace:VTS.QLNS.CTC.App.ViewModel.NewSalary.NewReport"
+             d:DataContext="{d:DesignInstance Type=report:NewReportDialogViewModel}">
+    <Grid Margin="16">
+        <StackPanel Orientation="Vertical">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="FileExcelOutline"
+                                         Style="{StaticResource DialogScreenIconStyle}" />
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            Margin="10 0">
+                    <TextBlock Text="{Binding Title}"
+                               FontWeight="Bold" />
+                    <TextBlock Text="{Binding Description}" />
+                </StackPanel>
+            </DockPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}" />
+            <Grid Margin="0 8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <StackPanel.Resources>
+                        <Style TargetType="ComboBox"
+                               BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating"
+                                    Value="True" />
+                            <Setter Property="Margin"
+                                    Value="0 2 10 2" />
+                            <Setter Property="Width"
+                                    Value="350" />
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Top" />
+                        </Style>
+                        <Style TargetType="TextBox"
+                               BasedOn="{StaticResource MaterialDesignTextBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating"
+                                    Value="True" />
+                            <Setter Property="Margin"
+                                    Value="0 2 10 2" />
+                            <Setter Property="Width"
+                                    Value="350" />
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Top" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <!--<Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Text="{Binding ReportName}"
+                                 materialDesign:HintAssist.Hint="Mã báo cáo"
+                                 HorizontalAlignment="Stretch">
+                        </TextBox>
+                    </Grid>-->
+
+                    <ComboBox IsEnabled="{Binding IsDonViCbEnabled}"
+                              IsEditable="True"
+                              materialDesign:HintAssist.Hint="Tháng"
+                              materialDesign:TextFieldAssist.HasClearButton="False"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              ItemsSource="{Binding ItemsMonth}"
+                              SelectedItem="{Binding SelectedMonth}"
+                              Visibility="{Binding IsShowComboboxThang, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    </ComboBox>
+                    <ComboBox x:Name="tbNam"
+                              IsEnabled="{Binding IsDonViCbEnabled}"
+                              IsEditable="True"
+                              materialDesign:HintAssist.Hint="Năm"
+                              materialDesign:TextFieldAssist.HasClearButton="False"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              ItemsSource="{Binding ItemsYear}"
+                              SelectedItem="{Binding SelectedYear}">
+                    </ComboBox>
+
+                    <ComboBox IsEnabled="{Binding IsDonViCbEnabled}"
+                              IsEditable="True"
+                              materialDesign:HintAssist.Hint="Thời gian"
+                              materialDesign:TextFieldAssist.HasClearButton="False"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              ItemsSource="{Binding MonthQuarters}"
+                              SelectedItem="{Binding SelectedMonthQuarter}"
+                              Visibility="{Binding IsShowComboboxThoiGian, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    </ComboBox>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox IsEditable="True"
+                                  materialDesign:HintAssist.Hint="Chọn Loại File Output"
+                                  materialDesign:TextFieldAssist.HasClearButton="False"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  ItemsSource="{Binding ItemsFileExport}"
+                                  SelectedItem="{Binding SelectedFileExport}">
+                        </ComboBox>
+                    </Grid>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"></ColumnDefinition>
+                            <ColumnDefinition Width="180"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Grid.Row="1"
+                                  Grid.Column="1"
+                                  Width="170"
+                                  IsEnabled="{Binding IsDonViCbEnabled}"
+                                  IsEditable="True"
+                                  Visibility="{Binding IsShowKichThuocIn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  materialDesign:HintAssist.Hint="Kích thước Khổ in"
+                                  materialDesign:TextFieldAssist.HasClearButton="False"
+                                  DisplayMemberPath="ValueItem"
+                                  SelectedValuePath="ValueItem"
+                                  SelectedItem="{Binding SelectedKhoIn}"
+                                  ItemsSource="{Binding ItemsKhoIn}">
+                        </ComboBox>
+                        <ComboBox Grid.Row="1"
+                                  Grid.Column="0"
+                                  IsEnabled="{Binding IsDonViCbEnabled}"
+                                  IsEditable="True"
+                                  Width="200"
+                                  materialDesign:HintAssist.Hint="Đơn vị tính"
+                                  materialDesign:TextFieldAssist.HasClearButton="False"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  SelectedItem="{Binding SelectedUnitType}"
+                                  ItemsSource="{Binding ItemsUnitType}">
+                        </ComboBox>
+                    </Grid>
+                    
+                    
+                    <ComboBox IsEditable="True"
+                              Visibility="{Binding IsShowKieuIn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              materialDesign:HintAssist.Hint="Kiểu in"
+                              materialDesign:TextFieldAssist.HasClearButton="False"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              SelectedItem="{Binding SelectedKieuIn}"
+                              ItemsSource="{Binding ItemsKieuIn}">
+                    </ComboBox>
+                    
+                    <TextBox Visibility="{Binding BIsShowNoiDung, Converter={StaticResource BooleanToVisibilityConverter}}"
+                             Text="{Binding SNoiDung}"
+                             materialDesign:HintAssist.Hint="Nội dung"
+                             Height="150"
+                             TextWrapping="Wrap"
+                             HorizontalAlignment="Stretch">
+                    </TextBox>
+
+                    <!--<ComboBox
+                        Visibility="{Binding IsShowPhuCap, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        materialDesign:HintAssist.Hint="Loại phụ cấp"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        DisplayMemberPath="DisplayItem"
+                        SelectedValuePath="ValueItem"
+                        SelectedItem="{Binding SelectedLoaiPhuCap}"
+                        ItemsSource="{Binding ItemsLoaiPhuCap}">
+                    </ComboBox>-->
+                    <!--<ComboBox
+                        Visibility="{Binding IsShowPhuCap, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        materialDesign:HintAssist.Hint="Định dạng phụ cấp"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        DisplayMemberPath="DisplayItem"
+                        SelectedValuePath="ValueItem"
+                        SelectedItem="{Binding SelectedDinhDangPhuCap}"
+                        ItemsSource="{Binding ItemsDinhDangPhuCap}">
+                    </ComboBox>-->
+                    <CheckBox Content="Sử dụng tên đơn vị"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              IsChecked="{Binding IsChecked}" />
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"></ColumnDefinition>
+                            <ColumnDefinition Width="180"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Grid.Row="1"
+                                  Grid.Column="0"
+                                  Visibility="{Binding IsShowSummary, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  Content="In Tổng hợp"
+                                  VerticalAlignment="Center"
+                                  Margin="0 10 0 0"
+                                  IsChecked="{Binding IsSummary}" />
+                        <ComboBox Grid.Row="1"
+                                  Grid.Column="1"
+                                  Margin="0 0 10 15"
+                                  Width="170"
+                                  IsEditable="True"
+                                  Visibility="{Binding IsShowLoaiTongHop, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  materialDesign:HintAssist.Hint="Chọn loại tổng hợp"
+                                  materialDesign:TextFieldAssist.HasClearButton="False"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  SelectedItem="{Binding SelectedLoaiTongHop}"
+                                  ItemsSource="{Binding ItemsLoaiTongHop}">
+                        </ComboBox>
+                    </Grid>
+                    
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"></ColumnDefinition>
+                            <ColumnDefinition Width="180"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox  Grid.Row="1"
+                                   Grid.Column="0"
+                                   Visibility="{Binding IsShowInHuongNuocNgoai, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  Content="In Hưởng nước ngoài"
+                                  VerticalAlignment="Center"
+                                  Margin="0 10 0 0"
+                                  x:Name="CheckBoxHuongNN"
+                                  IsChecked="{Binding IsHuongNN}" />
+                        <ComboBox Grid.Row="1"
+                                  Grid.Column="1"
+                                  Margin="0 0 10 15"
+                                  Width="170"
+                                  IsEditable="True"
+                                  Visibility="{Binding ElementName=CheckBoxHuongNN, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  materialDesign:HintAssist.Hint="Tỷ lệ hưởng"
+                                  materialDesign:TextFieldAssist.HasClearButton="False"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  SelectedItem="{Binding SelectedHuongNN}"
+                                  ItemsSource="{Binding HuongNNItems}">
+                        </ComboBox>
+                    </Grid>
+                    
+                    <!--<CheckBox
+                        Visibility="{Binding IsShowSummaryNew, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Content="In Tổng hợp mẫu mới"
+                        VerticalAlignment="Center"
+                        Margin="0 10 0 0"
+                        IsChecked="{Binding IsSummaryNew}" />-->
+                    <CheckBox Visibility="{Binding IsShowExportAllCadres, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Content="In tất cả cán bộ"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              IsChecked="{Binding IsExportAllCadres}" />
+                    <CheckBox Visibility="{Binding IsShowEmployeeNameCheckbox, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Content="Hiển thị họ tên"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              IsChecked="{Binding IsShowEmployeeName}" />
+                    <CheckBox Visibility="{Binding IsShowButtonDynamicPhuCap, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Content="In phụ cấp động"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              IsChecked="{Binding IsDynamicPhuCap}" />
+                    <CheckBox Visibility="{Binding IsShowButtonGiaiThichPCTLK, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Content="In giải thích phụ cấp truy lĩnh khác"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              IsChecked="{Binding IsGiaiThichPCTLK}" />
+                    <CheckBox Visibility="{Binding IsChiTraCaNhanKhacCheckbox, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Content="In thu nhập khác"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              IsChecked="{Binding IsChiTraCaNhanKhac}" />
+
+                    <CheckBox Visibility="{Binding IsShowYeuToLuong, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Content="In theo yếu tố lương, phụ cấp"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              IsChecked="{Binding IsCheckedYeuToLuong}" />
+                    <CheckBox Content="In ngày tháng tại chân ký"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              IsChecked="{Binding IsInNgayThang}" />
+                    <!--<CheckBox
+                        Visibility="{Binding IsShowInChieuDoc, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Content="In mẫu dọc"
+                        VerticalAlignment="Center"
+                        Margin="0 10 0 0"
+                        IsChecked="{Binding IsCheckedInChieuDoc}" />-->
+                    <CheckBox Content="Sắp xếp theo chức vụ"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              Visibility="{Binding IsShowOrderTheoChucVu, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              IsChecked="{Binding IsOrderTheoChucVu}" />
+                    <CheckBox Content="In danh sách người nhận lương, phụ cấp âm"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              Visibility="{Binding IsShowCheckBoxGiaGriAm, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              IsChecked="{Binding IsGiaTriAm}" />
+                    <CheckBox Content="Hiển thị mã hưởng lương"
+                              Visibility="{Binding IsShowMaHuongLuong, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              IsChecked="{Binding IsCheckedMaHuongLuong}" />
+                    <CheckBox Visibility="{Binding IsInCanBoMoiCheckbox, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Content="In cán bộ mới trong tháng"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              IsChecked="{Binding IsInCanBoMoi}" />
+                    <RadioButton Visibility="{Binding IsCheckedYeuToLuong, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                 IsChecked="{Binding IsToanQuan}"
+                                 Margin="0 10 0 0"
+                                 Content="In toàn quân">
+                    </RadioButton>
+                    <ComboBox IsEditable="True"
+                              Visibility="{Binding IsCheckedYeuToLuong, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              materialDesign:HintAssist.Hint="Ngạch"
+                              materialDesign:TextFieldAssist.HasClearButton="False"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              SelectedItem="{Binding SelectedGrade}"
+                              ItemsSource="{Binding ItemsGrades}">
+                    </ComboBox>
+                    <!--<ComboBox
+                        IsEditable="True"
+                        Visibility="{Binding IsChiTietQuanSo, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        materialDesign:HintAssist.Hint="Chọn loại quân số"
+                        materialDesign:TextFieldAssist.HasClearButton="False"
+                        DisplayMemberPath="DisplayItem"
+                        SelectedValuePath="ValueItem"
+                        SelectedItem="{Binding SelectedLoaiQuanSo}"
+                        ItemsSource="{Binding ItemsQuanSo}">
+                    </ComboBox>-->
+                    <RadioButton Visibility="{Binding IsCheckedYeuToLuong, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                 IsChecked="{Binding IsBienPhong, Mode=OneWay}"
+                                 Margin="0 10 0 0"
+                                 Content="In mẫu biên phòng">
+                    </RadioButton>
+                    <ComboBox IsEditable="True"
+                              Visibility="{Binding IsCheckedYeuToLuong, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              materialDesign:HintAssist.Hint="Phân loại báo cáo"
+                              materialDesign:TextFieldAssist.HasClearButton="False"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              SelectedItem="{Binding SelectedBaoCao}"
+                              ItemsSource="{Binding ItemsPhanLoaiBaoCaos}">
+                    </ComboBox>
+
+                    <CheckBox Content="In số đã trừ trợ cấp BHXH"
+                              Visibility="{Binding IsShowInTruTroCapBHXH, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              IsChecked="{Binding IsReduceBHXH}" />
+
+                    <CheckBox Content="In bổ sung HSQ-CS"
+                              VerticalAlignment="Center"
+                              Margin="0 10 0 0"
+                              Visibility="{Binding IsShowInBoSungHSQCS, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              IsChecked="{Binding IsBoSungHSQCS}" />
+
+                </StackPanel>
+
+                <Border Grid.Column="1"
+                        Background="White"
+                        BorderThickness="1"
+                        Width="300"
+                        BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Top">
+                        <materialDesign:ColorZone Mode="PrimaryLight">
+                            <DockPanel Margin="8"
+                                       IsEnabled="{Binding IsDonViCbEnabled}">
+                                <CheckBox IsChecked="{Binding SelectAllAgency,Mode=TwoWay}">
+                                    <TextBlock Text="{Binding LabelSelectedCountAgency}" />
+                                </CheckBox>
+                                <Border Margin="8 0 0 0"
+                                        Background="White"
+                                        MaxHeight="30"
+                                        CornerRadius="3"
+                                        Width="130"
+                                        HorizontalAlignment="Right"
+                                        ToolTip="Enter to search, ignore case">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                                Height="24"
+                                                Width="24">
+                                            <materialDesign:PackIcon Kind="Magnify"
+                                                                     Margin="0"
+                                                                     Opacity=".56" />
+                                        </Button>
+                                        <TextBox Grid.Column="1"
+                                                 Margin="0 0 5 0"
+                                                 Background="white"
+                                                 materialDesign:HintAssist.Hint="Tìm kiếm"
+                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                                 BorderThickness="0"
+                                                 VerticalAlignment="Center"
+                                                 Text="{Binding SearchDonVi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        </TextBox>
+                                    </Grid>
+                                </Border>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <ListView Height="400"
+                                  ItemsSource="{Binding ItemsDonVi}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsEnabled="{Binding ElementName=tbNam, Path=IsEnabled}"
+                                              Content="{Binding MaTenDonVi}"
+                                              IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2"
+                        Background="White"
+                        BorderThickness="1"
+                        Margin="10 0 0 0"
+                        Width="300"
+                        Visibility="{Binding IsShowPhuCap, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Top">
+                        <materialDesign:ColorZone Mode="PrimaryLight">
+                            <DockPanel Margin="8">
+                                <CheckBox IsChecked="{Binding SelectAllPhuCap,Mode=TwoWay}"
+                                          Visibility="{Binding IsShowBangBcLuongDong, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                                    <TextBlock Text="{Binding LabelSelectedCountPhuCap}" />
+                                </CheckBox>
+                                <TextBlock Text="{Binding LabelSelectedCountPhuCapBcCauHinhDong}"
+                                           Visibility="{Binding IsShowBangBcLuongDong, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                <Border Margin="8 0 0 0"
+                                        Background="White"
+                                        MaxHeight="30"
+                                        CornerRadius="3"
+                                        Width="100"
+                                        HorizontalAlignment="Right"
+                                        ToolTip="Enter to search, ignore case">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                                Height="24"
+                                                Width="24">
+                                            <materialDesign:PackIcon Kind="Magnify"
+                                                                     Margin="0"
+                                                                     Opacity=".56" />
+                                        </Button>
+                                        <TextBox Grid.Column="1"
+                                                 Margin="0 0 5 0"
+                                                 Background="white"
+                                                 materialDesign:HintAssist.Hint="Tìm kiếm"
+                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                                 BorderThickness="0"
+                                                 VerticalAlignment="Center"
+                                                 Text="{Binding SearchPhuCap, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        </TextBox>
+                                    </Grid>
+                                </Border>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <ListView Height="400"
+                                  ItemsSource="{Binding ItemsPhuCap}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding DisplayCheckBox}"
+                                              IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="3"
+                        Background="White"
+                        BorderThickness="1"
+                        Margin="10 0 0 0"
+                        Width="300"
+                        Visibility="{Binding IsShowDynamicPhuCap, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Top">
+                        <materialDesign:ColorZone Mode="PrimaryLight">
+                            <DockPanel Margin="8">
+                                <CheckBox IsChecked="{Binding SelectAllPhuCapTongLuong,Mode=TwoWay}">
+                                    <TextBlock Text="{Binding LabelSelectedCountPhuCapTongLuong}" />
+                                </CheckBox>
+                                <Border Margin="8 0 0 0"
+                                        Background="White"
+                                        MaxHeight="30"
+                                        CornerRadius="3"
+                                        Width="130"
+                                        HorizontalAlignment="Right"
+                                        ToolTip="Enter to search, ignore case">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                                Height="24"
+                                                Width="24">
+                                            <materialDesign:PackIcon Kind="Magnify"
+                                                                     Margin="0"
+                                                                     Opacity=".56" />
+                                        </Button>
+                                        <TextBox Grid.Column="1"
+                                                 Margin="0 0 5 0"
+                                                 Background="white"
+                                                 materialDesign:HintAssist.Hint="Tìm kiếm"
+                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                                 BorderThickness="0"
+                                                 VerticalAlignment="Center"
+                                                 Text="{Binding SearchPhuCap, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        </TextBox>
+                                    </Grid>
+                                </Border>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <ListView Height="400"
+                                  ItemsSource="{Binding ItemsPhuCapTongLuong}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding DisplayCheckBox}"
+                                              IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="3"
+                        Background="White"
+                        BorderThickness="1"
+                        Margin="10 0 0 0"
+                        Width="300"
+                        Visibility="{Binding IsShowBangBcLuongDong, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Top">
+                        <materialDesign:ColorZone Mode="PrimaryLight">
+                            <DockPanel Margin="8">
+                                <TextBlock Text="{Binding LabelSelectedCountPhuCapBotBcCauHinhDong}" />
+                                <Border Margin="8 0 0 0"
+                                        MaxHeight="30"
+                                        CornerRadius="3"
+                                        Width="130"
+                                        HorizontalAlignment="Right"
+                                        ToolTip="Enter to search, ignore case">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                                Height="24"
+                                                Width="24">
+                                            <materialDesign:PackIcon Kind="Magnify"
+                                                                     Margin="0"
+                                                                     Opacity=".56" />
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <ListView Height="400"
+                                  ItemsSource="{Binding ItemsPhuCapBot}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding DisplayCheckBox}"
+                                              IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="4"
+                        Background="White"
+                        BorderThickness="1"
+                        Margin="10 0 0 0"
+                        Width="300"
+                        Visibility="{Binding IsShowDynamicPhuCap, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Top">
+                        <materialDesign:ColorZone Mode="PrimaryLight">
+                            <DockPanel Margin="8">
+                                <CheckBox IsChecked="{Binding SelectAllPhuCapPhaiTru,Mode=TwoWay}">
+                                    <TextBlock Text="{Binding LabelSelectedCountPhuCapPhaiTru}" />
+                                </CheckBox>
+                                <Border Margin="8 0 0 0"
+                                        Background="White"
+                                        MaxHeight="30"
+                                        CornerRadius="3"
+                                        Width="130"
+                                        HorizontalAlignment="Right"
+                                        ToolTip="Enter to search, ignore case">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                                Height="24"
+                                                Width="24">
+                                            <materialDesign:PackIcon Kind="Magnify"
+                                                                     Margin="0"
+                                                                     Opacity=".56" />
+                                        </Button>
+                                        <TextBox Grid.Column="1"
+                                                 Margin="0 0 5 0"
+                                                 Background="white"
+                                                 materialDesign:HintAssist.Hint="Tìm kiếm"
+                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                                 BorderThickness="0"
+                                                 VerticalAlignment="Center"
+                                                 Text="{Binding SearchPhuCap, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        </TextBox>
+                                    </Grid>
+                                </Border>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <ListView Height="400"
+                                  ItemsSource="{Binding ItemsPhuCapPhaiTru}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding DisplayCheckBox}"
+                                              IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="5 0 0 0"
+                        Grid.Column="5"
+                        BorderThickness="1"
+                        Visibility="{Binding IsCheckedInChieuDoc, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Top">
+                        <materialDesign:ColorZone Mode="PrimaryLight">
+                            <DockPanel Margin="8">
+                                <CheckBox IsChecked="{Binding SelectAllYeuToLuongDoc,Mode=TwoWay}">
+                                    <TextBlock Text="YẾU TỐ LƯƠNG PHỤ CẤP" />
+                                </CheckBox>
+                                <Border Margin="8 0 0 0"
+                                        Background="White"
+                                        MaxHeight="30"
+                                        CornerRadius="3"
+                                        Width="130"
+                                        HorizontalAlignment="Right"
+                                        ToolTip="Enter to search, ignore case">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                                Height="24"
+                                                Width="24">
+                                            <materialDesign:PackIcon Kind="Magnify"
+                                                                     Margin="0"
+                                                                     Opacity=".56" />
+                                        </Button>
+                                        <TextBox Grid.Column="1"
+                                                 Margin="0 0 5 0"
+                                                 Background="white"
+                                                 materialDesign:HintAssist.Hint="Tìm kiếm"
+                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                                 BorderThickness="0"
+                                                 VerticalAlignment="Center"
+                                                 Text="{Binding SearchYeuToLuongDoc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        </TextBox>
+                                    </Grid>
+                                </Border>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <ListView Height="400"
+                                  SelectionMode="Single"
+                                  ItemsSource="{Binding ItemsYeuToLuongDoc}"
+                                  SelectedItem="{Binding SelectedYeuToluongDoc}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <RadioButton Content="{Binding TenPhuCap}"
+                                                 IsChecked="{Binding Path=IsSelected, 
+                                            Mode=TwoWay, 
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+                <Border Margin="5 0 0 0"
+                        Grid.Column="5"
+                        BorderThickness="1"
+                        Visibility="{Binding IsCheckedYeuToLuong, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Top">
+                        <materialDesign:ColorZone Mode="PrimaryLight">
+                            <DockPanel Margin="8"
+                                       Height="26">
+                                <TextBlock Text="YẾU TỐ LƯƠNG PHỤ CẤP"
+                                           VerticalAlignment="Center" />
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <ListView Height="400"
+                                  SelectionMode="Single"
+                                  ItemsSource="{Binding ItemsYeuToLuong}"
+                                  SelectedItem="{Binding SelectedYeuToluong}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <RadioButton Content="{Binding TenPhuCap}"
+                                                 IsChecked="{Binding Path=IsSelected, 
+                                            Mode=TwoWay, 
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <Separator Background="{DynamicResource MaterialDesignDivider}" />
+            <StackPanel Orientation="Horizontal"
+                        Margin="0 15 0 0"
+                        HorizontalAlignment="Right"
+                        IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBooleanConverter}}">
+                <Button ext:Permission.Identifier="NEW_SALARY_MANAGEMENT_REPORTS_DIALOG_SETTING"
+                        Command="{Binding ExportSignatureActionCommand}"
+                        Margin="10 0 0 0"
+                        Style="{StaticResource MaterialDesignRaisedButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Signal" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Thiết lập báo cáo</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button ext:Permission.Identifier="NEW_SALARY_MANAGEMENT_REPORTS_DIALOG_PRINT"
+                        Margin="5 0 0 0"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding ExportCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FileExportOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">In báo cáo</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button IsCancel="True"
+                        Margin="5 0 0 0"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                    <Button.CommandParameter>
+                        <system:Boolean>False</system:Boolean>
+                    </Button.CommandParameter>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+        <component:ProgressDialog />
+    </Grid>
+</UserControl>

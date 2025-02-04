@@ -1,0 +1,115 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Salary.Cadres.CadresDelete"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="170" d:DesignWidth="500"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component">
+    <materialDesign:DialogHost
+        Identifier="SalaryDetailDialog"
+        DialogTheme="Inherit">
+        <Grid>
+            <Grid Margin="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <DockPanel>
+                        <materialDesign:PackIcon Kind="AccountDetails" Style="{StaticResource DialogScreenIconStyle}"/>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
+                        </StackPanel>
+                    </DockPanel>
+                    <Separator Background="{StaticResource MaterialDesignDivider}" Margin="0 5 0 0" />
+                </StackPanel>
+                <StackPanel Grid.Row="1">
+                    <Grid>
+                        <TextBlock 
+                            Text="{Binding DeleteCadres}"
+                            Visibility="{Binding Text}">
+                        </TextBlock>
+                        <ComboBox
+                            materialDesign:HintAssist.Hint="Mã tăng giảm"
+                            materialDesign:TextFieldAssist.HasClearButton="False"
+                            Width="450"
+                            DisplayMemberPath="{Binding ComboboxDisplayMemberPathMucLuc}"
+                            SelectedValuePath="ValueItem"
+                            ItemsSource="{Binding MucLucItems}"
+                            SelectedItem="{Binding MucLucSelected}"
+                            Style="{StaticResource SearchBarHorizontalComboBoxStyle}"
+                            Visibility="{Binding MaTangGiam}">
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Row="2">
+                    <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0 10 0 0" HorizontalAlignment="Right">
+                        <Button
+                            Margin="5 0 0 0"
+                            Style="{StaticResource MaterialDesignRaisedButton}" 
+                            Command="{Binding OnDeleteCommand}"
+                            IsDefault="True"
+                            Visibility="{Binding Delete}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ContentSave" />
+                                <TextBlock 
+                                    Style="{StaticResource SearchBarBtnTextStyle}" 
+                                    Text="Xóa vĩnh viễn">
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Grid>
+                            <Button
+                                Margin="5 0 0 0"
+                                Style="{StaticResource MaterialDesignRaisedButton}" 
+                                Command="{Binding OnOpenUpdateMaTangGiamCommand}"
+                                IsDefault="True"
+                                Visibility="{Binding UpdateMaTang}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ContentSave" />
+                                    <TextBlock 
+                                        Style="{StaticResource SearchBarBtnTextStyle}" 
+                                        Text="Cập nhập mã tăng giảm">
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button
+                                Margin="5 0 0 0"
+                                Style="{StaticResource MaterialDesignRaisedButton}" 
+                                Command="{Binding OnOpenDialogMaTangGiamCommand}"
+                                IsDefault="True"
+                                Visibility="{Binding Save}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ContentSave" />
+                                    <TextBlock 
+                                        Style="{StaticResource SearchBarBtnTextStyle}" 
+                                        Text="Lưu">
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                        <Button
+                            IsCancel="True"
+                            Margin="5 0 0 0"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="CloseOutline" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                            </StackPanel>
+                            <Button.CommandParameter>
+                                <system:Boolean>False</system:Boolean>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+            <component:ProgressDialog/>
+        </Grid>
+    </materialDesign:DialogHost>
+</UserControl>

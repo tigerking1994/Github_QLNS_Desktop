@@ -1,0 +1,1300 @@
+<UserControl x:Class="VTS.QLNS.CTC.App.View.Shared.MucLucPopupBoxChucVuLuongMoiView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Shared"
+             xmlns:extensions="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="400">
+    <UserControl.InputBindings>
+    </UserControl.InputBindings>
+    <Grid x:Name="pageControlCustom">
+        <Grid.InputBindings>
+            <!--<KeyBinding Key="F5"
+                        Command="{Binding RefreshCommand}"
+                        CommandParameter="{Binding ElementName=DataGridCapBacLuong, Path=.}" />
+            <KeyBinding Key="F3"
+                        Command="{Binding AddCommand}"
+                        CommandParameter="{Binding ElementName=DataGridCapBacLuong, Path=.}" />
+            <KeyBinding Key="F4"
+                        Command="{Binding DeleteCommand}"
+                        CommandParameter="{Binding ElementName=DataGridCapBacLuong, Path=.}" />
+            <KeyBinding Key="F10"
+                        Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding ElementName=DataGridCapBacLuong, Path=.}" />
+            <KeyBinding Key="F1"
+                        Command="{Binding OpenFilterPopupCommand}" />
+            <KeyBinding Key="F6"
+                        Command="{Binding OpenReferencePopupCommand}"
+                        CommandParameter="{Binding ElementName=DataGridCapBacLuong, Path=.}" />
+            <KeyBinding Key="F7"
+                        Command="{Binding ViewDetailCommand}"
+                        CommandParameter="{Binding ElementName=DataGridCapBacLuong, Path=.}" />
+            <KeyBinding Key="LeftAlt"
+                        Command="{Binding SaveReferenceCommand}" />
+            <KeyBinding Gesture="Ctrl+F3"
+                        Command="{Binding AddChildCommand}"
+                        CommandParameter="{Binding ElementName=DataGridCapBacLuong, Path=.}" />
+            <KeyBinding Gesture="Ctrl+F6"
+                        Command="{Binding SelectMlnsParentCommand}"
+                        CommandParameter="{Binding ElementName=DataGridCapBacLuong, Path=.}" />-->
+        </Grid.InputBindings>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0">
+            <materialDesign:PackIcon Kind="DriveDocument"
+                                     Height="32"
+                                     Width="32"
+                                     Foreground="{DynamicResource PrimaryHueMidBrush}" />
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold"
+                           Text="{Binding Title}"></TextBlock>
+                <DockPanel>
+                    <TextBlock Text="{Binding Description}"></TextBlock>
+                    <TextBlock Text="{Binding Total}"
+                               HorizontalAlignment="Left"></TextBlock>
+                    <TextBlock Text="{Binding Hint}"
+                               Margin="100 0 0 0"
+                               HorizontalAlignment="Center"></TextBlock>
+                    <!--
+                    <TextBlock Text="[F3] Thêm dòng, [F4] Xóa dòng, [F10] Lưu" HorizontalAlignment="Right" FontWeight="Medium"></TextBlock>
+                    -->
+                </DockPanel>
+                <Separator Background="{StaticResource MaterialDesignDivider}"
+                           Margin="0 5 0 0" />
+            </StackPanel>
+        </DockPanel>
+
+        <ScrollViewer Grid.Row="1"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Disabled">
+            <StackPanel Margin="0 5"
+                        Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type ComboBox}"
+                           BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <Setter Property="Width"
+                                Value="150" />
+                    </Style>
+                </StackPanel.Resources>
+
+                <TextBlock Text="Tỷ lệ (%) nâng lương "
+                           Style="{StaticResource SearchBarBtnTextStyle}"
+                           Margin="10 15 0 0"></TextBlock>
+                <TextBox materialDesign:HintAssist.Hint="Nhập tỷ lệ tăng lương theo %"
+                         materialDesign:HintAssist.IsFloating="True"
+                         Margin="10 0 0 0"
+                         Width="250"
+                         BorderBrush="CadetBlue"
+                         PreviewTextInput="NumberValidationTextBox"
+                         Text="{Binding TyLeTang, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource SearchBarHorizontalTextBoxStyle}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding SearchCommand}"
+                                    Key="Return" />
+                    </TextBox.InputBindings>
+                </TextBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Grid Grid.Row="2"
+              Margin="0 10 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <!--<component:CategoryExpandedDataGrid x:Name="DataGridCapBac"
+                                                Visibility="{Binding IsShowCapBac, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                Grid.Row="2"
+                                                Margin="0,0,10,0"
+                                                CanUserAddRows="False"
+                                                CanUserDeleteRows="False"
+                                                BorderThickness="1"
+                                                Validation.ErrorTemplate="{x:Null}"
+                                                GridLinesVisibility="All"
+                                                FrozenColumnCount="3"
+                                                ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                                                ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                                                Style="{StaticResource MaterialDesignDataGrid}"
+                                                CellStyle="{StaticResource GenericDataGridCellDetail}"
+                                                RowStyle="{StaticResource GenericDataGridRowDetail}"
+                                                SelectedItem="{Binding SelectedCapBacItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                ItemsSource="{Binding CapBacItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                extensions:GridAutoGeneratingColumnBehaviour.Command="{Binding AutoGeneratingColumnsCommand}"
+                                                BeginningEdit="DataGrid_BeginningEdit"
+                                                extensions:SelectedCellChangedProperty.Command="{Binding SelectedCellChangeCommand}"
+                                                MaxWidth="2560"
+                                                MaxHeight="1600"
+                                                AutoGenerateColumns="False">
+                <DataGrid.Resources>
+                    <helper:BindingProxy x:Key="DataContextProxy"
+                                         Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <CheckBox IsChecked="{Binding Checked, UpdateSourceTrigger=PropertyChanged}">
+                                    </CheckBox>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.Header>
+                            <Border Background="Transparent">
+                                <CheckBox IsChecked="{Binding Data.IsAllItemsSelected, UpdateSourceTrigger=PropertyChanged, Source={StaticResource DataContextProxy}}" />
+                            </Border>
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}"
+                                   BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Center" />
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                    </DataGridTemplateColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding MaCb, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Mã cấp bậc</TextBlock>
+                                <materialDesign:PopupBox Name="MaCapBacPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacModel.MaCb, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="MaCapBacTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="MaCb"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="MaCb"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                                 Background="White"
+                                                                                 Opacity="0.5"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+
+                    <materialDesign:DataGridTextColumn Binding="{Binding TenCb, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       Width="*"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Tên cấp bậc</TextBlock>
+                                <materialDesign:PopupBox Name="TenCapBacPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacModel.TenCb, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="TenCapBacTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="TenCb"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="TenCb"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                                 Background="White"
+                                                                                 Opacity="0.5"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+
+                    <materialDesign:DataGridTextColumn IsReadOnly="True"
+                                                       Binding="{Binding Parent, UpdateSourceTrigger=PropertyChanged}"
+                                                       Visibility="{Binding Data.IsDialog, Source={StaticResource DataContextProxy}, Converter={StaticResource InverseBoolToVisConverter}}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Cấp bậc cha (F6)</TextBlock>
+                                <materialDesign:PopupBox Name="ParentPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacModel.Parent, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="ParentTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="Parent"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="Parent"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                                 Background="White"
+                                                                                 Opacity="0.5"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+
+                    <materialDesign:DataGridTextColumn Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       IsReadOnly="True"
+                                                       Visibility="{Binding Data.Note, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Ghi chú</TextBlock>
+                                <materialDesign:PopupBox Name="NotePopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacModel.Note, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="NoteTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="Note"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="Note"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+
+                </DataGrid.Columns>
+            </component:CategoryExpandedDataGrid>-->
+            <component:CategoryExpandedDataGrid x:Name="DataGridCapBacLuong"
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                CanUserAddRows="False"
+                                                CanUserDeleteRows="False"
+                                                BorderThickness="1"
+                                                GridLinesVisibility="All"
+                                                FrozenColumnCount="3"
+                                                ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                                                ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                                                Style="{StaticResource MaterialDesignDataGrid}"
+                                                CellStyle="{StaticResource GenericDataGridCellDetail}"
+                                                RowStyle="{StaticResource GenericDataGridRowDetail}"
+                                                SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                extensions:GridAutoGeneratingColumnBehaviour.Command="{Binding AutoGeneratingColumnsCommand}"
+                                                extensions:SelectedCellChangedProperty.Command="{Binding SelectedCellChangeCommand}"
+                                                MaxWidth="2000"
+                                                MaxHeight="400"
+                                                AutoGenerateColumns="True">
+                <DataGrid.Resources>
+                    <helper:BindingProxy x:Key="DataContextProxy"
+                                         Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}">
+                                    </CheckBox>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.Header>
+                            <Border Background="Transparent">
+                                <CheckBox IsChecked="{Binding Data.IsAllItemsSelected, UpdateSourceTrigger=PropertyChanged, Source={StaticResource DataContextProxy}}" />
+                            </Border>
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}"
+                                   BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Center" />
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                    </DataGridTemplateColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding MaDm, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       Visibility="{Binding Data.MaDm, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Mã bậc lương</TextBlock>
+                                <materialDesign:PopupBox Name="MaDmPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.MaDm, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="MaDmTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="MaDm"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="MaDm"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding TenDm, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Tên bậc lương</TextBlock>
+                                <materialDesign:PopupBox Name="TenDmPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.TenDm, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="TenDmTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="TenDm"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="TenDm"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding LoaiDoiTuong, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đối tượng</TextBlock>
+                                <materialDesign:PopupBox Name="LoaiDoiTuongPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.LoaiDoiTuong, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="LoaiDoiTuongTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="LoaiDoiTuong"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="LoaiDoiTuong"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding TienLuong, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Tiền lương</TextBlock>
+                                <materialDesign:PopupBox Name="TienLuongPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.TienLuong, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="TienLuongTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="TienLuong"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="TienLuong"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding TienNangLuong, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Tiền nâng lương</TextBlock>
+                                <materialDesign:PopupBox Name="TienNangLuongPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.TienNangLuong, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="TienNangLuongTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="TienNangLuong"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="TienNangLuong"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <!--<materialDesign:DataGridTextColumn Binding="{Binding BhxhCq, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">BHXH (Đơn vị)</TextBlock>
+                                <materialDesign:PopupBox Name="BhxhCqPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.BhxhCq, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="BhxhCqTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="BhxhCq"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="BhxhCq"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding HsBhxh, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">BHXH (Cá nhân)</TextBlock>
+                                <materialDesign:PopupBox Name="HsBhxhPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.HsBhxh, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="HsBhxhTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="HsBhxh"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="HsBhxh"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding BhytCq, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">BHYT (Đơn vị)</TextBlock>
+                                <materialDesign:PopupBox Name="BhytCqPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.BhytCq, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="BhytCqTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="BhytCq"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="BhytCq"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding HsBhyt, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">BHYT (Cá nhân)</TextBlock>
+                                <materialDesign:PopupBox Name="HsBhytPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.HsBhyt, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="HsBhytTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="HsBhyt"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="HsBhyt"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding BhtnCq, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">BHTN (Đơn vị)</TextBlock>
+                                <materialDesign:PopupBox Name="BhtnCqPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.BhtnCq, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="BhtnCqTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="BhtnCq"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="BhtnCq"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding HsBhtn, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">BHTN (Cá nhân)</TextBlock>
+                                <materialDesign:PopupBox Name="HsBhtnPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.TenDm, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="HsBhtnTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="HsBhtn"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="HsBhtn"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding KpcdCq, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">KPCD (Đơn vị)</TextBlock>
+                                <materialDesign:PopupBox Name="KpcdCqPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.KpcdCq, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="KpcdCqTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="KpcdCq"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="KpcdCq"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding HsKpcd, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">KPCD (Cá nhân)</TextBlock>
+                                <materialDesign:PopupBox Name="HsKpcdPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.HsKpcd, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="HsKpcdTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="HsKpcd"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="HsKpcd"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding PhuCapRaQuan, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Phụ cấp ra quân</TextBlock>
+                                <materialDesign:PopupBox Name="PhuCapRaQuanPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.PhuCapRaQuan, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="PhuCapRaQuanTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="PhuCapRaQuan"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="PhuCapRaQuan"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding TiLeHuong, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Tỉ lệ hưởng</TextBlock>
+                                <materialDesign:PopupBox Name="TiLeHuongPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.TiLeHuong, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="TiLeHuongTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="TiLeHuong"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="TiLeHuong"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding HsTroCapOmDau, UpdateSourceTrigger=PropertyChanged}"
+                                                       ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                       EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <materialDesign:DataGridTextColumn.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Hệ số trợ cấp ốm đau</TextBlock>
+                                <materialDesign:PopupBox Name="HsTroCapOmDauPopupBox"
+                                                         Padding="0,0,0,0"
+                                                         HorizontalAlignment="Right">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="FilterOutline"
+                                                                 Opacity="0.5" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,0">
+                                        <materialDesign:ColorZone Mode="PrimaryLight">
+                                            <Border Background="White"
+                                                    Margin="5,5,5,5"
+                                                    MaxHeight="30"
+                                                    CornerRadius="3"
+                                                    BorderThickness="1,1,1,1">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Width="150"
+                                                             Margin="5,0,0,0"
+                                                             BorderThickness="0,0,0,0"
+                                                             Text="{Binding Data.FilterCapBacLuongModel.HsTroCapOmDau, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"
+                                                             VerticalAlignment="Center"
+                                                             Name="HsTroCapOmDauTextBox"
+                                                             Loaded="TextBox_Loaded">
+                                                        <TextBox.InputBindings>
+                                                            <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="HsTroCapOmDau"
+                                                                        Key="Return" />
+                                                            <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}"
+                                                                        CommandParameter="HsTroCapOmDau"
+                                                                        Key="Esc" />
+                                                        </TextBox.InputBindings>
+                                                    </TextBox>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Style="{StaticResource MaterialDesignToolButton}">
+                                                        <materialDesign:PackIcon Kind="Filter"
+                                                                                 Background="White"></materialDesign:PackIcon>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </materialDesign:ColorZone>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </materialDesign:DataGridTextColumn.Header>
+                    </materialDesign:DataGridTextColumn>-->
+                </DataGrid.Columns>
+            </component:CategoryExpandedDataGrid>
+        </Grid>
+        <StackPanel Orientation="Horizontal"
+                    Margin="0 15 15 15"
+                    HorizontalAlignment="Right"
+                    Visibility="{Binding VisibilityDialogBtn}"
+                    Grid.Row="3">
+            <Button IsDefault="True"
+                    Margin="5 0 0 0"
+                    Command="{Binding UpdateNangCapBacLuong}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ContentSave" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Cập nhật (Alt+Enter)</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Margin="5 0 0 0"
+                    IsCancel="True"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CloseOutline" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

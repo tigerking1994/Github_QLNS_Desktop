@@ -1,0 +1,270 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Budget.Estimate.EstimateDiagram"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Budget.Allocation"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="IconStyle" TargetType="materialDesign:PackIcon">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="35"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="IconStyleRed" TargetType="materialDesign:PackIcon">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="35"/>
+            <Setter Property="Foreground" Value="DarkRed"/>
+        </Style>
+        <Style x:Key="BtnSettlementStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatLightBgButton}">
+            <Setter Property="Width" Value="260" />
+            <Setter Property="Height" Value="50" />
+            <Setter Property="Margin" Value="0 0 0 0" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Background" Value="#ffffe0" />
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+        <Style x:Key="TxtSettlementTitleStyle" TargetType="TextBlock" >
+            <Setter Property="Margin" Value="10 0 0 0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="15" />
+        </Style>
+        <Style x:Key="TxtSettlementDescStyle" TargetType="TextBlock" >
+            <Setter Property="Margin" Value="10 0 0 0"/>
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="TxtSettlementFunctionStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignBody2TextBlock}">
+            <Setter Property="Margin" Value="15"/>
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Grid.Column" Value="0" />
+        </Style>
+        <Style x:Key="TxtTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="Foreground" Value="DarkRed" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" Margin="0 20 0 0">
+            <TextBlock Style="{StaticResource TxtTitle}" Text="{Binding TieuDe}"></TextBlock>
+        </StackPanel>
+        <StackPanel 
+            Grid.Row="1"
+            Orientation="Horizontal" 
+            HorizontalAlignment="Center"
+            Margin="0 100 0 0">
+            <Canvas Height="10">
+                <StackPanel Orientation="Vertical" Margin="0 0 0 0" Canvas.Left="-40" Canvas.Top="-200">
+                    <TextBlock FontWeight="Bold" Text="Ngân sách cấp trên phân bổ"></TextBlock>
+                    <Button 
+                        Command="{Binding ShowDivisionIndexCommand}"
+                        Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                        Background="Green"
+                        Margin="0 20 0 0">
+                        <materialDesign:PackIcon
+                            Kind="ArrowDownBoldHexagonOutline"
+                            Style="{StaticResource IconStyle}" />
+                    </Button>
+                </StackPanel>
+            </Canvas>
+            <Canvas Width="60" Height="20" Margin="-35 -65 0 0">
+                <Line X1="82" Y1="-60" X2="82" Y2="10" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="76" Y1="-6" X2="82" Y2="10" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="88" Y1="-6" X2="82" Y2="10" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="10" Y1="10" X2="180" Y2="10" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="180" Y1="10" X2="166" Y2="5" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="180" Y1="10" X2="166" Y2="15" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+            </Canvas>
+            <StackPanel Orientation="Vertical" Margin="100 10 100 0" VerticalAlignment="Center">
+                <materialDesign:Card
+                      Background="#ffffe0"
+                      Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                      Padding="10"
+                      Width="220"
+                      Height="140"
+                      Margin="0 0 0 50">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            Grid.Row="0"
+                            Margin="0 0 0 10"
+                            FontSize="20"
+                            Foreground="Black"
+                            TextAlignment="Center"
+                            Text="DỰ TOÁN" />
+                        <StackPanel
+                            Grid.Row="1"
+                            Orientation="Vertical">
+                            <Button 
+                                Width="400" 
+                                Height="70" 
+                                Background="Orange"
+                                x:Name="btnRegularBudget"
+                                Command="{Binding ShowDivisionEstimateIndexCommand}"
+                                Style="{StaticResource BtnSettlementStyle}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Height="50" Width="50" Margin="-14 0 0 0" Kind="LayersTriple" Style="{StaticResource IconStyle}" />
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Foreground="White">Dự toán</TextBlock>
+                                        <TextBlock Foreground="White">Phân bổ ns cho đơn vị</TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:Card>
+                <Canvas Width="60" Height="20" Margin="60 -70 0 0">
+                    <Line X1="0" Y1="0" X2="0" Y2="43" Stroke="green" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                    <Line X1="0" Y1="43" X2="5" Y2="38" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                    <Line X1="-5" Y1="38" X2="0" Y2="43" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                </Canvas>
+                <materialDesign:Card
+                    Background="#ffffe0"
+                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                    <Button
+                        Style="{StaticResource BtnSettlementStyle}"
+                        Background="#219aa0"
+                        Height="60"
+                        Padding="25 10 25 10">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Kind="FileExcel"
+                                Style="{StaticResource IconStyle}" />
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Style="{StaticResource TxtSettlementTitleStyle}" Width="120" TextWrapping="Wrap" Text="Xuất dữ liệu"></TextBlock>
+                                <TextBlock Style="{StaticResource TxtSettlementTitleStyle}" Width="120" FontSize="12" TextWrapping="Wrap" Text="Cấp phát cho đơn vị"></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Button>
+                </materialDesign:Card>
+            </StackPanel>
+            <Canvas Width="60" Height="20" Margin="-130 -65 0 0">
+                <Line X1="-24" Y1="10" X2="80" Y2="10" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="80" Y1="10" X2="80" Y2="125" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="80" Y1="10" X2="80" Y2="-105" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="80" Y1="125" X2="140" Y2="125" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="80" Y1="-105" X2="140" Y2="-105" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="140" Y1="-105" X2="135" Y2="-100" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="140" Y1="-105" X2="135" Y2="-110" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="140" Y1="125" X2="135" Y2="120" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                <Line X1="140" Y1="125" X2="135" Y2="130" Stroke="CadetBlue" StrokeThickness="2" StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+            </Canvas>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Height="400" Margin="50 -50 0 0">
+                <StackPanel
+                      Background="#fafafa"
+                      Width="250"
+                      Margin="0 55 0 20">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Height="50" Width="50" Background="#219aa0" FontSize="30" Padding="0 0 0 0" Content="&#9671;"></Button>
+                        <Button Margin="10 0 0 0" Foreground="Black" BorderThickness="0" Content="Bìa TBNS" Background="Transparent"></Button>
+                    </StackPanel>
+                </StackPanel>
+                <materialDesign:Card
+                      Background="Transparent"
+                      Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                      Width="250"
+                      Margin="0 10 0 20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button FontSize="30" Padding="0 0 0 0" Content="&#9671;" Height="50" Width="50" Background="#219aa0" Grid.Column="0"></Button>
+                        <Button Margin="10 0 0 0" Foreground="Black" BorderThickness="0" Grid.Column="1" Content="Dự toán ngân sách" Background="Transparent"></Button>
+                        <materialDesign:PopupBox 
+                            Background="red"
+                            Margin="12 0 0 0"
+                            Foreground="Black" 
+                            Grid.Column="2" 
+                            HorizontalAlignment="Right">
+                            <StackPanel>
+                                <Button Content="1.Dự toán ngân sách - Theo đợt" />
+                                <Button Content="2.Dự toán ngân sách - Lũy kế đợt" />
+                                <Button Content="3.Dự toán ngân sách - Theo ngành" />
+                                <Separator
+                                    Style="{StaticResource MaterialDesignLightSeparator}" 
+                                    Background="Gray"
+                                    Margin="20 0 20 0"/>
+                                <Button Content="4a.Tổng hợp dự toán - Phần Tự chi" />
+                                <Button Content="4b.Tổng hợp dự toán - Phần Hiện vật" />
+                                <Button Content="4c.Tổng hợp dự toán - Tổng hợp" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                    </Grid>
+                </materialDesign:Card>
+                <materialDesign:Card
+                    Background="Transparent"
+                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                    Width="250"
+                    Margin="0 10 0 20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button FontSize="30" Padding="0 0 0 0" Content="&#9671;" Height="50" Width="50" Background="#ed493e" Grid.Column="0"></Button>
+                        <Button Margin="10 0 0 0" Foreground="Black" BorderThickness="0" Grid.Column="1" Content="Phân bổ dự toán đơn vị" Background="Transparent"></Button>
+                        <materialDesign:PopupBox
+                             Margin="-20 0 0 0"
+                             Foreground="Black" Grid.Column="2" 
+                             HorizontalAlignment="Right">
+                            <StackPanel Margin="00 0 0 0">
+                                <Button Content="1.Số phân bổ dự toán - Tờ bìa" />
+                                <Button Content="2.Số phân bổ dự toán - Từng đơn vị" />
+                                <Button Content="3.Số phân bổ dự toán theo đợt - Từng ngành" />
+                                <Separator
+                                    Style="{StaticResource MaterialDesignLightSeparator}" 
+                                    Background="Gray"
+                                    Margin="20 0 20 0"/>
+                                <Button Content="Tổng hợp số phân bổ dự toán: MLNS hàng dọc - Đơn vị hàng ngang"/>
+                                <Button Content="Tổng hợp số phân bổ theo đợt: MLNS hàng dọc - Đợt hàng ngang"/>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                    </Grid>
+                </materialDesign:Card>
+                <materialDesign:Card
+                      Background="Transparent"
+                      Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                      Width="250"
+                      Margin="0 -3 0 20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button FontSize="30" Padding="0 0 0 0" Content="&#9671;" Height="50" Width="50" Background="#ed493e" Grid.Column="0"></Button>
+                        <Button Margin="10 0 0 0" Foreground="Black" BorderThickness="0" Grid.Column="1" Content="Báo cáo tổng hợp" Background="Transparent"></Button>
+                        <materialDesign:PopupBox Background="red" Foreground="Black" Grid.Column="2" HorizontalAlignment="Right" Margin="15 0 0 0">
+                            <StackPanel>
+                                <Button Content="Tổng hợp số phân bổ dự toán: MLNS hàng dọc - Đơn vị hàng ngang" />
+                                <Button IsEnabled="False" Content="Tổng hợp chỉ tiêu theo LNS: Đơn vị hàng dọc - LNS hàng ngang" />
+                                <Separator
+                                    Style="{StaticResource MaterialDesignLightSeparator}" 
+                                    Background="Gray"
+                                    Margin="20 0 20 0"/>
+                                <Button Content="Tổng hợp đợt phân bổ dự toán: Đơn vị hàng dọc - LNS hàng ngang" />
+                                <Button Content="Tổng hợp chỉ tiêu theo Ngành: MLNS hàng dọc - Đơn vị hàng ngang" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                    </Grid>
+                </materialDesign:Card>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

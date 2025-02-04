@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReleaseNoteModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReleaseDate>2024-11-11T18:00:07.701445+07:00</ReleaseDate>
+	<NoteDetails>
+		<ReleaseNoteDetailModel>
+			<Module>Ngân sách</Module>
+			<Features/>
+			<BugFixes>
+				<string>Sửa các báo cáo lập dự toán đầu năm thu nộp ngân sách</string>
+			</BugFixes>
+			<Improvements>
+				<string>Tối ưu hiệu năng màn chi tiết lập dự toán đầu năm</string>
+			</Improvements>
+		</ReleaseNoteDetailModel>
+	</NoteDetails>
+</ReleaseNoteModel>

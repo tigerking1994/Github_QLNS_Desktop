@@ -1,0 +1,149 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Investment.EndOfInvestment.RequestSettlement.RequestSettlementTongHopDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:custom="clr-namespace:VTS.QLNS.CTC.Custom;assembly=VTS.QLNS.CTC.Custom"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="16">
+        <StackPanel Orientation="Vertical">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="PlaylistPlus" Style="{StaticResource DialogScreenIconStyle}"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                    <TextBlock  Text="{Binding Name}" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding Description}"></TextBlock>
+                </StackPanel>
+            </DockPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <Grid Margin="0 8" MinWidth="760">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Grid.Column="0" IsEnabled="{Binding IsDisabled, Converter={StaticResource InvertBooleanConverter}}">
+                    <StackPanel.Resources>
+                        <Style TargetType="DatePicker" BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                            <Setter Property="Margin" Value="0 2 10 2" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <DatePicker
+                        Language="vi-VN"
+                        materialDesign:HintAssist.Hint="Ngày báo cáo"
+                        SelectedDate="{Binding Model.ThoiGianBaoCao, UpdateSourceTrigger=LostFocus}" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="0" Grid.Column="1" IsEnabled="{Binding IsDisabled, Converter={StaticResource InvertBooleanConverter}}">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                            <Setter Property="Margin" Value="0 2 10 2" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <TextBox 
+                        materialDesign:HintAssist.Hint="Số báo cáo"
+                        Text="{Binding Model.SoBaoCao }"
+                        VerticalAlignment="Center" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="0 10 0 0" MaxWidth="1000">
+                    <component:ExpandedDataGrid
+                        x:Name="dgdVonNamDonViIndexAgregate"
+                        BorderThickness="1"
+                        IsReadOnly="True"
+                        CanUserResizeColumns="True"
+                        HorizontalScrollBarVisibility="Auto"
+                        CanUserAddRows="False"
+                        GridLinesVisibility="All"
+                        AutoGenerateColumns="False"
+                        ItemsSource="{Binding VoucherAgregates}"
+                        Style="{StaticResource MaterialDesignDataGrid}"
+                        RowStyle="{StaticResource DataGridRowIndex}">
+                        <DataGrid.Columns>
+                            <component:DataGridTextColumn
+                                ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                Header="Mã dự án"
+                                Binding="{Binding MaDuAn}">
+                            </component:DataGridTextColumn>
+                            <materialDesign:DataGridTextColumn
+                                ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                                Header="Tên dự án"
+                                Binding="{Binding TenDuAn}">
+                            </materialDesign:DataGridTextColumn>
+                            <materialDesign:DataGridTextColumn
+                                ElementStyle="{StaticResource DataGridTextColumnCenterStyle}" 
+                                Header="Chủ đầu tư"
+                                Binding="{Binding TenChuDauTu}">
+                            </materialDesign:DataGridTextColumn>
+                            <materialDesign:DataGridTextColumn 
+                                ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                                Header="Số báo cáo"
+                                Binding="{Binding SoBaoCao}">
+                            </materialDesign:DataGridTextColumn>
+
+                            <materialDesign:DataGridTextColumn
+                                ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                                Header="Thời gian khởi công"
+                                Binding="{Binding ThoiGianKhoiCong, Converter={StaticResource DateTimeToStringConverter}}">
+                            </materialDesign:DataGridTextColumn>
+                            <materialDesign:DataGridTextColumn
+                                ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                                Header="Thời gian hoàn thành"
+                                Binding="{Binding ThoiGianHoanThanh, Converter={StaticResource DateTimeToStringConverter}}">
+                            </materialDesign:DataGridTextColumn>
+
+                            <materialDesign:DataGridTextColumn
+                                Header="Giá trị đề nghị quyết toán"
+                                ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                Binding="{Binding GiaTriDeNghiQuyetToan, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                            </materialDesign:DataGridTextColumn>
+                        </DataGrid.Columns>
+
+                    </component:ExpandedDataGrid>
+                </StackPanel>
+            </Grid>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <StackPanel Orientation="Horizontal" Margin="0 15 0 0" HorizontalAlignment="Right">
+                <Button 
+                    IsDefault="True"
+                    Margin="5 0 0 0"
+                    IsEnabled="{Binding IsDisabled, Converter={StaticResource InvertBooleanConverter}}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding SaveCommand}"
+                    ext:Permission.Identifier="INVESTMENT_STANDARD_VON_NAM_DON_VI_DIALOG_SAVE">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lưu dữ liệu</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button
+                    IsCancel="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{Binding CloseCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

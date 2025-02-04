@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.Component.MultiSelectComboBox2"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ComboBox x:Name="MultiSelectCombo"
+              OverridesDefaultStyle="True"
+              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+              ScrollViewer.VerticalScrollBarVisibility="Auto"
+              ScrollViewer.CanContentScroll="True"
+              Style="{StaticResource MaterialDesignDataGridComboBox}"
+              IsSynchronizedWithCurrentItem="{x:Null}">
+        <ComboBox.ItemTemplate>
+            <DataTemplate>
+                <CheckBox Content="{Binding Title}"
+                          Focusable="False"
+                          IsChecked="{Binding Path=IsSelected, Mode=TwoWay}"
+                          Tag="{RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}"
+                          Click="CheckBox_Click" />
+            </DataTemplate>
+        </ComboBox.ItemTemplate>
+        <ComboBox.Template>
+            <ControlTemplate TargetType="ComboBox">
+                <Grid>
+                    <ToggleButton Name="ToggleButton"
+                                  Content="{Binding Path=Text,Mode=TwoWay,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                  Grid.Column="2"
+                                  Foreground="DarkSlateGray"
+                                  IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                                  Focusable="false"
+                                  Style="{StaticResource MahApps.Styles.ToggleButton}"
+                                  ClickMode="Press"
+                                  HorizontalContentAlignment="Left">
+                    </ToggleButton>
+                    <Popup Name="Popup"
+                           Placement="Bottom"
+                           AllowsTransparency="True"
+                           Focusable="False"
+                           IsOpen="{TemplateBinding IsDropDownOpen}"
+                           PopupAnimation="Slide">
+                        <Grid Name="DropDown"
+                              SnapsToDevicePixels="True"
+                              MinWidth="{TemplateBinding ActualWidth}"
+                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                            <Border x:Name="DropDownBorder"
+                                    BorderThickness="1"
+                                    Background="White"
+                                    BorderBrush="Black" />
+                            <ScrollViewer Margin="4,6,4,6"
+                                          SnapsToDevicePixels="True"
+                                          DataContext="{Binding}">
+                                <StackPanel IsItemsHost="True"
+                                            KeyboardNavigation.DirectionalNavigation="Contained" />
+                            </ScrollViewer>
+                        </Grid>
+                    </Popup>
+                </Grid>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="HasItems"
+                             Value="false">
+                        <Setter TargetName="DropDownBorder"
+                                Property="MinHeight"
+                                Value="95" />
+                    </Trigger>
+                    <Trigger SourceName="Popup"
+                             Property="Popup.AllowsTransparency"
+                             Value="true">
+                        <Setter TargetName="DropDownBorder"
+                                Property="CornerRadius"
+                                Value="4" />
+                        <Setter TargetName="DropDownBorder"
+                                Property="Margin"
+                                Value="0,2,0,0" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </ComboBox.Template>
+    </ComboBox>
+</UserControl>

@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace VTS.QLNS.CTC.Core.Domain
+{
+    public partial class NhTtThongTriCapPhat : EntityBase
+    {
+        public string IIdMaDonViId { get; set; }
+        public Guid? IIdDonViId { get; set; }
+        public string SMaThongTri { get; set; }
+        public DateTime? DNgayLapThongTri { get; set; }
+        public int? INamThucHien { get; set; }
+        public Guid? IIdDonViTienTeId { get; set; }
+        public DateTime? DNgayGhiSo { get; set; }
+        public string STk1 { get; set; }
+        public string SSoCt1 { get; set; }
+        public string STk2 { get; set; }
+        public string SSoCt2 { get; set; }
+        public Guid? IIdTiGiaUsdVndid { get; set; }
+        public Guid? IIdTiGiaUsdNgoaiTeKhacId { get; set; }
+        public double? FTongGiaTriNgoaiTeKhac { get; set; }
+        public double? FTongGiaTriUsd { get; set; }
+        public double? FTongGiaTriVnd { get; set; }
+        public string STongGiaTriBangChu { get; set; }
+        public string SNguoiTao { get; set; }
+        public DateTime? DNgayTao { get; set; }
+        public string SNguoiSua { get; set; }
+        public DateTime? DNgaySua { get; set; }
+        public string SNguoiXoa { get; set; }
+        public DateTime? DNgayXoa { get; set; }
+        public bool BIsActive { get; set; }
+        public bool BIsGoc { get; set; }
+        public bool BIsKhoa { get; set; }
+        public int? ILanDieuChinh { get; set; }
+        public bool BIsXoa { get; set; }
+        public Guid? IIdTiGiaId { get; set; }
+        public string SMaNgoaiTeKhac { get; set; }
+        public int? IIdNguonVonId { get; set; }
+        public double? FTongGiaTriEUR { get; set; }
+
+        [NotMapped]
+        public IEnumerable<NhTtThongTriCapPhatChiTiet> NhTtThongTriCapPhatChiTiets { get; set; }
+    }
+}

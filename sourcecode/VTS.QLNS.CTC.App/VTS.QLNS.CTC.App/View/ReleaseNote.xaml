@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.ReleaseNote"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.SystemAdmin.Utilities"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:printreport="clr-namespace:VTS.QLNS.CTC.App.ViewModel"
+             d:DataContext="{d:DesignInstance Type=printreport:ReleaseNoteViewModel}"
+             xmlns:converters="clr-namespace:VTS.QLNS.CTC.App.Converters"
+             xmlns:compt="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:lcEnum="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:TextLinesToFlowDocumentConverter x:Key="TextLinesToFlowDocumentConverter" />
+    </UserControl.Resources>
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical"
+                    Grid.Row="0">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="AccountPlus"
+                                         Style="{StaticResource DialogScreenIconStyle}" />
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            Margin="10 0">
+                    <TextBlock Text="{Binding Name}"
+                               FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding Description}"></TextBlock>
+                </StackPanel>
+            </DockPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}" />
+        </StackPanel>
+        <RichTextBox Grid.Row="1"
+                     Height="380"
+                     VerticalScrollBarVisibility="Visible"
+                     Name="myRichTextBox"
+                     Width="700"></RichTextBox>
+        <!--<component:ExpandedDataGrid x:Name="dgdClearDataRedundancy"
+                                    Grid.Row="1"
+                                    Visibility="Collapsed"
+                                    Margin="0 5 0 0"
+                                    ScrollViewer.CanContentScroll="True"
+                                    FrozenColumnCount="6"
+                                    VerticalAlignment="Top"
+                                    AutoGenerateColumns="False"
+                                    CanUserResizeColumns="True"
+                                    CanUserDeleteRows="False"
+                                    BorderThickness="1"
+                                    Height="500"
+                                    HorizontalScrollBarVisibility="Auto"
+                                    CanUserAddRows="False"
+                                    IsReadOnly="{Binding IsReadOnlyGrid}"
+                                    GridLinesVisibility="All"
+                                    ColumnInfo="{Binding Columns}"
+                                    Style="{StaticResource MaterialDesignDataGrid}"
+                                    ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                                    ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                                    CellStyle="{StaticResource DataGridCellDetail}"
+                                    RowStyle="{StaticResource DataGridRowDetail}"
+                                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                    ext:DataGridBehavior.LastColumnFill="True"
+                                    ItemsSource="{Binding ErrorDatabaseLogs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.Resources>
+                <helper:BindingProxy x:Key="DataContextProxy"
+                                     Data="{Binding}" />
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="Version"
+                                    Header="Version"
+                                    ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                    Binding="{Binding Version}"
+                                    IsReadOnly="True" />
+                <DataGridTextColumn x:Name="Module"
+                                    Header="Module"
+                                    Width="200"
+                                    ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                    Binding="{Binding Module}"
+                                    IsReadOnly="True" />
+                <DataGridTextColumn x:Name="Description"
+                                    Header="Description"
+                                    Width="300"
+                                    ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                    Binding="{Binding Description}"
+                                    IsReadOnly="True" />
+                <DataGridTemplateColumn Header="IsBug"
+                                        Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentControl x:Name="content" />
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsBug}"
+                                             Value="True">
+                                    <Setter TargetName="content"
+                                            Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <materialDesign:PackIcon Kind="Bug" />
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </component:ExpandedDataGrid>-->
+        <StackPanel Orientation="Horizontal"
+                    Margin="0 15 0 0"
+                    HorizontalAlignment="Right"
+                    Grid.Row="2">
+            <Button IsCancel="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CloseOutline" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <compt:ProgressDialog Grid.Row="1" />
+    </Grid>
+</UserControl>

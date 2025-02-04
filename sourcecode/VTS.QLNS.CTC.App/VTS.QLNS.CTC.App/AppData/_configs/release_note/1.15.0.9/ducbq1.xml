@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReleaseNoteModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReleaseDate>2024-11-11T18:00:07.701445+07:00</ReleaseDate>
+	<NoteDetails>
+		<ReleaseNoteDetailModel>
+			<Module>Ngân sách</Module>
+			<Features />
+			<BugFixes>
+				<string>Xóa dữ liệu thừa bảng MAP_MLSKT_MLNS 2025</string>
+			</BugFixes>
+			<Improvements />
+		</ReleaseNoteDetailModel>
+	</NoteDetails>
+</ReleaseNoteModel>

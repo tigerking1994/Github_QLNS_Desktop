@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Migrations;
+using VTS.QLNS.CTC.Core.Extensions;
+
+namespace VTS.QLNS.CTC.Core.Migrations
+{
+    public partial class UpdateVersion_11447 : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.RunSqlScript("AppData/_db/99_update_version_1.14.4.5_budget_reverse.sql");
+            migrationBuilder.RunSqlScript("AppData/_db/99_update_version_1.14.4.5_budget_reverse_1.sql");
+
+            migrationBuilder.RunSqlScript("AppData/_db/99_update_version_1.14.4.7_budget_1.sql");
+            migrationBuilder.RunSqlScript("AppData/_db/99_update_version_1.14.4.7_budget_2.sql");
+            migrationBuilder.RunSqlScript("AppData/_db/99_update_version_1.14.4.7_budget_3.sql");
+            migrationBuilder.RunSqlScript("AppData/_db/99_update_version_1.14.4.7_social_insurance_2.sql");
+            migrationBuilder.RunSqlScript("AppData/_db/99_update_version_1.14.4.7_social_insurance_4.sql");
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+
+        }
+    }
+}

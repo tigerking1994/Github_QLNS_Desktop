@@ -1,0 +1,337 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Salary.Settlement.RegularSettlement.RegularDataIntertation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Salary.Settlement.RegularSettlement"
+        xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+        mc:Ignorable="d"
+        Title="Quyết toán - Chứng từ chi tiết - Giải thích số liệu" 
+        x:Name="DetailWindow"
+        Style="{StaticResource MaterialDesignWindow}" 
+        FontSize="14"
+        WindowStartupLocation="CenterScreen"
+        Icon="/favicon.ico">
+    <Window.InputBindings>
+        <KeyBinding Key="F3" Command="{Binding AddRowCommand}" />
+        <KeyBinding Key="F4" Command="{Binding DeleteRowCommand}" />
+    </Window.InputBindings>
+    <materialDesign:DialogHost
+        Identifier="DataInterpretationDialog"
+        DialogTheme="Inherit">
+        <ScrollViewer>
+            <Grid Margin="15" ext:EnterKeyExtension.IsEnabled="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Vertical">
+                    <DockPanel>
+                        <materialDesign:PackIcon Kind="PlaylistPlus" Style="{StaticResource DialogScreenIconStyle}"/>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                            <TextBlock 
+                            Text="Quyết toán - Chứng từ chi tiết - Giải thích số liệu" 
+                            FontWeight="Bold" 
+                            ext:TextBlockTransform.CharacterCasing="Upper"/>
+                            <TextBlock></TextBlock>
+                        </StackPanel>
+                    </DockPanel>
+                    <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+                </StackPanel>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2.5*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Vertical">
+                            <TextBlock Text="I. Tiền lương xin quyết toán" Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Text="1. Tiền lương tháng" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="- Lương ngạch, bậc"  Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="- Phụ cấp lương" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="2. Trừ tiền lương của những ngày nghỉ không hưởng lương" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="- Lương ngạch, bậc"  Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="- Phụ cấp lương" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="3. Trừ tiền lương của những ngày hưởng trợ cấp BHXH" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="- Lương ngạch, bậc" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="- Phụ cấp lương" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="4. Tiền lương xin quyết toán tháng này" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="- Lương ngạch, bậc" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="- Phụ cấp lương" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="5. Kinh phí không thực hiện tự chủ" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="- Tiền lương, phụ cấp và các khoản đóng góp" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="- Phụ cấp HSQ, BS" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="- Tiền ăn" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="II. Quân số phải cung cấp tiền ăn" Margin="0 10 0 0" Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Text="1. Số ngày ăn phải cung cấp theo QS lĩnh phụ cấp" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="2. Cộng số ngày ăn phải cung cấp" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="3. Trừ số ngày ăn không phải cung cấp" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="4. Số ngày ăn xin quyết toán" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="III. Ra quân trong tháng" Margin="0 10 0 0" Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Text="1. Xuất ngũ" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="2. Hưu" Style="{StaticResource ChildLabel}"/>
+                            <TextBlock Text="3. Thôi việc" Style="{StaticResource ChildLabel}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                            <TextBlock Text="Sĩ quan" TextAlignment="Center" Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FLuongSiQuan, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FPcSiQuan, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FLuongSiQuanTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FPhuCapSiQuanTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FLuongBhxhSiQuanTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FPhuCapBhxhSiQuanTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                IsReadOnly="True"
+                                Text="{Binding TlRegularDataIntertation.FLuongQtSiquan, Mode=OneWay, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}" RenderTransformOrigin="29.656,907.601"/>
+                            <TextBox
+                                IsReadOnly="True"
+                                Text="{Binding TlRegularDataIntertation.FPhuCapQtSiquan, Mode=OneWay, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FKinhPhiLuongPcKhac, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FKinhPhiPhuCapHsqbs, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FKinhPhiAn, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FNgayAn, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FNgayAnCong, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FNgayAnTru, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FNgayAnQt, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.IXuatNguSiQuan, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.IHuuSiQuan, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.IThoiViecSiQuan, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Vertical" Margin="10 0 0 0">
+                            <TextBlock Text="QNCN" TextAlignment="Center" Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FLuongQNCN, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FPcQNCN, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FLuongQncnTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FPhuCapQncnTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FLuongBhxhQncnTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FPhuCapBhxhQncnTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox
+                                IsReadOnly="True"
+                                Text="{Binding TlRegularDataIntertation.FLuongQtQncn, Mode=OneWay, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBox
+                                IsReadOnly="True"
+                                Text="{Binding TlRegularDataIntertation.FPhuCapQtQncn, Mode=OneWay, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.IXuatNguQncn, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.IHuuQncn, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.IThoiViecQncn, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="3" Orientation="Vertical" Margin="10 0 0 0">
+                            <TextBlock Text="CNVCQP" TextAlignment="Center" Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FLuongCNVC, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FPcCNVC, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FLuongCnvqpTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FPhuCapCnvqpTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FLuongBhxhCnvqpTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FPhuCapBhxhCnvqpTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox
+                                IsReadOnly="True"
+                                Text="{Binding TlRegularDataIntertation.FLuongQtCnvc, Mode=OneWay, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBox
+                                IsReadOnly="True"
+                                Text="{Binding TlRegularDataIntertation.FPhuCapQtCnvc, Mode=OneWay, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.IXuatNguHsqbs, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.IHuuHsqbs, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.IThoiViecHsqbs, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="4" Orientation="Vertical" Margin="10 0 0 0">
+                            <TextBlock Text="Hợp đồng - khác" TextAlignment="Center" Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FLuongHDLD, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FPcHDLD, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FLuongHdTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FPhuCapHdTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FLuongBhxhHdTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.FPhuCapBhxhHdTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBlock Style="{StaticResource ChildLabel}"/>
+                            <TextBox
+                                IsReadOnly="True"
+                                Text="{Binding TlRegularDataIntertation.FLuongQtHd, Mode=OneWay, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBox
+                                IsReadOnly="True"
+                                Text="{Binding TlRegularDataIntertation.FPhuCapQtHd, Mode=OneWay, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                Style="{StaticResource TbData}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBlock Style="{StaticResource ParentLabel}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.IXuatNguKhac, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.IHuuKhac, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                            <TextBox 
+                                Text="{Binding TlRegularDataIntertation.IThoiViecKhac, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                Style="{StaticResource TbDataEdit}"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 10 0 0" HorizontalAlignment="Right">
+                    <Button 
+                        Margin="5 0 0 0"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        CommandParameter="{Binding ElementName=DetailWindow}"
+                        Command="{Binding SaveCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu dữ liệu"/>
+                        </StackPanel>
+                    </Button>
+                    <Button
+                        IsCancel="True"
+                        Margin="5 0 0 0"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        CommandParameter="{Binding ElementName=DetailWindow}"
+                        Command="{Binding CloseCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CloseOutline" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Đóng"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </materialDesign:DialogHost>
+</Window>
+

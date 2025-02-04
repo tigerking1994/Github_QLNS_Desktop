@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="ProductComponents">
+      <ComponentRef Id="MainAppShortcut" />
+	  <ComponentRef Id="ApplicationShortcut" />
+    </ComponentGroup>
+
+    <!-- Installed files -->
+	<!-- release|x86 -->
+	<?if $(var.Configuration)=x86 ?>
+	    <?define ProjectSource = "..\VTS.QLNS.CTC.Update\bin\x86\Release\target\" ?>
+	<!-- release|x64 -->
+	<?else?>
+	    <?define ProjectSource = "..\VTS.QLNS.CTC.Update\bin\Release\target\" ?>
+	<?endif?>
+    <DirectoryRef Id="INSTALLFOLDER" FileSource="$(var.ProjectSource)">
+      <Component Id="MainAppShortcut" Guid="{0995664D-AE63-4DD6-B894-708A99611370}">
+
+        <Shortcut Id="MainAppShortcut"
+                  Name="!(loc.ProductName_$(var.Platform))"
+                  Target="[INSTALLFOLDER]VTS.QLNS.CTC.App.exe"
+                  Directory="InstallProgramMenuFolder"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Icon="icon.ico"
+                  />
+
+        <!-- Our unique key for this component/shortcut -->
+        <RegistryValue Id="RegShortcutKey" Root="HKCU" Key="SOFTWARE\$(loc.ProductNameFolder)" Name="Shortcut" Value="1" Type="integer" KeyPath="yes" />
+
+        <!--Remove start menu items -->
+        <RemoveFolder Id="RemoveStartMenu" Directory="InstallProgramMenuFolder" On="uninstall" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

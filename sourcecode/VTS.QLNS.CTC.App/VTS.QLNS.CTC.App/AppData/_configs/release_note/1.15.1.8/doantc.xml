@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ReleaseNoteModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReleaseDate>2024-11-27T18:00:07.701445+07:00</ReleaseDate>
+	<NoteDetails>
+		<ReleaseNoteDetailModel>
+			<Module>Bảo hiểm xã hội</Module>
+			<Features/>
+			<BugFixes>
+				<string>Cập nhật sắp xếp mã đơn vị cho báo cáo dự toán thu mau BHYT </string>
+				<string>Chỉnh sửa báo cáo: Thông báo giao dự toán - Tổng hợp thu, chi hiển thi: Mục 5 thu BHYT thân nhân hiện thị mục lục dự toán và hạch toán </string>
+			</BugFixes>
+			<Improvements />
+		</ReleaseNoteDetailModel>
+	</NoteDetails>
+</ReleaseNoteModel>

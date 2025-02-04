@@ -1,0 +1,25 @@
+﻿namespace VTS.QLNS.CTC.Utility.Enum
+{
+    public enum SocialInsuranceDivisionEstimatePrintType
+    {
+        COVER_SHEET = 1,
+        TARGET_AGENCY = 2,
+        TARGET_MAJORS = 3,
+        SYNTHESIS_BUDGET_AGENCY = 4,
+        SYNTHESIS_BUDGET_DIVISION = 5,
+        TARGET_AGENCY_LNS = 6,
+        DETAIL_SYNTHESIS_TARGET_AGENCY_LNS = 7,
+        DETAIL_SYNTHESIS_TARGET_LNS_AGENCY = 8,
+        DETAIL_SYNTHESIS_TARGET_MAJORS = 9,
+        TARGET_AGENCY_SUMMARY = 10,
+        TARGET_MAJORS_DAY = 11,
+        TARGET_MAJORS_AGENCY = 12,
+        PUBLIC_FINANCE = 13,
+        PUBLIC_DIVISION = 14,
+        DIVISION_ESTIMATE_BATCH = 15,
+        APPENDIX = 16,
+        DU_TOAN_THU_CHI_TONG_HOP = 17,
+        DELIVER = 18,
+        DU_TOAN_CHITIET_KPQL = 19
+    }
+}

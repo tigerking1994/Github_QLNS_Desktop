@@ -1,0 +1,706 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Budget.Settlement.Explanation.DataInterpretation"
+        x:Name="DataInterpretationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Budget.Settlement.Explanation"
+        xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+        mc:Ignorable="d"
+        Title="Quyết toán - Chứng từ chi tiết - Giải thích số liệu"
+        Height="810"
+        Width="1100"
+        WindowState="Maximized"
+        Style="{StaticResource MaterialDesignWindow}"
+        FontSize="14"
+        WindowStartupLocation="CenterScreen"
+        Icon="/favicon.ico"
+        ResizeMode="NoResize">
+    <Window.InputBindings>
+        <KeyBinding Key="F3"
+                    Command="{Binding AddRowCommand}" />
+        <KeyBinding Key="F4"
+                    Command="{Binding DeleteRowCommand}" />
+    </Window.InputBindings>
+    <materialDesign:DialogHost Identifier="DataInterpretationDialog"
+                               DialogTheme="Inherit">
+        <ScrollViewer>
+            <Grid Margin="15"
+                  ext:EnterKeyExtension.IsEnabled="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0"
+                            Orientation="Vertical">
+                    <DockPanel>
+                        <materialDesign:PackIcon Kind="PlaylistPlus"
+                                                 Style="{StaticResource DialogScreenIconStyle}" />
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Margin="10 0">
+                            <TextBlock Text="Quyết toán - Chứng từ chi tiết - Giải thích số liệu"
+                                       FontWeight="Bold"
+                                       ext:TextBlockTransform.CharacterCasing="Upper" />
+                            <TextBlock></TextBlock>
+                        </StackPanel>
+                    </DockPanel>
+                    <Separator Background="{DynamicResource MaterialDesignDivider}" />
+                </StackPanel>
+                <TabControl x:Name="tabController"
+                            Grid.Row="1"
+                            Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+                            TabStripPlacement="Top"
+                            materialDesign:ColorZoneAssist.Mode="PrimaryLight"
+                            SelectedIndex="{Binding SelectedTab, Mode=TwoWay}">
+                    <TabItem Header="Nhập giải thích số"
+                             Style="{StaticResource ExplainTabItemStyle}">
+                        <Border BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                BorderThickness="1">
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0"
+                                      IsEnabled="{Binding IsEnableSelfPayTab}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1.5*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0"
+                                                Orientation="Vertical">
+                                        <TextBlock Text="I. CHI TIỀN LƯƠNG, PHỤ CẤP, TRỢ CẤP"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <TextBlock Text="1. Tiền lương, phụ cấp"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <TextBlock Text="- Lương, cấp bậc, ngạch bậc:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <TextBlock Text="- Phụ cấp lương:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <TextBlock Text="2. Trừ tiền lương của những ngày không hưởng lương"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <TextBlock Text="- Lương, cấp bậc, ngạch bậc:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <TextBlock Text="- Phụ cấp lương:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <TextBlock Text="3. Trừ tiền lương của những ngày hưởng trợ cấp BHXH"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <TextBlock Text="- Lương, cấp bậc, ngạch bậc:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <TextBlock Text="- Phụ cấp lương:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <TextBlock Text="4. Tiền lương, phụ cấp thực chi tháng (quý) này"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <TextBlock Text="- Lương, cấp bậc, ngạch bậc:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <TextBlock Text="- Phụ cấp lương:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <!--<TextBlock Text="5. Kinh phí không thực hiện tự chủ" Style="{StaticResource ChildLabel}"/>
+                                        <TextBlock Text="- Tiền lương, phụ cấp và các khoản đóng góp" Style="{StaticResource ChildLabel}"/>
+                                        <TextBlock Text="- Phụ cấp HSQ, BS" Style="{StaticResource ChildLabel}"/>
+                                        <TextBlock Text="- Tiền ăn" Style="{StaticResource ChildLabel}"/>-->
+                                        <TextBlock Text="II. TIỀN ĂN CỦA HẠ SĨ QUAN BINH SĨ"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <TextBlock Text="1. Số ngày phải đảm bảo tính theo quân số:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <TextBlock Text="2. Cộng số ngày ăn phải đảm bảo:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <TextBlock Text="3. Trừ số ngày không đảm bảo tiền ăn:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <TextBlock Text="4. Số ngày ăn thực chi:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1"
+                                                Orientation="Vertical"
+                                                Margin="20 0 20 0">
+                                        <TextBlock Text="Sĩ quan"
+                                                   TextAlignment="Center"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <TextBlock Style="{StaticResource ChildLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FLuongSiQuan, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FPhuCapSiQuan, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                        <TextBlock Style="{StaticResource ChildLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FLuongSiQuanTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FPhuCapSiQuanTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBlock Style="{StaticResource ChildLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FLuongBhxhSiQuanTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FPhuCapBhxhSiQuanTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBlock Style="{StaticResource ChildLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FLuongSiQuanQt, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FPhuCapSiQuanQt, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                        <!--<TextBlock Style="{StaticResource ChildLabel}"/>-->
+                                        <!--<TextBox 
+                                            Text="{Binding SettlementVoucherDetailExplain.FKinhPhiLuongPcKhac, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Style="{StaticResource TbDataEdit}"/>
+                                        <TextBox 
+                                            Text="{Binding SettlementVoucherDetailExplain.FKinhPhiPhuCapHsqbs, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Style="{StaticResource TbDataEdit}"/>
+                                        <TextBox 
+                                            Text="{Binding SettlementVoucherDetailExplain.FKinhPhiAn, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Style="{StaticResource TbDataEdit}"/>-->
+                                        <TextBlock Style="{StaticResource ParentLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FNgayAn, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FNgayAnCong, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FNgayAnTru, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FNgayAnQt, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2"
+                                                Orientation="Vertical"
+                                                Margin="20 0 20 0">
+                                        <TextBlock Text="QNCN"
+                                                   TextAlignment="Center"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <TextBlock Style="{StaticResource ChildLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FLuongQncn, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FPhuCapQncn, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                        <TextBlock Style="{StaticResource ChildLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FLuongQncnTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FPhuCapQncnTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBlock Style="{StaticResource ChildLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FLuongBhxhQncnTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FPhuCapBhxhQncnTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBlock Style="{StaticResource ChildLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FLuongQncnQt, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FPhuCapQncnQt, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="3"
+                                                Orientation="Vertical"
+                                                Margin="20 0 20 0">
+                                        <TextBlock Text="Đối tượng khác"
+                                                   TextAlignment="Center"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <TextBlock Style="{StaticResource ChildLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FLuongCnvqp, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FPhuCapCnvqp, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                        <TextBlock Style="{StaticResource ChildLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FLuongCnvqpTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FPhuCapCnvqpTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBlock Style="{StaticResource ChildLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FLuongBhxhCnvqpTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FPhuCapBhxhCnvqpTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbDataEdit}" />
+                                        <TextBlock Style="{StaticResource ChildLabel}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FLuongCnvqpQt, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                        <TextBox Text="{Binding SettlementVoucherDetailExplain.FPhuCapCnvqpQt, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                 Style="{StaticResource TbData}" />
+                                    </StackPanel>
+                                    <!--<StackPanel Grid.Column="4" Orientation="Vertical" Margin="10 0 10 0">
+                                        <TextBlock Text="Hợp đồng - khác" TextAlignment="Center" Style="{StaticResource ParentLabel}"/>
+                                        <TextBlock Style="{StaticResource ChildLabel}"/>
+                                        <TextBox 
+                                            Text="{Binding SettlementVoucherDetailExplain.FLuongHd, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Style="{StaticResource TbData}"/>
+                                        <TextBox 
+                                            Text="{Binding SettlementVoucherDetailExplain.FPhuCapHd, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Style="{StaticResource TbData}"/>
+                                        <TextBlock Style="{StaticResource ChildLabel}"/>
+                                        <TextBox 
+                                            Text="{Binding SettlementVoucherDetailExplain.FLuongHdTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Style="{StaticResource TbDataEdit}"/>
+                                        <TextBox 
+                                            Text="{Binding SettlementVoucherDetailExplain.FPhuCapHdTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Style="{StaticResource TbDataEdit}"/>
+                                        <TextBlock Style="{StaticResource ChildLabel}"/>
+                                        <TextBox 
+                                            Text="{Binding SettlementVoucherDetailExplain.FLuongBhxhHdTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Style="{StaticResource TbDataEdit}"/>
+                                        <TextBox 
+                                            Text="{Binding SettlementVoucherDetailExplain.FPhuCapBhxhHdTru, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Style="{StaticResource TbDataEdit}"/>
+                                        <TextBlock Style="{StaticResource ChildLabel}"/>
+                                        <TextBox 
+                                            Text="{Binding SettlementVoucherDetailExplain.FLuongHdQt, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Style="{StaticResource TbData}"/>
+                                        <TextBox 
+                                            Text="{Binding SettlementVoucherDetailExplain.FPhuCapHdQt, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Style="{StaticResource TbData}"/>
+                                    </StackPanel>-->
+                                </Grid>
+                                <Grid Grid.Row="1"
+                                      IsEnabled="{Binding IsEnableSelfPayTab}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1.5*" />
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="2*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0"
+                                                Orientation="Vertical">
+                                        <TextBlock Text="III. CHI RA QUÂN"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <TextBlock Text="1. Hưu:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <TextBlock Text="2. Phục viên, xuất ngũ:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                        <TextBlock Text="3. Thôi việc:"
+                                                   Style="{StaticResource ChildLabel}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1"
+                                                Orientation="Vertical"
+                                                Margin="10 0 10 0">
+                                        <TextBlock Text="Sĩ quan"
+                                                   TextAlignment="Center"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <Grid>
+                                            <!--<Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                            </Grid.ColumnDefinitions>-->
+                                            <!--<StackPanel Grid.Column="0" Orientation="Vertical" Margin="0 0 5 0">
+                                                <TextBox 
+                                                    Text="{Binding SettlementVoucherDetailExplain.FRaQuanSiQuanNguoiXuatNgu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                    Style="{StaticResource TbDataEdit}"/>
+                                                <TextBox 
+                                                    Text="{Binding SettlementVoucherDetailExplain.FRaQuanSiQuanNguoiHuu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                    Style="{StaticResource TbDataEdit}"/>
+                                                <TextBox 
+                                                    Text="{Binding SettlementVoucherDetailExplain.FRaQuanSiQuanNguoiThoiViec, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                    Style="{StaticResource TbDataEdit}"/>
+                                            </StackPanel>-->
+                                            <StackPanel Grid.Column="0"
+                                                        Orientation="Vertical"
+                                                        Margin="5 0 0 0">
+                                                <TextBox Text="{Binding SettlementVoucherDetailExplain.FRaQuanSiQuanTienHuu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                         Style="{StaticResource TbDataEdit}" />
+                                                <TextBox Text="{Binding SettlementVoucherDetailExplain.FRaQuanSiQuanTienXuatNgu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                         Style="{StaticResource TbDataEdit}" />
+                                                <TextBox Text="{Binding SettlementVoucherDetailExplain.FRaQuanSiQuanTienThoiViec, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                         Style="{StaticResource TbDataEdit}" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2"
+                                                Orientation="Vertical"
+                                                Margin="10 0 10 0">
+                                        <TextBlock Text="QNCN"
+                                                   TextAlignment="Center"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <Grid>
+                                            <!--<Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                            </Grid.ColumnDefinitions>-->
+                                            <!--<StackPanel Grid.Column="0" Orientation="Vertical" Margin="0 0 5 0">
+                                                <TextBox 
+                                                    Text="{Binding SettlementVoucherDetailExplain.FRaQuanQncnNguoiXuatNgu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                    Style="{StaticResource TbDataEdit}"/>
+                                                <TextBox 
+                                                    Text="{Binding SettlementVoucherDetailExplain.FRaQuanQncnNguoiHuu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                    Style="{StaticResource TbDataEdit}"/>
+                                                <TextBox 
+                                                    Text="{Binding SettlementVoucherDetailExplain.FRaQuanQncnNguoiThoiViec, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                    Style="{StaticResource TbDataEdit}"/>
+                                            </StackPanel>-->
+                                            <StackPanel Grid.Column="0"
+                                                        Orientation="Vertical"
+                                                        Margin="5 0 0 0">
+                                                <TextBox Text="{Binding SettlementVoucherDetailExplain.FRaQuanQncnTienHuu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                         Style="{StaticResource TbDataEdit}" />
+                                                <TextBox Text="{Binding SettlementVoucherDetailExplain.FRaQuanQncnTienXuatNgu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                         Style="{StaticResource TbDataEdit}" />
+                                                <TextBox Text="{Binding SettlementVoucherDetailExplain.FRaQuanQncnTienThoiViec, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                         Style="{StaticResource TbDataEdit}" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="3"
+                                                Orientation="Vertical"
+                                                Margin="10 0 10 0">
+                                        <TextBlock Text="HSQ, BS"
+                                                   TextAlignment="Center"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <Grid>
+                                            <!--<Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                            </Grid.ColumnDefinitions>-->
+                                            <!--<StackPanel Grid.Column="0" Orientation="Vertical" Margin="0 0 5 0">
+                                                <TextBox 
+                                                    Text="{Binding SettlementVoucherDetailExplain.FRaQuanHsqcsNguoiXuatNgu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                    Style="{StaticResource TbDataEdit}"/>
+                                                                                    <TextBox 
+                                                    Text="{Binding SettlementVoucherDetailExplain.FRaQuanHsqcsNguoiHuu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                    Style="{StaticResource TbDataEdit}"/>
+                                                                                    <TextBox 
+                                                    Text="{Binding SettlementVoucherDetailExplain.FRaQuanHsqcsNguoiThoiViec, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                    Style="{StaticResource TbDataEdit}"/>
+                                             </StackPanel>-->
+                                            <StackPanel Grid.Column="0"
+                                                        Orientation="Vertical"
+                                                        Margin="5 0 0 0">
+                                                <TextBox Text="{Binding SettlementVoucherDetailExplain.FRaQuanHsqcsTienHuu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                         Style="{StaticResource TbDataEdit}" />
+                                                <TextBox Text="{Binding SettlementVoucherDetailExplain.FRaQuanHsqcsTienXuatNgu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                         Style="{StaticResource TbDataEdit}" />
+                                                <TextBox Text="{Binding SettlementVoucherDetailExplain.FRaQuanHsqcsTienThoiViec, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                         Style="{StaticResource TbDataEdit}" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="4"
+                                                Orientation="Vertical"
+                                                Margin="10 0 10 0">
+                                        <TextBlock Text="Đối tượng khác"
+                                                   TextAlignment="Center"
+                                                   Style="{StaticResource ParentLabel}" />
+                                        <Grid>
+                                            <!--<Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                            </Grid.ColumnDefinitions>-->
+                                            <!--<StackPanel Grid.Column="0" Orientation="Vertical" Margin="0 0 5 0">
+                                                <TextBox 
+                                                    Text="{Binding SettlementVoucherDetailExplain.FRaQuanCnvqpNguoiXuatNgu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                    Style="{StaticResource TbDataEdit}"/>
+                                                <TextBox 
+                                                    Text="{Binding SettlementVoucherDetailExplain.FRaQuanCnvqpNguoiHuu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                    Style="{StaticResource TbDataEdit}"/>
+                                                <TextBox 
+                                                    Text="{Binding SettlementVoucherDetailExplain.FRaQuanCnvqpNguoiThoiViec, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                    Style="{StaticResource TbDataEdit}"/>
+                                            </StackPanel>-->
+                                            <StackPanel Grid.Column="0"
+                                                        Orientation="Vertical"
+                                                        Margin="5 0 0 0">
+                                                <TextBox Text="{Binding SettlementVoucherDetailExplain.FRaQuanCnvqpTienHuu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                         Style="{StaticResource TbDataEdit}" />
+                                                <TextBox Text="{Binding SettlementVoucherDetailExplain.FRaQuanCnvqpTienXuatNgu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                         Style="{StaticResource TbDataEdit}" />
+                                                <TextBox Text="{Binding SettlementVoucherDetailExplain.FRaQuanCnvqpTienThoiViec, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                         Style="{StaticResource TbDataEdit}" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="Nhập tiền lương trừ"
+                             Style="{StaticResource ExplainTabItemStyle}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0"
+                                    BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                    BorderThickness="1 0 1 0">
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="5 5 0 0">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="{x:Type ComboBox}"
+                                               BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                                            <Setter Property="Width"
+                                                    Value="150" />
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    <TextBlock Margin="0 8 0 0"
+                                               Text="F3: Thêm dòng, F4: Xóa dòng"
+                                               Padding="4"
+                                               Visibility="{Binding IsEnableSelfPayTab, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                                               Visibility="{Binding IsEnableSelfPayTab, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <Button Style="{StaticResource SearchBarBtnStyle}"
+                                            ToolTip="Refresh"
+                                            Command="{Binding ReloadDataCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Refresh" />
+                                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                                       Text="(F5)" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                                    <Button Style="{StaticResource SearchBarBtnStyle}"
+                                            Visibility="{Binding IsEnableSelfPayTab, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            IsEnabled="{Binding IsDeleteAll}"
+                                            Command="{Binding DeleteAllCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="DeleteForever" />
+                                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                                       Text="Xóa tất cả" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                                               Visibility="{Binding IsEnableSelfPayTab, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <Button Style="{StaticResource SearchBarBtnStyle}"
+                                            IsEnabled="{Binding IsSaveData}"
+                                            Visibility="{Binding IsEnableSelfPayTab, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            Command="{Binding SaveCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="ContentSave" />
+                                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                                       Text="Lưu số liệu" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                                               Visibility="{Binding IsEnableSelfPayTab, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <Button Style="{StaticResource SearchBarBtnStyle}"
+                                            Name="btnSaveAndUpdate"
+                                            IsEnabled="{Binding IsSaveAndUpdateData}"
+                                            Visibility="{Binding IsEnableSelfPayTab, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            Command="{Binding SaveAndUpdateCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="ContentSave" />
+                                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                                       Text="Lưu và cập nhật" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                                               Visibility="{Binding IsEnableSelfPayTab, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <Button x:Name="btnShowColSelfPay"
+                                            Style="{StaticResource SearchBarBtnStyle}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                                       Text="Ẩn/hiện cột" />
+                                            <materialDesign:PopupBox Name="pbDynamicColumn"
+                                                                     Margin="-10 0 0 0"
+                                                                     HorizontalAlignment="Right"
+                                                                     StaysOpen="True">
+                                                <materialDesign:PopupBox.ToggleContent>
+                                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                                </materialDesign:PopupBox.ToggleContent>
+                                            </materialDesign:PopupBox>
+                                        </StackPanel>
+                                    </Button>
+                                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                                    <ComboBox Margin="0 0 0 5"
+                                              Name="cbFrozenColumn"
+                                              materialDesign:HintAssist.Hint="Cố định cột"
+                                              DisplayMemberPath="DisplayItem"
+                                              SelectedValuePath="ValueItem" />
+                                </StackPanel>
+                            </Border>
+                            <component:ExpandedDataGrid ColumnInfo="{Binding Columns}"
+                                                        ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                                                        ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                                                        Style="{StaticResource MaterialDesignDataGrid}"
+                                                        x:Name="DgDataInterpretation"
+                                                        IsEnabled="{Binding IsEnableSelfPayTab}"
+                                                        Grid.Row="1"
+                                                        AutoGenerateColumns="False"
+                                                        CanUserResizeColumns="True"
+                                                        BorderThickness="1"
+                                                        VerticalAlignment="Stretch"
+                                                        CanUserAddRows="False"
+                                                        FrozenColumnCount="3"
+                                                        GridLinesVisibility="All"
+                                                        CellStyle="{StaticResource DataGridCellDetail}"
+                                                        RowStyle="{StaticResource DataGridRowDetail}"
+                                                        ItemsSource="{Binding ExplainSubtracts}"
+                                                        SelectedItem="{Binding SelectedExplainSubtract}"
+                                                        ScrollViewer.ScrollChanged="dgdData_ScrollChanged"
+                                                        wpf:DataGridAssist.CornerRadius="0 0 4 4">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn x:Name="IdDoiTuong"
+                                                            Header="Đối tượng">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <DataTemplate.Resources>
+                                                    <Style TargetType="ComboBox"
+                                                           BasedOn="{StaticResource {ComponentResourceKey TypeInTargetAssembly={x:Type ComboBox}, ResourceId=MaterialDataGridComboBoxColumnEditingStyle}}">
+                                                    </Style>
+                                                </DataTemplate.Resources>
+                                                <ComboBox DisplayMemberPath="Name"
+                                                          SelectedValuePath="Code"
+                                                          SelectedValue="{Binding IIdDoiTuong, UpdateSourceTrigger=LostFocus}"
+                                                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.MilitaryObjects}">
+                                                </ComboBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn x:Name="IdDonVi"
+                                                        Header="Đơn vị"
+                                                        Binding="{Binding IIdMaDonVi, UpdateSourceTrigger=LostFocus}"
+                                                        IsReadOnly="True"
+                                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}" />
+                                    <DataGridTextColumn x:Name="HoTen"
+                                                        Header="Họ tên"
+                                                        Binding="{Binding SHoTen, UpdateSourceTrigger=LostFocus}"
+                                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" />
+                                    <DataGridTextColumn x:Name="LuongThang"
+                                                        Header="Tổng cộng"
+                                                        Binding="{Binding FLuongThang, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                        IsReadOnly="True" />
+                                    <component:DataGridTextColumn x:Name="NgayNghi"
+                                                                  Header="Ngày nghỉ"
+                                                                  StringFormat="{}{0:N0}"
+                                                                  Binding="{Binding FNgayNghi, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                                    <component:DataGridTextColumn x:Name="SoNguoi"
+                                                                  Header="Người"
+                                                                  StringFormat="{}{0:N0}"
+                                                                  Binding="{Binding FSoNguoi, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                                    <component:DataGridTextColumn x:Name="LuongCapBac"
+                                                                  Header="Lương CB"
+                                                                  StringFormat="{}{0:N0}"
+                                                                  Binding="{Binding FLuongCapBac, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                                    <component:DataGridTextColumn x:Name="LuongThamNien"
+                                                                  Header="Thâm niên"
+                                                                  StringFormat="{}{0:N0}"
+                                                                  Binding="{Binding FLuongThamNien, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                                    <component:DataGridTextColumn x:Name="LuongPhuCapCongVu"
+                                                                  Header="Phụ cấp CV"
+                                                                  StringFormat="{}{0:N0}"
+                                                                  Binding="{Binding FLuongPhuCapCongVu, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                                    <component:DataGridTextColumn x:Name="LuongPhuCapKhacBh"
+                                                                  Header="PC khác BH"
+                                                                  StringFormat="{}{0:N0}"
+                                                                  Binding="{Binding FLuongPhuCapKhacBh, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                                    <component:DataGridTextColumn x:Name="LuongPhuCapKhac"
+                                                                  Header="PC khác"
+                                                                  StringFormat="{}{0:N0}"
+                                                                  Binding="{Binding FLuongPhuCapKhac, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                                    <DataGridTextColumn x:Name="TongBaoHiem"
+                                                        Header="Tính BH"
+                                                        Binding="{Binding FTongBaoHiem, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                        IsReadOnly="True" />
+                                </DataGrid.Columns>
+                            </component:ExpandedDataGrid>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0"
+                                            Orientation="Horizontal">
+                                    <Grid Width="{Binding ElementName=IdDoiTuong, Path=ActualWidth}"></Grid>
+                                    <Grid Width="{Binding ElementName=IdDonVi, Path=ActualWidth}"></Grid>
+                                    <Grid Width="{Binding ElementName=HoTen, Path=ActualWidth}"></Grid>
+                                </StackPanel>
+                                <ScrollViewer Grid.Column="1"
+                                              x:Name="scrollFooter"
+                                              HorizontalScrollBarVisibility="Hidden"
+                                              VerticalScrollBarVisibility="Hidden">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Grid Width="{Binding ElementName=LuongThang, Path=ActualWidth}">
+                                            <TextBox Text="{Binding SumExplainSubtract.TongLuongThang, StringFormat={}{0:N0}}"
+                                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                                        </Grid>
+                                        <Grid Width="{Binding ElementName=NgayNghi, Path=ActualWidth}">
+                                            <TextBox Text="{Binding SumExplainSubtract.TongNgayNghi, StringFormat={}{0:N0}}"
+                                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                                        </Grid>
+                                        <Grid Width="{Binding ElementName=SoNguoi, Path=ActualWidth}">
+                                            <TextBox Text="{Binding SumExplainSubtract.TongSoNguoi, StringFormat={}{0:N0}}"
+                                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                                        </Grid>
+                                        <Grid Width="{Binding ElementName=LuongCapBac,Path=ActualWidth}">
+                                            <TextBox Text="{Binding SumExplainSubtract.TongLuongCapBac, StringFormat={}{0:N0}}"
+                                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                                        </Grid>
+                                        <Grid Width="{Binding ElementName=LuongThamNien,Path=ActualWidth}">
+                                            <TextBox Text="{Binding SumExplainSubtract.TongLuongThamNien, StringFormat={}{0:N0}}"
+                                                     IsReadOnly="True"
+                                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                                        </Grid>
+                                        <Grid Width="{Binding ElementName=LuongPhuCapCongVu,Path=ActualWidth}">
+                                            <TextBox Text="{Binding SumExplainSubtract.TongLuongPhuCapCongVu, StringFormat={}{0:N0}}"
+                                                     IsReadOnly="True"
+                                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                                        </Grid>
+                                        <Grid Width="{Binding ElementName=LuongPhuCapKhacBh,Path=ActualWidth}">
+                                            <TextBox Text="{Binding SumExplainSubtract.TongLuongPhuCapKhacBh, StringFormat={}{0:N0}}"
+                                                     IsReadOnly="True"
+                                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                                        </Grid>
+                                        <Grid Width="{Binding ElementName=LuongPhuCapKhac,Path=ActualWidth}">
+                                            <TextBox Text="{Binding SumExplainSubtract.TongLuongPhuCapKhac, StringFormat={}{0:N0}}"
+                                                     IsReadOnly="True"
+                                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                                        </Grid>
+                                        <Grid Width="{Binding ElementName=TongBaoHiem,Path=ActualWidth}">
+                                            <TextBox Text="{Binding SumExplainSubtract.TongBaoHiem, StringFormat={}{0:N0}}"
+                                                     IsReadOnly="True"
+                                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                                        </Grid>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                <StackPanel Grid.Row="3"
+                            Orientation="Horizontal"
+                            Margin="0 10 0 0"
+                            HorizontalAlignment="Right">
+                    <Button Margin="5 0 5 0"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Command="{Binding SaveCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Lưu dữ liệu" />
+                        </StackPanel>
+                    </Button>
+                    <Button IsCancel="True"
+                            Margin="5 0 0 0"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding ElementName=DataInterpretationWindow}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CloseOutline" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Đóng" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+
+    </materialDesign:DialogHost>
+</Window>

@@ -1,0 +1,267 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.SystemAdmin.Utilities.ClearDataRedundancy"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.SystemAdmin.Utilities"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:compt="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:lcEnum="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <materialDesign:PackIcon Kind="DriveDocument"
+                                     Height="32"
+                                     Width="32"
+                                     Foreground="{DynamicResource PrimaryHueMidBrush}" />
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold"
+                           Text="{Binding Title}"></TextBlock>
+                <TextBlock Text="{Binding Description}"></TextBlock>
+                <Separator Background="{StaticResource MaterialDesignDivider}"
+                           Margin="0 5 0 0" />
+            </StackPanel>
+        </DockPanel>
+        <StackPanel Grid.Row="1">
+            <StackPanel Margin="0 5"
+                        Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
+                    <Button Margin="40 20 0 20"
+                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
+                            materialDesign:ButtonProgressAssist.Value="-1"
+                            Style="{DynamicResource MaterialDesignRaisedButton}"
+                            HorizontalContentAlignment="Left"
+                            Command="{Binding ClearDataRedundancyCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Calculator"
+                                                     Visibility="{Binding IsLoading1, Converter={StaticResource InverseBoolToVisConverter}}" />
+                            <ProgressBar Height="20"
+                                         Width="20"
+                                         Value="35"
+                                         Margin="0 0 10 0"
+                                         Foreground="White"
+                                         IsIndeterminate="True"
+                                         Visibility="{Binding IsLoading1, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         Style="{StaticResource MaterialDesignCircularProgressBar}" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Tính toán lại dữ liệu" />
+                            <!--<ProgressBar Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         Height="20"
+                                         Width="20"
+                                         Value="35"
+                                         IsIndeterminate="True"
+                                         Style="{StaticResource MaterialDesignCircularProgressBar}" />-->
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="40 0 0 20"
+                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
+                            materialDesign:ButtonProgressAssist.Value="-1"
+                            Style="{DynamicResource MaterialDesignRaisedButton}"
+                            HorizontalContentAlignment="Left"
+                            Command="{Binding ConfigBudgetCategoryCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Settings" Visibility="{Binding IsLoading2, Converter={StaticResource InverseBoolToVisConverter}}"/>
+                            <ProgressBar Height="20"
+                                         Width="20"
+                                         Value="35"
+                                         Margin="0 0 10 0"
+                                         Foreground="White"
+                                         IsIndeterminate="True"
+                                         Visibility="{Binding IsLoading2, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         Style="{StaticResource MaterialDesignCircularProgressBar}" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Thiết lập lại cha con MLNS" />
+                        </StackPanel>
+                    </Button>
+                    <StackPanel Margin="40 0 0 20"
+                                Orientation="Horizontal">
+                        <Button Margin="0 0 10 0"
+                                materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                                materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
+                                materialDesign:ButtonProgressAssist.Value="-1"
+                                Style="{DynamicResource MaterialDesignRaisedButton}"
+                                HorizontalContentAlignment="Left"
+                                Command="{Binding CopyDoiTuongCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ContentCopy"
+                                                         Visibility="{Binding IsLoading3, Converter={StaticResource InverseBoolToVisConverter}}" />
+                                <ProgressBar Height="20"
+                                             Width="20"
+                                             Value="35"
+                                             Margin="0 0 10 0"
+                                             Foreground="White"
+                                             IsIndeterminate="True"
+                                             Visibility="{Binding IsLoading3, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                             Style="{StaticResource MaterialDesignCircularProgressBar}" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Sao chép dữ liệu đối tượng MLNS" />
+                            </StackPanel>
+                        </Button>
+                        <ComboBox Width="150"
+                                  HorizontalAlignment="Right"
+                                  materialDesign:HintAssist.Hint="Năm lấy dữ liệu"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  SelectedValue="{Binding SourceYear}"
+                                  ItemsSource="{Binding Years}"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    </StackPanel>
+                    <!--<StackPanel Margin="40 0 0 20"
+                                Orientation="Horizontal">
+                        <Button Margin="0 0 10 0"
+                                materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                                materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
+                                materialDesign:ButtonProgressAssist.Value="-1"
+                                Style="{DynamicResource MaterialDesignRaisedButton}"
+                                HorizontalContentAlignment="Left"
+                                Command="{Binding GenerateScriptCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Create" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Sinh mã dữ liệu" />
+                            </StackPanel>
+                        </Button>
+                        <ComboBox Width="150"
+                                  HorizontalAlignment="Right"
+                                  materialDesign:HintAssist.Hint="Phân hệ"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  SelectedValue="{Binding SelectedModule}"
+                                  ItemsSource="{Binding Modules}"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    </StackPanel>-->
+
+                    <StackPanel Margin="40 0 0 20"
+                                Orientation="Horizontal">
+                        <Button Margin="0 0 10 0"
+                                materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                                materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
+                                materialDesign:ButtonProgressAssist.Value="-1"
+                                Style="{DynamicResource MaterialDesignRaisedButton}"
+                                HorizontalContentAlignment="Left"
+                                Command="{Binding RestoreMLSKTCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Restore"
+                                                         Visibility="{Binding IsLoading4, Converter={StaticResource InverseBoolToVisConverter}}" />
+                                <ProgressBar Height="20"
+                                             Width="20"
+                                             Value="35"
+                                             Margin="0 0 10 0"
+                                             Foreground="White"
+                                             IsIndeterminate="True"
+                                             Visibility="{Binding IsLoading4, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                             Style="{StaticResource MaterialDesignCircularProgressBar}" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Khôi phục lại MLSKT, MAP_MLSKT" />
+                            </StackPanel>
+                        </Button>
+                        <ComboBox Width="150"
+                                  HorizontalAlignment="Right"
+                                  materialDesign:HintAssist.Hint="Năm khôi phục"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  SelectedValue="{Binding RestoreYear}"
+                                  ItemsSource="{Binding RestoreYears}"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    </StackPanel>
+
+                    <Button Margin="40 0 0 20"
+                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
+                            materialDesign:ButtonProgressAssist.Value="-1"
+                            Style="{DynamicResource MaterialDesignRaisedButton}"
+                            HorizontalContentAlignment="Left"
+                            Command="{Binding RestoreMLNSThuNopCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Settings"
+                                                     Visibility="{Binding IsLoading5, Converter={StaticResource InverseBoolToVisConverter}}" />
+                            <ProgressBar Height="20"
+                                         Width="20"
+                                         Value="35"
+                                         Margin="0 0 10 0"
+                                         Foreground="White"
+                                         IsIndeterminate="True"
+                                         Visibility="{Binding IsLoading5, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         Style="{StaticResource MaterialDesignCircularProgressBar}" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Khôi phục lại MLNS Thu nộp 2025" />
+                        </StackPanel>
+                    </Button>
+
+                    <StackPanel 
+                                Visibility="{Binding IsShowCompareDatabase, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Margin="40 0 0 20"
+                                Orientation="Horizontal">
+
+                        <Button Margin="0 0 20 20"
+                                materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                                materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
+                                materialDesign:ButtonProgressAssist.Value="-1"
+                                Style="{DynamicResource MaterialDesignRaisedButton}"
+                                HorizontalContentAlignment="Left"
+                                Command="{Binding CompareDatabaseCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Settings" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="So sánh cơ sở dữ liệu" />
+                            </StackPanel>
+                        </Button>
+                        <Button Margin="20 0 0 20"
+                                materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                                materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
+                                materialDesign:ButtonProgressAssist.Value="-1"
+                                Style="{DynamicResource MaterialDesignRaisedButton}"
+                                HorizontalContentAlignment="Left"
+                                Command="{Binding ShowErrorDataLogCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Journal" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Nhật ký so sánh CSDL" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <!--<Border BorderThickness="1"
+                            BorderBrush="{DynamicResource MaterialDesignDivider}"
+                            Margin="40 10 0 0"
+                            Padding="5 0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0"
+                                     IsEnabled="False"
+                                     materialDesign:HintAssist.Hint="Nhập dữ liệu"
+                                     materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                     BorderThickness="0"
+                                     VerticalAlignment="Center"
+                                     Text="{Binding FileName}" />
+                            <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                    Grid.Column="1"
+                                    Command="{Binding UploadFileCommand}">
+                                <materialDesign:PackIcon Kind="FileUpload"
+                                                         Margin="8 0 0 0" />
+                            </Button>
+                        </Grid>
+                    </Border>-->
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <component:ProgressBar Grid.Row="1" Margin="0 50 0 0" />
+    </Grid>
+</UserControl>

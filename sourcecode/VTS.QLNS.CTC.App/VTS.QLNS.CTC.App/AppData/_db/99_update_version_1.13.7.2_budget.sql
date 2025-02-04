@@ -1,0 +1,5 @@
+﻿UPDATE NS_QS_ChungTuChiTiet
+SET fSoLDHD = fSoLDHD - fSoCNVQP
+GO
+
+

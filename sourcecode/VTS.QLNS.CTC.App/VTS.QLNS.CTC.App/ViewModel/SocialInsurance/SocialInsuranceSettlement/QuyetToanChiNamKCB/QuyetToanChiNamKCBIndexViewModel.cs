@@ -1,0 +1,1014 @@
+﻿using AutoMapper;
+using FlexCel.Core;
+using log4net;
+using MaterialDesignThemes.Wpf;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Data;
+using VTS.QLNS.CTC.App.Command;
+using VTS.QLNS.CTC.App.Helper;
+using VTS.QLNS.CTC.App.Model;
+using VTS.QLNS.CTC.App.Model.Control;
+using VTS.QLNS.CTC.App.Properties;
+using VTS.QLNS.CTC.App.Service;
+using VTS.QLNS.CTC.App.Service.Impl;
+using VTS.QLNS.CTC.App.Service.UserFunction;
+using VTS.QLNS.CTC.App.View.SocialInsurance.SocialInsuranceSettlement.QuyetToanChiNamKCB;
+using VTS.QLNS.CTC.App.View.SocialInsurance.SocialInsuranceSettlement.QuyetToanChiNamKCB.Import;
+using VTS.QLNS.CTC.App.View.SocialInsurance.SocialInsuranceSettlement.QuyetToanChiNamKCB.PrintReport;
+using VTS.QLNS.CTC.App.ViewModel.SocialInsurance.SocialInsuranceSettlement.QuyetToanChiNamKCB.Import;
+using VTS.QLNS.CTC.App.ViewModel.SocialInsurance.SocialInsuranceSettlement.QuyetToanChiNamKCB.PritnReport;
+using VTS.QLNS.CTC.Core.Domain;
+using VTS.QLNS.CTC.Core.Service;
+using VTS.QLNS.CTC.Utility;
+using VTS.QLNS.CTC.Utility.Enum;
+
+namespace VTS.QLNS.CTC.App.ViewModel.SocialInsurance.SocialInsuranceSettlement.QuyetToanChiNamKCB
+{
+    public class QuyetToanChiNamKCBIndexViewModel : GridViewModelBase<BhQtcnKCBModel>
+    {
+        private readonly ILog _logger;
+        private readonly IMapper _mapper;
+        private readonly IBhDmMucLucNganSachService _bhDmMucLucNganSachService;
+        private readonly IQtcnKCBService _qtcnKCBService;
+        private readonly IQtcnKCBChiTietService _qtcnKCBChiTietService;
+        private readonly ISessionService _sessionService;
+        private readonly INsDonViService _donViService;
+        private readonly ISysAuditLogService _log;
+        private SessionInfo _sessionInfo;
+        private readonly IExportService _exportService;
+        private ICollectionView _bhChungTuModelsView;
+        private ICollectionView _nsDonViModelsView;
+        private readonly INsNguoiDungDonViService _iNguoiDungDonViService;
+
+        private ImportQuyetToanChiNamKCB _importQuyetToanChiNamKCB;
+        private bool _isEdit;
+        public bool IsEdit
+        {
+            get => _isEdit;
+            set => SetProperty(ref _isEdit, value);
+        }
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set => SetProperty(ref _searchText, value);
+        }
+        public bool IsButtonEnable
+        {
+            get
+            {
+                var result = false;
+                var lstSelected = Items.Where(x => x.Selected).ToList();
+                if (LockStatusSelected != null && !LockStatusSelected.ValueItem.Equals("0") && lstSelected.Count > 0)
+                {
+                    result = true;
+                }
+                else if (LockStatusSelected != null && LockStatusSelected.ValueItem.Equals("0") && lstSelected.Count > 0)
+                {
+                    var lstSelectedKhoa = lstSelected.Where(x => x.BIsKhoa).ToList();
+                    var lstSelectedMo = lstSelected.Where(x => !x.BIsKhoa).ToList();
+                    if (lstSelectedKhoa.Any() && lstSelectedMo.Any())
+                    {
+                        result = false;
+                    }
+                    else if (lstSelectedKhoa.Any())
+                    {
+                        IsLock = true;
+                        result = true;
+                    }
+                    else if (lstSelectedMo.Any())
+                    {
+                        IsLock = false;
+                        result = true;
+                    }
+
+                }
+                return result;
+
+            }
+        }
+
+        private bool _isLock;
+        public bool IsLock
+        {
+            get => _isLock;
+            set => SetProperty(ref _isLock, value);
+        }
+
+        private DonViModel _selectedNsDonViModel;
+        public DonViModel SelectedNsDonViModel
+        {
+            get => _selectedNsDonViModel;
+            set
+            {
+                SetProperty(ref _selectedNsDonViModel, value);
+                SearchData();
+            }
+        }
+
+        private bool _isOpenExcelPopup;
+        public bool IsOpenExcelPopup
+        {
+            get => _isOpenExcelPopup;
+            set => SetProperty(ref _isOpenExcelPopup, value);
+        }
+
+        private BhQtcnKCBModel _selectedChungTu;
+        public BhQtcnKCBModel SelectedChungTu
+        {
+            get => _selectedChungTu;
+            set
+            {
+                SetProperty(ref _selectedChungTu, value);
+                if (_selectedChungTu != null)
+                {
+                    IsLock = _selectedChungTu.BIsKhoa;
+                }
+                else
+                {
+                    IsEdit = false;
+                }
+                OnPropertyChanged(nameof(IsButtonEnable));
+                if (_selectedChungTu == null)
+                {
+                    IsEdit = false;
+                }
+                OnPropertyChanged(nameof(IsExportAggregateData));
+                OnPropertyChanged(nameof(IsExportDataFilter));
+            }
+        }
+
+        private List<BhQtcnKCBModel> _lstChungTuOrigin;
+        public List<BhQtcnKCBModel> LstChungTuOrigin
+        {
+            get => _lstChungTuOrigin;
+            set
+            {
+                SetProperty(ref _lstChungTuOrigin, value);
+            }
+        }
+
+        private ObservableCollection<DonViModel> _bhDonViModelItems;
+        public ObservableCollection<DonViModel> BhDonViModelItems
+        {
+            get => _bhDonViModelItems;
+            set => SetProperty(ref _bhDonViModelItems, value);
+        }
+
+        private ObservableCollection<ComboboxItem> _voucherTypes = new ObservableCollection<ComboboxItem>();
+
+        public ObservableCollection<ComboboxItem> VoucherTypes
+        {
+            get => _voucherTypes;
+            set => SetProperty(ref _voucherTypes, value);
+        }
+
+        public bool? IsAllItemSummariesSelected
+        {
+            get
+            {
+                if (Items != null)
+                {
+                    var selected = Items.Select(item => item.Selected).Distinct().ToList();
+                    return selected.Count == 1 ? selected.Single() : (bool?)null;
+                }
+                return false;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    SelectAll(value.Value, Items);
+                    OnPropertyChanged();
+                    //if (Items != null)
+                    //{
+                    //    Items.Where(x => x.IsExpand).ForAll(c => c.Selected = value.Value);
+                    //}
+                }
+            }
+        }
+        private ObservableCollection<ComboboxItem> _lockStatus = new ObservableCollection<ComboboxItem>();
+
+        public ObservableCollection<ComboboxItem> LockStatus
+        {
+            get => _lockStatus;
+            set => SetProperty(ref _lockStatus, value);
+        }
+
+        private ComboboxItem _lockStatusSelected;
+
+        public ComboboxItem LockStatusSelected
+        {
+            get => _lockStatusSelected;
+            set
+            {
+                SetProperty(ref _lockStatusSelected, value);
+                OnRefresh();
+                OnPropertyChanged(nameof(IsButtonEnable));
+                if (_lockStatusSelected != null && _lockStatusSelected.ValueItem.Equals("1"))
+                {
+                    IsLock = true;
+                }
+                else if (_lockStatusSelected != null && _lockStatusSelected.ValueItem.Equals("2"))
+                {
+                    IsLock = false;
+                }
+            }
+        }
+
+        private ObservableCollection<ComboboxItem> _budgetSourceTypes = new ObservableCollection<ComboboxItem>();
+
+        public ObservableCollection<ComboboxItem> BudgetSourceTypes
+        {
+            get => _budgetSourceTypes;
+            set => SetProperty(ref _budgetSourceTypes, value);
+        }
+
+        /// <summary>
+        /// Checkbox select all property
+        /// </summary>
+        public bool? IsAllItemsSelected
+        {
+            get
+            {
+                if (Items != null)
+                {
+                    var selected = Items.Select(item => item.Selected).Distinct().ToList();
+                    return selected.Count == 1 ? selected.Single() : (bool?)null;
+                }
+                return false;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    SelectAll(value.Value, Items);
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsCensorship
+        {
+            get
+            {
+                var itemSelected = Items.Where(x => x.Selected);
+                return itemSelected.Any() && itemSelected.All(x => !x.IsSummaryVocher && x.BIsKhoa);
+            }
+        }
+
+        public bool IsExportAggregateData => Items != null && Items.Any(n => n.Selected);
+        public bool IsExportDataFilter => _selectedChungTu != null;
+
+        private void SelectAll(bool select, IEnumerable<BhQtcnKCBModel> models)
+        {
+            foreach (var model in models.Where(x => x.IsFilter))
+            {
+                if (!model.BDaTongHop)
+                {
+                    model.Selected = select;
+                }
+            }
+        }
+        public bool IsEnableButtonDataShow => TabIndex == ImportTabIndex.Data;
+
+        private ImportTabIndex _tabIndex;
+        public ImportTabIndex TabIndex
+        {
+            get => _tabIndex;
+            set
+            {
+                SetProperty(ref _tabIndex, value);
+                LoadData();
+                OnPropertyChanged(nameof(IsEnableButtonDataShow));
+
+            }
+        }
+        public string ComboboxDisplayMemberPath => nameof(SelectedNsDonViModel.TenDonViIdDonVi);
+        public override Type ContentType => typeof(QuyetToanChiNamKCBIndex);
+        public override string GroupName => MenuItemContants.GROUP_QT_CHI_NAM;
+        public override string Description => "QT chi năm KCB quân y đơn vị";
+        public override string Name => "QT chi KCB quân y đơn vị";
+        public override PackIconKind IconKind => PackIconKind.BankTransferOut;
+        public RelayCommand SelectionChangedCommand { get; }
+        public RelayCommand ExportCommand { get; }
+        public RelayCommand LockCommand { get; }
+        public RelayCommand PrintCommand { get; }
+        public RelayCommand SearchCommand { get; }
+        public RelayCommand AggregateCommand { get; }
+        public RelayCommand ExportDataCommand { get; }
+        public RelayCommand ImportDataCommand { get; }
+        public RelayCommand ExportDataFilterCommand { get; }
+        public RelayCommand UploadFileCommand { get; }
+
+        public QuyetToanChiNamKCBDialogViewModel QuyetToanChiNamKCBDialogViewModel { get; }
+        public QuyetToanChiNamKCBDetailViewModel QuyetToanChiNamKCBDetailViewModel { get; }
+        public QuyetToanChiNamKCBSummaryViewModel QuyetToanChiNamKCBSummaryViewModel { get; }
+        public PrintQuyetToanChiNamKCViewModel PrintQuyetToanChiNamKCViewModel { get; }
+        public ImportQuyetToanChiNamKCBViewModel ImportQuyetToanChiNamKCBViewModel { get; }
+
+        public QuyetToanChiNamKCBIndexViewModel(
+            IBhDmMucLucNganSachService bhDmMucLucNganSachService,
+            IQtcnKCBService qtcnKCBService,
+            IQtcnKCBChiTietService qtcnKCBChiTietService,
+            ILog logger,
+            IMapper mapper,
+            IExportService exportService,
+            ISessionService sessionService,
+            INsDonViService donViService,
+            INsNguoiDungDonViService iNguoiDungDonViService,
+            QuyetToanChiNamKCBDialogViewModel quyetToanChiNamKCBDialogViewModel,
+            QuyetToanChiNamKCBDetailViewModel quyetToanChiNamKCBDetailViewModel,
+            QuyetToanChiNamKCBSummaryViewModel quyetToanChiNamKCBSummaryViewModel,
+            PrintQuyetToanChiNamKCViewModel printQuyetToanChiNamKCViewModel,
+            ImportQuyetToanChiNamKCBViewModel importQuyetToanChiNamKCBViewModel,
+            ISysAuditLogService log)
+        {
+            _logger = logger;
+            _mapper = mapper;
+            _sessionService = sessionService;
+            _bhDmMucLucNganSachService = bhDmMucLucNganSachService;
+            _qtcnKCBService = qtcnKCBService;
+            _qtcnKCBChiTietService = qtcnKCBChiTietService;
+            _exportService = exportService;
+            _donViService = donViService;
+            _log = log;
+            _iNguoiDungDonViService = iNguoiDungDonViService;
+
+            QuyetToanChiNamKCBDialogViewModel = quyetToanChiNamKCBDialogViewModel;
+            QuyetToanChiNamKCBDialogViewModel.ParentPage = this;
+            QuyetToanChiNamKCBDetailViewModel = quyetToanChiNamKCBDetailViewModel;
+            QuyetToanChiNamKCBDetailViewModel.ParentPage = this;
+            QuyetToanChiNamKCBSummaryViewModel = quyetToanChiNamKCBSummaryViewModel;
+            QuyetToanChiNamKCBSummaryViewModel.ParentPage = this;
+            ImportQuyetToanChiNamKCBViewModel = importQuyetToanChiNamKCBViewModel;
+            ImportQuyetToanChiNamKCBViewModel.ParentPage = this;
+            PrintQuyetToanChiNamKCViewModel = printQuyetToanChiNamKCViewModel;
+            PrintQuyetToanChiNamKCViewModel.ParentPage = this;
+
+            ExportCommand = new RelayCommand(obj => IsOpenExcelPopup = true);
+            SelectionChangedCommand = new RelayCommand(OnSelectedChange);
+            LockCommand = new RelayCommand(OnLock);
+            ExportDataCommand = new RelayCommand(obj => OnExportDataCommand());
+            AggregateCommand = new RelayCommand(obj => ConfirmAggregate());
+            ImportDataCommand = new RelayCommand(obj => OnImportData());
+            PrintCommand = new RelayCommand(OnPrint);
+            SearchCommand = new RelayCommand(obj => SearchData());
+        }
+        private void SearchData()
+        {
+            if (_bhChungTuModelsView != null)
+                _bhChungTuModelsView.Refresh();
+        }
+        public override void OnCancel()
+        {
+            base.OnCancel();
+            ParentPage.ParentPage.CurrentPage = null;
+        }
+
+        protected override void OnSelectionDoubleClick(object obj)
+        {
+            base.OnSelectionDoubleClick(obj);
+            OpenDetailDialog((BhQtcnKCBModel)obj, false);
+        }
+
+        protected override void OnDelete()
+        {
+            if (SelectedChungTu == null) return;
+            if (SelectedChungTu.SNguoiTao != _sessionInfo.Principal)
+            {
+                MessageBoxHelper.Warning(string.Format(Resources.MsgRoleDelete, SelectedChungTu.SNguoiTao));
+                return;
+            }
+            var messageBuilder = new StringBuilder();
+            messageBuilder.AppendFormat(Resources.DeleteChungTuKhtBHXH, SelectedChungTu.SSoChungTu, SelectedChungTu.DNgayChungTu);
+            var messageBox = new NSMessageBoxViewModel(messageBuilder.ToString(), "Xác nhận", NSMessageBoxButtons.YesNo,
+                OnDeleteHandler);
+            DialogHost.Show(messageBox.Content, "RootDialog");
+        }
+        private bool ChungTuModelsFilter(object obj)
+        {
+            if (!(obj is BhQtcnKCBModel temp)) return true;
+            var keyword = SearchText?.Trim().ToLower() ?? string.Empty;
+            var condition1 = false;
+            var condition2 = true;
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                if (!string.IsNullOrEmpty(temp.SSoChungTu))
+                    condition1 = condition1 || temp.SSoChungTu.ToLower().Contains(keyword);
+                if (!string.IsNullOrEmpty(temp.SSoQuyetDinh))
+                    condition1 = condition1 || temp.SSoQuyetDinh.ToLower().Contains(keyword);
+                if (!string.IsNullOrEmpty(temp.SMoTa))
+                    condition1 = condition1 || temp.SMoTa.ToLower().Contains(keyword);
+                if (!string.IsNullOrEmpty(temp.SNguoiTao))
+                    condition1 = condition1 || temp.SNguoiTao.ToLower().Contains(keyword);
+
+            }
+            else
+            {
+                condition1 = true;
+            }
+
+            if (SelectedNsDonViModel != null)
+            {
+                condition2 = condition2 && temp.IIdMaDonVi == SelectedNsDonViModel.IIDMaDonVi;
+            }
+
+            if (LockStatusSelected != null)
+            {
+                if (LockStatusSelected.ValueItem.Equals("1"))
+                {
+                    condition2 = condition2 && temp.BIsKhoa == true;
+                }
+                if (LockStatusSelected.ValueItem.Equals("2"))
+                {
+                    condition2 = condition2 && temp.BIsKhoa == false;
+                }
+            }
+            var result = condition1 && condition2;
+            temp.IsFilter = result;
+            return result;
+        }
+        private void OnDeleteHandler(NSDialogResult result)
+        {
+            if (result != NSDialogResult.Yes) return;
+            DateTime dtNow = DateTime.Now;
+            if (SelectedChungTu != null)
+            {
+                var khtChungTu = _qtcnKCBService.FindById(SelectedChungTu.Id);
+                if (khtChungTu != null)
+                {
+                    var predicate_chitiet = PredicateBuilder.True<BhQtcnKCBChiTiet>();
+                    predicate_chitiet = predicate_chitiet.And(x => x.IIdQTCNamKCBQuanYDonVi == SelectedChungTu.Id);
+
+                    var lstChungTuChiTiet = _qtcnKCBChiTietService.FindByCondition(predicate_chitiet).ToList();
+                    //Xóa chứng từ
+                    _qtcnKCBService.Delete(khtChungTu);
+
+                    if (!string.IsNullOrEmpty(khtChungTu.SDSSoChungTuTongHop))
+                    {
+                        var lstSoCtChild = khtChungTu.SDSSoChungTuTongHop.Split(",");
+                        foreach (var soct in lstSoCtChild)
+                        {
+                            var ctChild = _qtcnKCBService.FindByYear(_sessionInfo.YearOfWork).Where(x => x.SSoChungTu == soct).FirstOrDefault();
+                            if (ctChild != null)
+                            {
+                                ctChild.ILoaiTongHop = SettlementTypeLoaiChungTu.ChungTu;
+                                ctChild.BDaTongHop = false;
+                                _qtcnKCBService.Update(ctChild);
+                            }
+                        }
+                    }
+                    //Xóa chi tiết chứng từ
+                    _qtcnKCBChiTietService.RemoveRange(lstChungTuChiTiet);
+                    _log.WriteLog(Resources.ApplicationName, "Xóa chứng từ", (int)TypeExecute.Delete, dtNow, TransactionStatus.Success, _sessionService.Current.Principal);
+                    OnRefresh();
+                    DialogHost.CloseDialogCommand.Execute(null, null);
+                }
+            }
+        }
+
+        private void OnImportData()
+        {
+            ImportQuyetToanChiNamKCBViewModel.Init();
+            ImportQuyetToanChiNamKCBViewModel.SavedAction = obj =>
+            {
+                _importQuyetToanChiNamKCB.Close();
+                this.LoadData();
+                OnPropertyChanged(nameof(IsCensorship));
+                IsAllItemsSelected = false;
+                OpenDetailDialog((BhQtcnKCBModel)obj);
+            };
+            _importQuyetToanChiNamKCB = new ImportQuyetToanChiNamKCB
+            {
+                DataContext = ImportQuyetToanChiNamKCBViewModel
+            };
+            _importQuyetToanChiNamKCB.ShowDialog();
+
+        }
+
+        private void ConfirmAggregate()
+        {
+            List<BhQtcnKCBModel> selectedSktChungTus = Items.Where(x => x.Selected && !x.IsSummaryVocher).ToList();
+            bool checkAllowAggregate = selectedSktChungTus.All(x => x.BIsKhoa);
+            if (checkAllowAggregate)
+            {
+                OnAggregate();
+            }
+            else
+            {
+                string message = Resources.ConfirmAggregate;
+                MessageBoxResult result = MessageBoxHelper.Confirm(message);
+                if (result == MessageBoxResult.Yes)
+                    OnAggregate();
+            }
+        }
+
+        private void OnAggregate()
+        {
+            //kiểm tra trạng thái các bản ghi
+            if (!_sessionService.Current.IsQuanLyDonViCha)
+            {
+                MessageBoxHelper.Warning(Resources.MsgRoleSummary);
+                return;
+            }
+            List<BhQtcnKCBModel> selectedVouchers = Items.Where(x => x.Selected && x.BIsKhoa && !x.IsSummaryVocher && x.IsFilter).ToList();
+
+            if (selectedVouchers.Select(x => x.INamLamViec).Distinct().Count() != 1)
+            {
+                MessageBoxHelper.Info(Resources.AlertAggregateAgency);
+                return;
+            }
+
+            QuyetToanChiNamKCBSummaryViewModel.BhQtcnKCB = new BhQtcnKCBModel();
+            QuyetToanChiNamKCBSummaryViewModel.DataBhqtcnKCB = new ObservableCollection<BhQtcnKCBModel>(selectedVouchers);
+            QuyetToanChiNamKCBSummaryViewModel.IsEditProcess = false;
+            QuyetToanChiNamKCBSummaryViewModel.Init();
+            QuyetToanChiNamKCBSummaryViewModel.SavedAction = obj =>
+            {
+                TabIndex = ImportTabIndex.MLNS;
+                this.LoadData();
+                OnPropertyChanged(nameof(IsCensorship));
+                IsAllItemsSelected = false;
+                OpenDetailDialog((BhQtcnKCBModel)obj);
+            };
+            var addView = new QuyetToanChiNamKCBSummary() { DataContext = QuyetToanChiNamKCBSummaryViewModel };
+            DialogHost.Show(addView, SystemConstants.ROOT_DIALOG, null, ClosingEventHandler);
+        }
+        private void OnSelectedChange(object obj)
+        {
+            SelectedChungTu = (BhQtcnKCBModel)obj;
+            if (SelectedChungTu is { BIsKhoa: true } || SelectedChungTu == null)
+            {
+                IsEdit = false;
+            }
+            else
+            {
+                IsEdit = true;
+            }
+        }
+
+        private void ClosingEventHandler(object sender, DialogClosingEventArgs eventArgs)
+        {
+            LoadData();
+            if (eventArgs.Parameter != null)
+                OpenDetailDialog((BhQtcnKCBModel)eventArgs.Parameter);
+        }
+
+        private void LoadData()
+        {
+            _sessionInfo = _sessionService.Current;
+            LoadQuyetToanChungTu();
+            LoadNsDonVi();
+            OnPropertyChanged(nameof(IsCensorship));
+        }
+
+        private void LoadLockStatus()
+        {
+            var lockStatus = new List<ComboboxItem>
+            {
+                new ComboboxItem {DisplayItem = "Toàn bộ", ValueItem = "0"},
+                new ComboboxItem {DisplayItem = "Đã khóa", ValueItem = "1"},
+                new ComboboxItem {DisplayItem = "Chưa khóa", ValueItem = "2"},
+            };
+
+            LockStatus = new ObservableCollection<ComboboxItem>(lockStatus);
+            LockStatusSelected = LockStatus.ElementAt(0);
+        }
+
+        private void LoadQuyetToanChungTu()
+        {
+            try
+            {
+                var yearOfWork = _sessionInfo.YearOfWork;
+                var currentIdDonVi = _sessionInfo.IdDonVi;
+
+                var listChungTu = _qtcnKCBService.GetDanhSachQuyetToanNamKCB(yearOfWork).OrderBy(x => x.SSoChungTu);
+                _lstChungTuOrigin = _mapper.Map<List<BhQtcnKCBModel>>(listChungTu);
+
+                if (_sessionService.Current.IsQuanLyDonViCha)
+                {
+                    if (TabIndex == ImportTabIndex.Data)
+                    {
+                        Items = _mapper.Map<ObservableCollection<BhQtcnKCBModel>>(listChungTu.Where(x => x.ILoaiTongHop == KhcBhxhLoaiChungTu.BhxhChungTu && !x.BDaTongHop));
+                    }
+                    else
+                    {
+                        var listCTTongHop = listChungTu.Where(x => x.ILoaiTongHop.Equals(BhxhLoaiChungTu.BhxhChungTuTongHop) && x.IIdMaDonVi.Equals(_sessionInfo.IdDonVi)).ToList();
+                        var listTongHop = new List<BhQtcnKCBModel>();
+                        foreach (var ctTongHop in listCTTongHop)
+                        {
+                            var parent = _mapper.Map<BhQtcnKCBModel>(ctTongHop);
+                            parent.IsExpand = true;
+                            listTongHop.Add(parent);
+
+
+                            if (!string.IsNullOrEmpty(ctTongHop.SDSSoChungTuTongHop))
+                            {
+                                var listChild = _mapper.Map<List<BhQtcnKCBModel>>(listChungTu.Where(x => ctTongHop.SDSSoChungTuTongHop != null && ctTongHop.SDSSoChungTuTongHop.Contains(x.SSoChungTu)));
+                                listChild.ForEach(x => { x.IsChildSummary = true; x.SoChungTuParent = ctTongHop.SSoChungTu; });
+                                listTongHop.AddRange(listChild);
+                            }
+                        }
+
+                        Items = _mapper.Map<ObservableCollection<BhQtcnKCBModel>>(listTongHop);
+                    }
+                }
+                else
+                {
+                    Items = _mapper.Map<ObservableCollection<BhQtcnKCBModel>>(listChungTu.Where(x => x.ILoaiTongHop == BhxhLoaiChungTu.BhxhChungTu && !x.BDaTongHop));
+                }
+
+                foreach (var model in Items)
+                {
+                    model.PropertyChanged += (sender, args) =>
+                    {
+                        if (args.PropertyName == nameof(BhQtcnKCBModel.Selected))
+                        {
+                            OnPropertyChanged(nameof(IsCensorship));
+                            OnPropertyChanged(nameof(IsExportAggregateData));
+                            OnPropertyChanged(nameof(IsExportDataFilter));
+                            OnPropertyChanged(nameof(IsButtonEnable));
+                            OnPropertyChanged(nameof(IsAllItemsSelected));
+                        }
+                        if (args.PropertyName == nameof(BhQtcnKCBModel.IsCollapse))
+                        {
+                            ExpandChild();
+                        }
+                    };
+                }
+                _bhChungTuModelsView = CollectionViewSource.GetDefaultView(Items);
+                _bhChungTuModelsView.Filter = ChungTuModelsFilter;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+            }
+        }
+
+        private void ExpandChild()
+        {
+            if (Items != null)
+            {
+                Items.Where(n => n.SoChungTuParent == SelectedChungTu.SSoChungTu).Select(n => { n.IsExpand = !n.IsExpand; return n; }).ToList();
+            }
+        }
+
+        private void LockOrUnLockMultiVoucher()
+        {
+            DateTime dtNow = DateTime.Now;
+            var lstSelected = Items.Where(x => x.Selected).ToList();
+            var isLock = !lstSelected.FirstOrDefault().BIsKhoa;
+            foreach (var ct in lstSelected)
+            {
+                _qtcnKCBService.LockOrUnLock(ct.Id, isLock);
+                var chungTu = Items.First(x => x.Id == ct.Id);
+                chungTu.BIsKhoa = !ct.BIsKhoa;
+            }
+            _log.WriteLog(Resources.ApplicationName, "Khóa chứng từ quyết toán chi năm", (int)TypeExecute.Update, dtNow, TransactionStatus.Success, _sessionService.Current.Principal);
+            LoadQuyetToanChungTu();
+        }
+
+        private void LoadNsDonVi()
+        {
+            var yearOfWork = _sessionService.Current.YearOfWork;
+            var predicate = PredicateBuilder.True<DonVi>();
+            predicate = predicate.And(x => x.NamLamViec == yearOfWork);
+            if (Items != null && Items.Count > 0)
+            {
+                var idDonVis = Items.Select(x => x.IIdMaDonVi).ToList();
+                predicate = predicate.And(x => idDonVis.Any(y => y == x.IIDMaDonVi));
+                var listUnit = _donViService.FindByCondition(predicate).ToList();
+                BhDonViModelItems = new ObservableCollection<DonViModel>();
+                BhDonViModelItems = _mapper.Map<ObservableCollection<DonViModel>>(listUnit);
+                _nsDonViModelsView = CollectionViewSource.GetDefaultView(BhDonViModelItems);
+                _nsDonViModelsView.SortDescriptions.Add(new SortDescription(nameof(DonViModel.Loai),
+                    ListSortDirection.Ascending));
+                _nsDonViModelsView.SortDescriptions.Add(new SortDescription(nameof(DonViModel.TenDonVi),
+                    ListSortDirection.Ascending));
+            }
+        }
+
+        protected override void OnAdd()
+        {
+            QuyetToanChiNamKCBDialogViewModel.Name = "Thêm mới chứng từ";
+            QuyetToanChiNamKCBDialogViewModel.Description = "Tạo mới chứng từ kế hoạch thu";
+            QuyetToanChiNamKCBDialogViewModel.Model = new BhQtcnKCBModel();
+            QuyetToanChiNamKCBDialogViewModel.isSummary = false;
+            QuyetToanChiNamKCBDialogViewModel.Init();
+            QuyetToanChiNamKCBDialogViewModel.SavedAction = obj =>
+            {
+                var khtChungTu = (BhQtcnKCBModel)obj;
+                this.LoadData();
+                OpenDetailDialog(khtChungTu);
+            };
+            var exportView = new QuyetToanChiNamKCBDialog() { DataContext = QuyetToanChiNamKCBDialogViewModel };
+            DialogHost.Show(exportView, SystemConstants.ROOT_DIALOG);
+        }
+
+        protected override void OnUpdate()
+        {
+
+            if (SelectedChungTu != null)
+            {
+                if (SelectedChungTu.ILoaiTongHop == BhxhLoaiChungTu.BhxhChungTuTongHop)
+                {
+                    OnAggregateEdit();
+                }
+                else
+                {
+                    if (SelectedChungTu.SNguoiTao != _sessionInfo.Principal)
+                    {
+                        MessageBoxHelper.Warning(string.Format(Resources.MsgRoleUpdate, SelectedChungTu.SNguoiTao));
+                        return;
+                    }
+                    QuyetToanChiNamKCBDialogViewModel.Model = SelectedChungTu;
+                    QuyetToanChiNamKCBDialogViewModel.Name = "Sửa chứng từ";
+                    QuyetToanChiNamKCBDialogViewModel.Description = "Cập nhật thông tin chứng từ";
+                    QuyetToanChiNamKCBDialogViewModel.isSummary = false;
+                    QuyetToanChiNamKCBDialogViewModel.Init();
+                    QuyetToanChiNamKCBDialogViewModel.SavedAction = obj =>
+                    {
+                        this.OnRefresh();
+                    };
+                    QuyetToanChiNamKCBDialogViewModel.ShowDialogHost();
+                }
+            }
+        }
+
+        private void OnLock(object obj)
+        {
+            if (IsLock)
+            {
+                string lstSoChungTu = string.Join(", ", Items.Where(n => n.Selected && (bool)n.BIsKhoa).Select(n => n.SSoChungTu));
+                List<DonVi> userAgency = _donViService.FindByUser(_sessionInfo.Principal, _sessionInfo.YearOfWork, LoaiDonVi.ROOT);
+                if (userAgency.All(x => x.Loai != LoaiDonVi.ROOT))
+                {
+                    MessageBoxHelper.Warning(string.Format(Resources.MsgRoleUnlock, lstSoChungTu));
+                    return;
+                }
+                //string lstSoChungTuDaTongHop = string.Join(", ", Items.Where(n => n.Selected && n.BDaTongHop && (bool)n.BIsKhoa && !n.IIdMaDonVi.Equals(_sessionInfo.IdDonVi)).Select(n => n.SSoChungTu));
+
+                //if (!string.IsNullOrEmpty(lstSoChungTuDaTongHop))
+                //{
+                //    MessageBoxHelper.Warning(string.Format(Resources.AlertUnlockAggregatedVoucher, lstSoChungTuDaTongHop));
+                //    return;
+                //}
+            }
+            else
+            {
+                string lstSoChungTuInvalid = string.Join(", ", Items.Where(n => n.Selected && n.SNguoiTao != _sessionInfo.Principal && !(bool)n.BIsKhoa).Select(n => n.SSoChungTu));
+
+                if (!string.IsNullOrEmpty(lstSoChungTuInvalid))
+                {
+                    MessageBoxHelper.Warning(string.Format(Resources.MsgRoleLock, lstSoChungTuInvalid));
+                    return;
+                }
+            }
+            string message = IsLock ? Resources.UnlockChungTu : Resources.LockChungTu;
+            string msgDone = IsLock ? Resources.MsgUnLockDone : Resources.MsgLockDone;
+            MessageBoxResult dialogResult = MessageBoxHelper.Confirm(message);
+            if (dialogResult == MessageBoxResult.Yes)
+            {
+                LockOrUnLockMultiVoucher();
+                MessageBoxHelper.Info(msgDone);
+                LockStatusSelected = LockStatus.ElementAt(0);
+            }
+        }
+        protected override void OnRefresh()
+        {
+            LoadQuyetToanChungTu();
+        }
+
+        private void UnCheckBoxAll()
+        {
+            foreach (var item in Items)
+            {
+                item.Selected = false;
+            }
+        }
+
+        /// <summary>
+        /// Open Detail
+        /// </summary>
+        /// <param name="BhCpBsChungTuModel"></param>
+        private void OpenDetailDialog(BhQtcnKCBModel bhKhtBHXHDetail, params bool[] isNew)
+        {
+            QuyetToanChiNamKCBDetailViewModel.Model = ObjectCopier.Clone(bhKhtBHXHDetail);
+            //QuyetToanChiNamKCBDetailViewModel.IsVoucherSummary = !string.IsNullOrEmpty(bhKhtBHXHDetail.SDSSoChungTuTongHop);
+            QuyetToanChiNamKCBDetailViewModel.Init();
+            var view = new QuyetToanChiNamKCBDetail() { DataContext = QuyetToanChiNamKCBDetailViewModel };
+            view.ShowDialog();
+        }
+
+        private void SelfRefresh(object sender, EventArgs e)
+        {
+            OnRefresh();
+        }
+
+        public override void Init()
+        {
+            base.Init();
+            _tabIndex = ImportTabIndex.Data;
+            _sessionInfo = _sessionService.Current;
+            LoadData();
+            LoadLockStatus();
+            OnPropertyChanged(nameof(Title));
+            OnPropertyChanged(nameof(Description));
+            QuyetToanChiNamKCBDetailViewModel.UpdateParentWindowEventHandler += SelfRefresh;
+        }
+
+        private void OnAggregateEdit()
+        {
+            //kiểm tra trạng thái các bản ghi
+            List<BhQtcnKCBModel> selectedVoucher = LstChungTuOrigin.Where(x => !string.IsNullOrEmpty(SelectedChungTu.SDSSoChungTuTongHop) && SelectedChungTu.SDSSoChungTuTongHop.Contains(x.SSoChungTu)).ToList();
+            QuyetToanChiNamKCBSummaryViewModel.Name = "Sửa chứng từ tổng hợp";
+            QuyetToanChiNamKCBSummaryViewModel.Description = "Sửa chứng từ quyết toán năm KCB  tổng hợp";
+            QuyetToanChiNamKCBSummaryViewModel.BhQtcnKCB = SelectedChungTu;
+            QuyetToanChiNamKCBSummaryViewModel.DataBhqtcnKCB = new ObservableCollection<BhQtcnKCBModel>(selectedVoucher);
+            QuyetToanChiNamKCBSummaryViewModel.Init();
+            QuyetToanChiNamKCBSummaryViewModel.SavedAction = obj =>
+            {
+                TabIndex = ImportTabIndex.MLNS;
+                this.LoadData();
+                OnPropertyChanged(nameof(IsCensorship));
+                IsAllItemsSelected = false;
+                OpenDetailDialog((BhQtcnKCBModel)obj);
+            };
+            var addView = new QuyetToanChiNamKCBSummary() { DataContext = QuyetToanChiNamKCBSummaryViewModel };
+            DialogHost.Show(addView);
+        }
+
+        /// <summary>
+        /// Xuất excel chứng từ lập kế hoạch thu BHXH
+        /// </summary>
+        private void OnExportDataCommand()
+        {
+            try
+            {
+                BackgroundWorkerHelper.Run((s, e) =>
+                {
+                    IsLoading = true;
+
+                    List<ExportResult> results = new List<ExportResult>();
+                    string templateFileName;
+                    string fileNamePrefix;
+                    string fileNameWithoutExtension;
+
+                    List<BhQtcnKCBModel> chungTu = Items.Where(x => x.Selected).ToList();
+
+                    var yearOfWork = _sessionService.Current.YearOfWork;
+
+                    var lstLNS = LNSValue.LNS_9010004_9010005.Split(",");
+                    var lstMucLuc = _bhDmMucLucNganSachService.FindByCondition(x => x.INamLamViec == yearOfWork && lstLNS.Contains(x.SLNS));
+
+                    foreach (var item in chungTu)
+                    {
+                        var currentDonVi = GetNsDonViOfCurrentUser();
+                        var exportVoucher = _qtcnKCBChiTietService.GetChiTietQuyetToanChiNamKCB(item.Id, item.SDSLNS, _sessionInfo.YearOfWork, item.BThucChiTheo4Quy, item.IIdMaDonVi, !IsDonViRoot(item.IIdMaDonVi)).ToList();
+                        var exportVoucherMap = _mapper.Map<ObservableCollection<BhQtcnKCBChiTietModel>>(exportVoucher).ToList();
+                        CalculateData(exportVoucherMap);
+                        exportVoucherMap.Where(x => !string.IsNullOrEmpty(x.SDuToanChiTietToi) && x.BHangCha).Select(x =>
+                        {
+                            x.FTienDuToanNamTruocChuyenSang = x.FDuToanNamTruocChuyenSang;
+                            return x;
+                        }).ToList();
+                        Dictionary<string, object> Data = new Dictionary<string, object>();
+
+                        FormatNumber formatNumber = new FormatNumber(1, ExportType.EXCEL);
+                        Data.Add("TitleFirst", $"QUYẾT TOÁN CHI KCB QUÂN Y NĂM {_sessionService.Current.YearOfWork}");
+                        Data.Add("TitleSecond", $"(Kèm theo Quyết định số: {item.SSoChungTu}, ngày: {DateUtils.Format(item.DNgayChungTu)})");
+                        Data.Add("FormatNumber", formatNumber);
+                        Data.Add("SNguoiTao", item.SNguoiTao);
+                        Data.Add("Cap1", _sessionService.Current.TenDonViTrucThuoc);
+                        Data.Add("DonVi", _sessionService.Current.TenDonVi);
+                        Data.Add("YearWork", yearOfWork);
+                        Data.Add("YearWorkOld", yearOfWork - 1);
+                        Data.Add("H2", "Lữ đoàn X");
+                        Data.Add("H1", "Lữ đoàn X");
+                        Data.Add("Items", exportVoucherMap);
+                        Data.Add("MLNS", lstMucLuc.OrderBy(x => x.SXauNoiMa));
+
+                        //Data.Add("TongDaQuyetToan", total.FTongDaQuyetToan);
+                        //Data.Add("TongDaCapUng", total.FTongDaCapUng);
+                        //Data.Add("TongThuaThieu", total.FTongThuaThieu);
+                        //Data.Add("TongSoCapBoSung", total.FTongSoCapBoSung);
+
+                        templateFileName = Path.Combine(ExportPrefix.PATH_BH_QTCNKCB, ExportFileName.RPT_BH_QTCN_CHUNGTU_CHITIET_KCB);
+                        fileNamePrefix = item.SSoChungTu;
+                        fileNameWithoutExtension = StringUtils.CreateExportFileName(fileNamePrefix);
+                        var xlsFile = _exportService.Export<BhQtcnKCBModel, BhDmMucLucNganSach, BhQtcnKCBChiTietModel>(templateFileName, Data);
+                        var nameRange = xlsFile.GetNamedRange(1);
+                        nameRange.Comment = "Workbook";
+                        xlsFile.SetNamedRange(nameRange);
+                        xlsFile.SetNamedRange(new TXlsNamedRange("__Area_Items__", 1, 0, "=1:2,A:B"));
+                        xlsFile.SetCellValue(50, 50, "CheckSum");
+                        xlsFile.SetRowHidden(50, true);
+
+                        results.Add(new ExportResult(fileNameWithoutExtension, fileNameWithoutExtension, null, xlsFile));
+                    }
+                    e.Result = results;
+                }, (s, e) =>
+                {
+                    if (e.Error == null)
+                    {
+                        var result = (List<ExportResult>)e.Result;
+                        _exportService.Open(result, ExportType.EXCEL);
+                    }
+                    else
+                    {
+                        _logger.Error(e.Error.Message);
+                    }
+                    IsLoading = false;
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+            }
+        }
+
+        private bool IsDonViRoot(string iIDMaDonVi) => iIDMaDonVi == _sessionInfo.IdDonVi;
+        private void CalculateData(List<BhQtcnKCBChiTietModel> lstChungTuChiTiet)
+        {
+            lstChungTuChiTiet.Where(x => x.BHangCha)
+                .ForAll(x =>
+                {
+                    x.FTienDuToanNamTruocChuyenSang = 0;
+                    //x.FTienDuToanGiaoNamNay = 0;
+                    x.FTienTongDuToanDuocGiao = 0;
+                    x.FTienThucChi = 0;
+                    x.FTienThua = 0;
+                    x.FTienThieu = 0;
+                    x.FTiLeThucHienTrenDuToan = 0;
+
+                });
+            var dictByMlns = lstChungTuChiTiet.GroupBy(x => x.IID_MLNS).ToDictionary(x => x.Key, x => x.First());
+            var temp = lstChungTuChiTiet.Where(x => !x.BHangCha && !x.IsDeleted && x.IsFilter).ToList();
+            foreach (var item in temp)
+            {
+
+                CalculateParent(item.IID_MLNS_Cha, item, dictByMlns);
+            }
+        }
+
+        private void CalculateParent(Guid? idParent, BhQtcnKCBChiTietModel item, Dictionary<Guid?, BhQtcnKCBChiTietModel> dictByMlns)
+        {
+            if (idParent == null || !dictByMlns.ContainsKey(idParent))
+            {
+                return;
+            }
+
+            var model = dictByMlns[idParent];
+
+            model.FTienDuToanNamTruocChuyenSang = (model.FTienDuToanNamTruocChuyenSang ?? 0) + (item.FTienDuToanNamTruocChuyenSang ?? 0);
+            model.FTienDuToanGiaoNamNay = (model.FTienDuToanGiaoNamNay ?? 0) + (item.FTienDuToanGiaoNamNay ?? 0);
+            model.FTienTongDuToanDuocGiao = (model.FTienTongDuToanDuocGiao ?? 0) + (item.FTienTongDuToanDuocGiao ?? 0);
+            model.FTienThucChi = (model.FTienThucChi ?? 0) + (item.FTienThucChi ?? 0);
+            model.FTienThua = (model.FTienThua ?? 0) + (item.FTienThua ?? 0);
+            model.FTienThieu = (model.FTienThieu ?? 0) + (item.FTienThieu ?? 0);
+            model.FTiLeThucHienTrenDuToan = (model.FTiLeThucHienTrenDuToan ?? 0) + (item.FTiLeThucHienTrenDuToan ?? 0);
+
+            CalculateParent(model.IID_MLNS_Cha, item, dictByMlns);
+        }
+        private DonVi GetNsDonViOfCurrentUser()
+        {
+            var yearOfWork = _sessionInfo.YearOfWork;
+            var predicate = PredicateBuilder.True<DonVi>();
+            predicate = predicate.And(x => x.NamLamViec == yearOfWork && x.Loai == "0");
+            var nsDonViOfCurrentUser = _donViService.FindByCondition(predicate).FirstOrDefault();
+            return nsDonViOfCurrentUser;
+        }
+        private void OnPrint(object param)
+        {
+            int dialogType = (int)param;
+            switch (dialogType)
+            {
+                case (int)BhQuyeToanChiNamType.PRINT_BAOCAOQUYETTOANCHIBHXH:
+                case (int)BhQuyeToanChiNamType.PRINT_QUYETTOANCHIBHXH:
+                    PrintQuyetToanChiNamKCViewModel.SettlementTypeValue = dialogType;
+                    PrintQuyetToanChiNamKCViewModel.Init();
+                    var view1 = new PrintQuyetToanChiNamKCB
+                    {
+                        DataContext = PrintQuyetToanChiNamKCViewModel
+                    };
+                    DialogHost.Show(view1, SettlementScreen.ROOT_DIALOG, null, null);
+                    break;
+            }
+
+        }
+        protected override void OnItemsChanged()
+        {
+            base.OnItemsChanged();
+            OnPropertyChanged(nameof(IsAllItemsSelected));
+        }
+
+    }
+}

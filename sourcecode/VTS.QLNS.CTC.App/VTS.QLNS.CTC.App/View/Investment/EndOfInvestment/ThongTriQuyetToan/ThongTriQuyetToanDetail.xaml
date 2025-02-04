@@ -1,0 +1,387 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Investment.EndOfInvestment.ThongTriQuyetToan.ThongTriQuyetToanDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Investment.EndOfInvestment.ThongTriQuyetToan"
+        mc:Ignorable="d"
+        xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        xmlns:converters="clr-namespace:VTS.QLNS.CTC.App.Converters"
+        xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Title="Quản lý thông tri quyết toán" Height="450" Width="800">
+    <Window.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}" />
+        <KeyBinding Key="F10" Command="{Binding SaveDataCommand}"/>
+    </Window.InputBindings>
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel 
+            Grid.Row="0"
+            Orientation="Vertical">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="Dollar" Style="{StaticResource DialogScreenIconStyle}"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="Mã thông chi: {0} - Ngày lập: {1} - Năm : {2} | Loại công trình : {3}">
+                                    <Binding Path="Model.sMaThongTri" />
+                                    <Binding Path="Model.dNgayThongTri" Converter="{StaticResource DateTimeToStringConverter}" />
+                                    <Binding Path="Model.iNamThongTri" />
+                                    <Binding Path="Model.sTenLoaiCongTrinh" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Grid>
+                </StackPanel>
+            </DockPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+        </StackPanel>
+        <StackPanel
+            Grid.Row="1"
+            Orientation="Horizontal">
+            <Button
+                ext:Permission.Identifier="INVESTMENT_IMPLEMENTATION_THONG_TRI_QUYET_TOAN_DETAIL_SAVE"
+                Style="{StaticResource SearchBarBtnStyle}" 
+                IsEnabled="{Binding IsSaveData}"
+                Command="{Binding SaveDataCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ContentSave" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu dữ liệu (F10)"/>
+                </StackPanel>
+            </Button>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+            <Button 
+                Style="{StaticResource SearchBarBtnStyle}"
+                ToolTip="Refresh"
+                Command="{Binding RefreshCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tải lại (F5)"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <!--<Grid 
+            Grid.Row="2"
+            Margin="0 10 0 0">
+            <StackPanel
+                    Orientation="Horizontal">
+                <RadioButton
+                        x:Name="RbQuyetToanNamTruoc"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        GroupName="TabIndex"
+                        IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:ThongTriTabIndex.QT_KP_NAM_TRUOC}}"
+                        Content="Quyết toán Kinh phí năm trước" />
+                <RadioButton
+                        x:Name="RbQuyetToanNamNay"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        GroupName="TabIndex"
+                        IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:ThongTriTabIndex.QT_KP_NAM_NAY}}"
+                        Content="Quyết toán Kinh phí năm nay" />
+                <RadioButton
+                        x:Name="RbKinhPhiChuyenNamSau"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        GroupName="TabIndex"
+                        IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:ThongTriTabIndex.THU_KP_CHUYEN_NAM_TSAU}}"
+                        Content="Thu Kinh phí chuyển năm sau" />
+                <RadioButton
+                        x:Name="RbCapThanhKhoan"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        GroupName="TabIndex"
+                        IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:ThongTriTabIndex.CAP_THANH_KHOAN}}"
+                        Content="Cấp Thanh khoản" />
+                <RadioButton
+                        x:Name="RbThuThanhKhoan"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        GroupName="TabIndex"
+                        IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:ThongTriTabIndex.THU_THANH_KHOAN}}"
+                        Content="Thu Thanh khoản" />
+                <RadioButton
+                        x:Name="RbCapKinhPhiChuyenSang"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        GroupName="TabIndex"
+                        IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:ThongTriTabIndex.CAP_KP_CHUYEN_SANG}}"
+                        Content="Cấp Kinh phí chuyển sang" />
+                <RadioButton
+                        x:Name="RbThuNopNganSach"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        GroupName="TabIndex"
+                        IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:ThongTriTabIndex.THU_NOP_NGAN_SACH}}"
+                        Content="Thu nộp Ngân sách" />
+            </StackPanel>
+        </Grid>-->
+        <Grid
+            Grid.Row="6"
+            Margin="0 5 0 0">
+            <DataGrid 
+                Grid.Row="1"
+                Margin="0 0 0 0"
+                VerticalAlignment="Top"
+                BorderThickness="1"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                HorizontalScrollBarVisibility="Auto"
+                FrozenColumnCount="6"
+                CanUserAddRows="False"
+                GridLinesVisibility="All"
+                CellStyle="{StaticResource DataGridCellDetail}"
+                RowStyle="{StaticResource DataGridRowDetail}"
+                ItemsSource="{Binding Items}">
+                <DataGrid.Resources>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource {ComponentResourceKey TypeInTargetAssembly={x:Type ComboBox}, ResourceId=MaterialDataGridComboBoxColumnEditingStyle}}" >
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding SM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiểu mục" Binding="{Binding STm}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiết mục" Binding="{Binding STtm}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Ngành" Binding="{Binding SNg}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tên dự án" Binding="{Binding STenDuAn}" Width="*" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Loại công trình" Binding="{Binding STenLoaiCongTrinh}" IsReadOnly="True"/>
+                    <DataGridTextColumn  
+                        Header="Số tiền" 
+                        Binding="{Binding FSoTien, Converter={ StaticResource NumberToStringEmptyConverter}, StringFormat={}{0:N0}}" 
+                        IsReadOnly="True" 
+                        Width="400"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!--<DataGrid 
+                Visibility="{Binding IsChecked, ElementName=RbQuyetToanNamNay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Grid.Row="2"
+                Margin="0 0 0 0"
+                VerticalAlignment="Top"
+                BorderThickness="1"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                HorizontalScrollBarVisibility="Auto"
+                FrozenColumnCount="6"
+                CanUserAddRows="False"
+                GridLinesVisibility="All"
+                CellStyle="{StaticResource DataGridCellDetail}"
+                RowStyle="{StaticResource DataGridRowDetail}"
+                ItemsSource="{Binding QTKPNamNay}"
+                SelectedItem="{Binding SelectedItem}">
+                <DataGrid.Resources>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource {ComponentResourceKey TypeInTargetAssembly={x:Type ComboBox}, ResourceId=MaterialDataGridComboBoxColumnEditingStyle}}" >
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding sM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiểu mục" Binding="{Binding sTM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiết mục" Binding="{Binding sTTM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Ngành" Binding="{Binding sNG}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding sM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tên dự án" Binding="{Binding sTenDuAn}" Width="*" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Loại công trình" Binding="{Binding sTenLoaiCongTrinh}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Hợp đồng" Binding="{Binding sSoHopDong}" IsReadOnly="True"/>
+                    <DataGridTextColumn  
+                        Header="Số tiền" 
+                        Binding="{Binding fSoTien, Converter={ StaticResource NumberToStringEmptyConverter}, StringFormat={}{0:N0}}" 
+                        IsReadOnly="True" 
+                        Width="400"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid 
+                Visibility="{Binding IsChecked, ElementName=RbKinhPhiChuyenNamSau, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Grid.Row="3"
+                Margin="0 0 0 0"
+                VerticalAlignment="Top"
+                BorderThickness="1"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                HorizontalScrollBarVisibility="Auto"
+                FrozenColumnCount="6"
+                CanUserAddRows="False"
+                GridLinesVisibility="All"
+                CellStyle="{StaticResource DataGridCellDetail}"
+                RowStyle="{StaticResource DataGridRowDetail}"
+                ItemsSource="{Binding ThuKPChuyenNamSau}"
+                SelectedItem="{Binding SelectedItem}">
+                <DataGrid.Resources>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource {ComponentResourceKey TypeInTargetAssembly={x:Type ComboBox}, ResourceId=MaterialDataGridComboBoxColumnEditingStyle}}" >
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding sM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiểu mục" Binding="{Binding sTM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiết mục" Binding="{Binding sTTM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Ngành" Binding="{Binding sNG}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding sM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tên dự án" Binding="{Binding sTenDuAn}" Width="*" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Loại công trình" Binding="{Binding sTenLoaiCongTrinh}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Nhà thầu" Binding="{Binding sTenNhaThau}" IsReadOnly="True"/>
+                    <DataGridTextColumn  
+                        Header="Số tiền" 
+                        Binding="{Binding fSoTien, Converter={ StaticResource NumberToStringEmptyConverter}, StringFormat={}{0:N0}}" 
+                        IsReadOnly="True" 
+                        Width="400"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid 
+                Visibility="{Binding IsChecked, ElementName=RbCapThanhKhoan, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Grid.Row="4"
+                Margin="0 0 0 0"
+                VerticalAlignment="Top"
+                BorderThickness="1"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                HorizontalScrollBarVisibility="Auto"
+                FrozenColumnCount="6"
+                CanUserAddRows="False"
+                GridLinesVisibility="All"
+                CellStyle="{StaticResource DataGridCellDetail}"
+                RowStyle="{StaticResource DataGridRowDetail}"
+                ItemsSource="{Binding CapThanhKhoan}"
+                SelectedItem="{Binding SelectedItem}">
+                <DataGrid.Resources>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource {ComponentResourceKey TypeInTargetAssembly={x:Type ComboBox}, ResourceId=MaterialDataGridComboBoxColumnEditingStyle}}" >
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding sM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiểu mục" Binding="{Binding sTM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiết mục" Binding="{Binding sTTM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Ngành" Binding="{Binding sNG}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding sM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tên dự án" Binding="{Binding sTenDuAn}" Width="*" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Loại công trình" Binding="{Binding sTenLoaiCongTrinh}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Hợp đồng" Binding="{Binding sSoHopDong}" IsReadOnly="True"/>
+                    <DataGridTextColumn  
+                        Header="Số tiền" 
+                        Binding="{Binding fSoTien, Converter={ StaticResource NumberToStringEmptyConverter}, StringFormat={}{0:N0}}" 
+                        IsReadOnly="True" 
+                        Width="400"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid 
+                Visibility="{Binding IsChecked, ElementName=RbThuThanhKhoan, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Grid.Row="4"
+                Margin="0 0 0 0"
+                VerticalAlignment="Top"
+                BorderThickness="1"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                HorizontalScrollBarVisibility="Auto"
+                FrozenColumnCount="6"
+                CanUserAddRows="False"
+                GridLinesVisibility="All"
+                CellStyle="{StaticResource DataGridCellDetail}"
+                RowStyle="{StaticResource DataGridRowDetail}"
+                ItemsSource="{Binding ThuThanhKhoan}"
+                SelectedItem="{Binding SelectedItem}">
+                <DataGrid.Resources>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource {ComponentResourceKey TypeInTargetAssembly={x:Type ComboBox}, ResourceId=MaterialDataGridComboBoxColumnEditingStyle}}" >
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding sM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiểu mục" Binding="{Binding sTM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiết mục" Binding="{Binding sTTM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Ngành" Binding="{Binding sNG}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding sM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tên dự án" Binding="{Binding sTenDuAn}" Width="*" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Loại công trình" Binding="{Binding sTenLoaiCongTrinh}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Hợp đồng" Binding="{Binding sSoHopDong}" IsReadOnly="True"/>
+                    <DataGridTextColumn  
+                        Header="Số tiền" 
+                        Width="400"
+                        Binding="{Binding fSoTien, Converter={ StaticResource NumberToStringEmptyConverter}, StringFormat={}{0:N0}}" 
+                        IsReadOnly="True" 
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid 
+                Visibility="{Binding IsChecked, ElementName=RbCapKinhPhiChuyenSang, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Grid.Row="4"
+                Margin="0 0 0 0"
+                VerticalAlignment="Top"
+                BorderThickness="1"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                HorizontalScrollBarVisibility="Auto"
+                FrozenColumnCount="6"
+                CanUserAddRows="False"
+                GridLinesVisibility="All"
+                CellStyle="{StaticResource DataGridCellDetail}"
+                RowStyle="{StaticResource DataGridRowDetail}"
+                ItemsSource="{Binding ThuUngXDCBKhac}"
+                SelectedItem="{Binding SelectedItem}">
+                <DataGrid.Resources>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource {ComponentResourceKey TypeInTargetAssembly={x:Type ComboBox}, ResourceId=MaterialDataGridComboBoxColumnEditingStyle}}" >
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding sM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiểu mục" Binding="{Binding sTM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiết mục" Binding="{Binding sTTM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Ngành" Binding="{Binding sNG}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding sM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tên dự án" Binding="{Binding sTenDuAn}" Width="*" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Loại công trình" Binding="{Binding sTenLoaiCongTrinh}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Hợp đồng" Binding="{Binding sSoHopDong}" IsReadOnly="True"/>
+                    <DataGridTextColumn  
+                        Header="Số tiền" 
+                        Width="400"
+                        Binding="{Binding fSoTien, Converter={ StaticResource NumberToStringEmptyConverter}, StringFormat={}{0:N0}}" 
+                        IsReadOnly="True" 
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid 
+                Visibility="{Binding IsChecked, ElementName=RbThuNopNganSach, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Grid.Row="4"
+                Margin="0 0 0 0"
+                VerticalAlignment="Top"
+                BorderThickness="1"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                HorizontalScrollBarVisibility="Auto"
+                FrozenColumnCount="6"
+                CanUserAddRows="False"
+                GridLinesVisibility="All"
+                CellStyle="{StaticResource DataGridCellDetail}"
+                RowStyle="{StaticResource DataGridRowDetail}"
+                ItemsSource="{Binding ThuUngXDCBKhac}"
+                SelectedItem="{Binding SelectedItem}">
+                <DataGrid.Resources>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource {ComponentResourceKey TypeInTargetAssembly={x:Type ComboBox}, ResourceId=MaterialDataGridComboBoxColumnEditingStyle}}" >
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding sM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiểu mục" Binding="{Binding sTM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tiết mục" Binding="{Binding sTTM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Ngành" Binding="{Binding sNG}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Mục" Binding="{Binding sM}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Tên dự án" Binding="{Binding sTenDuAn}" Width="*" IsReadOnly="True"/>
+                    <DataGridTextColumn  
+                        Header="Số tiền" 
+                        Width="400"
+                        Binding="{Binding fSoTien, Converter={ StaticResource NumberToStringEmptyConverter}, StringFormat={}{0:N0}}" 
+                        IsReadOnly="True" 
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}"/>
+                </DataGrid.Columns>
+            </DataGrid>-->
+        </Grid>
+    </Grid>
+</Window>

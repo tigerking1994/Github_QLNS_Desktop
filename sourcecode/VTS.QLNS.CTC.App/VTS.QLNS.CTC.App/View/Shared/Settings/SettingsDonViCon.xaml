@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Shared.Settings.SettingsDonViCon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Shared.Settings"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.InputBindings>
+            <KeyBinding Key="F5" Command="{Binding LoadExistCommand}" CommandParameter="{Binding ElementName=dgdData, Path=.}"/>
+            <KeyBinding Key="F3" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=dgdData, Path=.}"/>
+            <KeyBinding Key="F4" Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=dgdData, Path=.}"/>
+        </Grid.InputBindings>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="0 5">
+            <Button Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding AddCommand}" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Plus"/>
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Thêm mới (F3)"/>
+                </StackPanel>
+            </Button>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+            <Button Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding DeleteCommand}" HorizontalAlignment="Right" >
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Trash"/>
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xóa (F4)"/>
+                </StackPanel>
+            </Button>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+            <Button Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding LoadExistCommand}" HorizontalAlignment="Right" >
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Reload"/>
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lấy dữ liệu (F5)"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <DataGrid Grid.Row="1"
+            x:Name="dgdData"
+            GridLinesVisibility="All"
+            AutoGenerateColumns="False"
+            BorderThickness="1"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            CellStyle="{StaticResource GenericDataGridCellDetail}"
+            RowStyle="{StaticResource GenericDataGridRowDetail}"
+            Style="{StaticResource MaterialDesignDataGrid}"
+            SelectedItem="{Binding SelectedItem}"
+            ItemsSource="{Binding Items}">
+            <DataGrid.Resources>
+                <helper:BindingProxy
+                    x:Key="DataContextProxy"
+                    Data="{Binding}" />
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <materialDesign:DataGridTextColumn
+                        Binding="{Binding IIDMaDonVi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                        Header="Phiên hiệu quân sự" />
+                <materialDesign:DataGridTextColumn
+                        Binding="{Binding TenDonVi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                        Header="Tên đơn vị" />
+                <DataGridCheckBoxColumn Width="Auto" Header="Phòng ban" Binding="{Binding IsPhongBan, UpdateSourceTrigger=PropertyChanged}"
+                        ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                        EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}"/>
+                <materialDesign:DataGridTextColumn
+                        Binding="{Binding MoTa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                        Header="Mô tả" />
+                <materialDesign:DataGridComboBoxColumn 
+                    Header="Loại hình" 
+                    DisplayMemberPath="DisplayItem" ItemsSource="{Binding Path=Data.LoaiDonVi, Source={StaticResource DataContextProxy}}" 
+                    SelectedValuePath="ValueItem" SelectedValueBinding="{Binding Loai, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                </materialDesign:DataGridComboBoxColumn>
+                <DataGridCheckBoxColumn 
+                        ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                        EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}" 
+                        Header="Có ngân sách ngành" Binding="{Binding BCoNSNganh, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></DataGridCheckBoxColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,246 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Category.NsBaoCaoGhiChuDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Category"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:localEnumSystem="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:utility="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:compt="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:ghichu="clr-namespace:VTS.QLNS.CTC.App.ViewModel.Category"
+             mc:Ignorable="d"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             Height="Auto"
+             Width="1095">
+    <Grid Margin="16">
+        <StackPanel Orientation="Vertical">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="PlaylistPlus"
+                                         Style="{StaticResource DialogScreenIconStyle}" />
+                <StackPanel Margin="10,0"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                    <TextBlock FontWeight="Bold"
+                               Text="{Binding Name}" />
+                    <TextBlock Text="{Binding Description}" />
+                </StackPanel>
+            </DockPanel>
+
+            <Separator Background="{DynamicResource MaterialDesignDivider}"
+                       Margin="0 0 10 0" />
+            <Grid Margin="0 5 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+                <!--SKT - SNC-->
+                <StackPanel Orientation="Vertical"
+                            Visibility="{Binding IsBaoCaoDuToan, Converter={StaticResource InverseBoolToVisConverter}}">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBox"
+                               BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating"
+                                    Value="True" />
+                            <Setter Property="Margin"
+                                    Value="0 2 10 2" />
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center" />
+                        </Style>
+                        <Style TargetType="ComboBox"
+                               BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating"
+                                    Value="True" />
+                            <Setter Property="Margin"
+                                    Value="0 2 10 2" />
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center" />
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <ComboBox materialDesign:HintAssist.Hint="Loại báo cáo"
+                              materialDesign:TextFieldAssist.HasClearButton="False"
+                              DisplayMemberPath="DisplayItem"
+                              Margin="0,10,10,10"
+                              Visibility="{Binding IsBaoCaoSoNhuCauTongHop, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              SelectedValuePath="ValueItem"
+                              SelectedItem="{Binding PaperPrintTypeSelected}"
+                              ItemsSource="{Binding PaperPrintTypes}">
+                    </ComboBox>
+
+                    <ComboBox materialDesign:HintAssist.Hint="Loại báo cáo"
+                              materialDesign:TextFieldAssist.HasClearButton="False"
+                              DisplayMemberPath="DisplayItem"
+                              Margin="0,10,10,10"
+                              Visibility="{Binding IsBaoCaoSoKiemTra, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              SelectedValuePath="ValueItem"
+                              SelectedItem="{Binding PaperPrintTypeSelected}"
+                              ItemsSource="{Binding PaperPrintTypes}">
+                    </ComboBox>
+
+                    <CheckBox Content="In theo chứng từ tổng hợp"
+                              VerticalAlignment="Center"
+                              Visibility="{Binding IsBaoCaoSoNhuCauTongHop, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Margin="0 10 0 0"
+                              IsChecked="{Binding IsInTheoTongHop}" />
+
+                    <ComboBox materialDesign:HintAssist.Hint="Loại chứng từ"
+                              materialDesign:TextFieldAssist.HasClearButton="False"
+                              Visibility="{Binding IsBaoCaoDinhMuc}"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              SelectedItem="{Binding VoucherTypeSelected}"
+                              ItemsSource="{Binding VoucherTypes}">
+                    </ComboBox>
+
+                    <UniformGrid Columns="2">
+
+                        <ComboBox materialDesign:HintAssist.Hint="Khối"
+                                  materialDesign:TextFieldAssist.HasClearButton="False"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  Visibility="{Binding IsBaoCaoSoNhuCauTongHop_Nganh, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  SelectedItem="{Binding KhoiSelected}"
+                                  ItemsSource="{Binding KhoiItems}">
+                        </ComboBox>
+
+                        <ComboBox materialDesign:HintAssist.Hint="B quản lý"
+                                  materialDesign:TextFieldAssist.HasClearButton="False"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  Visibility="{Binding IsBaoCaoSoNhuCauTongHop, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  SelectedItem="{Binding BQuanLySelected}"
+                                  ItemsSource="{Binding BQuanLyItems}">
+                        </ComboBox>
+
+                        <ComboBox materialDesign:HintAssist.Hint="Loại chứng từ"
+                                  materialDesign:TextFieldAssist.HasClearButton="False"
+                                  Visibility="{Binding IsBaoCaoSoKiemTra, Converter={StaticResource InverseBoolToVisConverter}}"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  SelectedItem="{Binding VoucherTypeSelected}"
+                                  ItemsSource="{Binding VoucherTypes}">
+                        </ComboBox>
+
+                        
+
+                        <StackPanel Visibility="{Binding IsVisibilityRadioButtonNSBD, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    Orientation="Vertical"
+                                    Margin="0 5 0 0">
+                            <RadioButton GroupName="reportSynthesis"
+                                         IsChecked="{Binding LoaiNSBD, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static utility:LoaiNSBD.DAC_THU}}"
+                                         Content="Đặc thù"
+                                         Padding="5 -1 0 0"
+                                         Margin="0 5 0 0"
+                                         Style="{StaticResource MaterialDesignRadioButton}" />
+                            <RadioButton GroupName="reportSynthesis"
+                                         IsChecked="{Binding LoaiNSBD, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static utility:LoaiNSBD.MHHV}}"
+                                         Content="Mua hàng cấp hiện vật &amp; Tồn kho"
+                                         Padding="5 -1 0 0"
+                                         Margin="0 5 0 0"
+                                         Style="{StaticResource MaterialDesignRadioButton}" />
+                        </StackPanel>
+
+                        <ComboBox materialDesign:HintAssist.Hint="Loại nguồn ngân sách"
+                                  materialDesign:TextFieldAssist.HasClearButton="False"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  SelectedItem="{Binding BudgetSourceTypeSelected}"
+                                  ItemsSource="{Binding BudgetSourceTypes}">
+                        </ComboBox>
+                        <ComboBox materialDesign:HintAssist.Hint="Loại ngân sách"
+                                  materialDesign:TextFieldAssist.HasClearButton="False"
+                                  Visibility="{Binding IsBaoCaoSoKiemTra, Converter={StaticResource InverseBoolToVisConverter}}"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  SelectedItem="{Binding BudgetTypeSelected}"
+                                  ItemsSource="{Binding BudgetTypes}">
+                        </ComboBox>
+                    </UniformGrid>
+                </StackPanel>
+                <!--Dự toán - Customize-->
+                <StackPanel Orientation="Vertical"
+                            Visibility="{Binding IsBaoCaoDuToan, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBox"
+                               BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating"
+                                    Value="True" />
+                            <Setter Property="Margin"
+                                    Value="0 2 10 2" />
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center" />
+                        </Style>
+                        <Style TargetType="ComboBox"
+                               BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating"
+                                    Value="True" />
+                            <Setter Property="Margin"
+                                    Value="0 2 10 2" />
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <ComboBox Visibility="{Binding IsShowBQuanLy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              materialDesign:HintAssist.Hint="B quản lý"
+                              materialDesign:TextFieldAssist.HasClearButton="False"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              SelectedItem="{Binding BQuanLySelected}"
+                              ItemsSource="{Binding BQuanLyItems}">
+                    </ComboBox>
+                </StackPanel>
+                <Border  Grid.Column="1"
+                         Margin="0 0 0 0"
+                         BorderThickness="1"
+                         Width="{Binding NoteColWidth}"
+                         BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <TextBox materialDesign:HintAssist.Hint="Nhập ghi chú"
+                             Padding="6"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             HorizontalScrollBarVisibility="Disabled"
+                             VerticalScrollBarVisibility="Auto"
+                             Text="{Binding TxtGhiChu,UpdateSourceTrigger=PropertyChanged}" />
+                </Border>
+            </Grid>
+            <!--Save <> Close-->
+            <StackPanel Grid.Row="3"
+                        Margin="0,15,0,0"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                <Button Margin="5,0,0,0"
+                        Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding BhKhtmBHYTModel}"
+                        IsDefault="True"
+                        Style="{StaticResource MaterialDesignRaisedButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lưu dữ liệu</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Margin="5,0,0,0"
+                        Command="{x:Static wpf:DialogHost.CloseDialogCommand}"
+                        IsCancel="True"
+                        Style="{StaticResource MaterialDesignOutlinedButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

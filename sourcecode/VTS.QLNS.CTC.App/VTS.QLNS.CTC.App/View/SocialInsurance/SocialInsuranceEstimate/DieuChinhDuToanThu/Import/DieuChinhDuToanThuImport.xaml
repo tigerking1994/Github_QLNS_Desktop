@@ -1,0 +1,1368 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.SocialInsurance.SocialInsuranceEstimate.DieuChinhDuToanThu.Import.DieuChinhDuToanThuImport"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+        xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+        xmlns:custom="clr-namespace:VTS.QLNS.CTC.Custom;assembly=VTS.QLNS.CTC.Custom"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.SocialInsurance.SocialInsuranceEstimate.DieuChinhDuToanThu.Import"
+        mc:Ignorable="d"
+        WindowState="Maximized"
+        x:Name="DieuChinhDuToanThuImportViewModel"
+        Title="Import dữ liệu dự toán - Điều chỉnh dự toán thu BHXH, BHYT, BHTN">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <materialDesign:PackIcon Kind="MicrosoftExcel"
+                                     Style="{StaticResource DialogScreenIconStyle}" />
+            <StackPanel Orientation="Vertical"
+                        VerticalAlignment="Center"
+                        Margin="10 0">
+                <TextBlock Text="{Binding Name}"
+                           FontWeight="Bold" />
+                <TextBlock Text="{Binding Description}" />
+            </StackPanel>
+        </DockPanel>
+        <Separator Grid.Row="1"
+                   Background="{DynamicResource MaterialDesignDivider}" />
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid MinHeight="100">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Border BorderThickness="1"
+                        BorderBrush="{DynamicResource MaterialDesignDivider}"
+                        Margin="0 10 0 0"
+                        Padding="5 0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 IsEnabled="False"
+                                 materialDesign:HintAssist.Hint="Lựa chọn file Excel"
+                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                 BorderThickness="0"
+                                 VerticalAlignment="Center"
+                                 Text="{Binding FilePath}" />
+                        <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                Grid.Column="1"
+                                Command="{Binding UploadFileCommand}">
+                            <materialDesign:PackIcon Kind="FileUpload"
+                                                     Margin="8 0 0 0" />
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <StackPanel Grid.Row="1"
+                            Orientation="Horizontal">
+                    <TextBox Margin="10 10 20 10"
+                             IsEnabled="False"
+                             Width="100"
+                             Text="{Binding SSoChungTu}"
+                             materialDesign:HintAssist.Hint="Số"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                    <custom:AutoCompleteComboBox Width="200"
+                                                 materialDesign:HintAssist.Hint="-- Đơn vị quản lý --"
+                                                 materialDesign:TextFieldAssist.HasClearButton="True"
+                                                 DisplayMemberPath="DisplayItem"
+                                                 TextSearch.TextPath="DisplayItem"
+                                                 SelectedItem="{Binding SelectedDonVi ,UpdateSourceTrigger=PropertyChanged}"
+                                                 SelectedValue="{Binding SelectedDonVi, UpdateSourceTrigger=LostFocus}"
+                                                 ItemsSource="{Binding ItemsDonVi}"
+                                                 Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                                 Margin="0 0 10 0">
+                    </custom:AutoCompleteComboBox>
+
+
+                    <DatePicker Grid.Column="2"
+                                Language="vi-VN"
+                                Margin="10 0 10 0"
+                                SelectedDate="{Binding NgayChungTu}"
+                                materialDesign:HintAssist.Hint="Ngày"
+                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+
+                    <Button Margin="10 0 0 0"
+                            IsEnabled="{Binding IsSelectedFile}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Command="{Binding HandleDataCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Check" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Kiểm tra" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Margin="10 0 0 0"
+                            Width="120"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Command="{Binding ResetDataCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Hủy bỏ" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+            </Grid>
+
+            <Grid Grid.Row="2"
+                  Margin="0 10 0 0">
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton x:Name="RbDivisionDetail"
+                                 Style="{StaticResource MaterialDesignTabRadioButton}"
+                                 GroupName="TabIndex"
+                                 IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:ImportTabIndex.Data}}"
+                                 Content="Thông tin chi tiết" />
+                    <RadioButton x:Name="RbMLNS"
+                                 Style="{StaticResource MaterialDesignTabRadioButton}"
+                                 GroupName="TabIndex"
+                                 IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:ImportTabIndex.MLNS}}"
+                                 Content="Mục lục BHXH" />
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="3"
+                  Margin="0 5 0 0">
+                <DataGrid Visibility="{Binding IsChecked, ElementName=RbDivisionDetail, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Margin="0 5 0 0"
+                          AutoGenerateColumns="False"
+                          CanUserResizeColumns="True"
+                          BorderThickness="1"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          ScrollViewer.VerticalScrollBarVisibility="Visible"
+                          ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                          FrozenColumnCount="1"
+                          CanUserAddRows="False"
+                          GridLinesVisibility="All"
+                          ItemsSource="{Binding Items}"
+                          SelectedItem="{Binding SelectedItem}"
+                          Style="{StaticResource MaterialDesignDataGrid}"
+                          CellStyle="{StaticResource GenericDataGridCellDetail}"
+                          RowStyle="{StaticResource GenericDataGridRowDetail}">
+                    <DataGrid.Resources>
+                        <helper:BindingProxy x:Key="DataContextProxy"
+                                             Data="{Binding}" />
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Trạng thái">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl x:Name="content" />
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding ImportStatus}"
+                                                     Value="True">
+                                            <Setter TargetName="content"
+                                                    Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <materialDesign:PackIcon Kind="CheckCircle"
+                                                                                 Foreground="Green"
+                                                                                 HorizontalAlignment="Center" />
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ImportStatus}"
+                                                     Value="False">
+                                            <Setter TargetName="content"
+                                                    Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <materialDesign:PackIcon Kind="CloseCircle"
+                                                                                 Foreground="Red"
+                                                                                 HorizontalAlignment="Center" />
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn 
+                                            Header="Xâu nối mã"
+                                            Binding="{Binding SXauNoiMa, UpdateSourceTrigger=LostFocus}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" />
+
+                        <DataGridTextColumn IsReadOnly="True"
+                                            Header="Nội dung"
+                                            Binding="{Binding STenMLNS, UpdateSourceTrigger=LostFocus}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" />
+
+                        <!--Dự toán được giao đầu năm-->
+                        <component:DataGridTextColumn x:Name="FThuBHXHNLD"
+                                                      IsReadOnly="True"
+                                                      Header="Thu BHXH NLĐ"
+                                                      Binding="{Binding FThuBHXHNLD}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                                <Grid>
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHXHNLD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHXHNSD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNLD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNSD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNLD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNSD"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <TextBlock Name="HeaderGroup"
+                                                               HorizontalAlignment="Center"
+                                                               Text="Dự toán được giao đầu năm" />
+                                                </Grid>
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Text="BHXH NLĐ"
+                                                       HorizontalAlignment="Center" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHXHNSD"
+                                                      IsReadOnly="True"
+                                                      Header="Thu BHXH NSD"
+                                                      Binding="{Binding FThuBHXHNSD}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       Text="BHXH NSD" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHYTNLD"
+                                                      Header="Thu BHYT NLD"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHYTNLD}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       Text="BHYT NLĐ" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHYTNSD"
+                                                      Header="Thu BHYT NSD"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHYTNSD}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       Text="BHYT NSD" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHTNNLD"
+                                                      IsReadOnly="True"
+                                                      Header="Thu BHTN NLD"
+                                                      Binding="{Binding FThuBHTNNLD}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       Text="BHTN NLĐ" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHTNNSD"
+                                                      Header="Thu BHTN NSD"
+                                                      Binding="{Binding FThuBHTNNSD}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       Text="BHTN NSD" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+
+                        <!--Thực hiện 6 tháng đầu năm-->
+                        <component:DataGridTextColumn x:Name="FThuBHXHNLD6DN"
+                                                      IsReadOnly="True"
+                                                      Header="Thu BHXH NLĐ (đầu năm)"
+                                                      Binding="{Binding FThuBHXHNLDQTDauNam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                                <Grid>
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHXHNLD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHXHNSD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNLD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNSD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNLD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNSD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <TextBlock Name="HeaderGroup"
+                                                               HorizontalAlignment="Center"
+                                                               Text="Thực hiện 6 tháng đầu năm" />
+                                                </Grid>
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Text="BHXH NLĐ"
+                                                       HorizontalAlignment="Center" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHXHNSD6DN"
+                                                      IsReadOnly="True"
+                                                      Header="Thu BHXH NSD (đầu năm)"
+                                                      Binding="{Binding FThuBHXHNSDQTDauNam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHXH NSD" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHYTNLD6DN"
+                                                      Header="Thu BHYT NLĐ (đầu năm)"
+                                                      Binding="{Binding FThuBHYTNSDQTDauNam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHYT NLĐ" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHYTNSD6DN"
+                                                      Header="Thu BHYT NSD (đầu năm)"
+                                                      Binding="{Binding FThuBHYTNLDQTDauNam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHYT NSD" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHTNNLD6DN"
+                                                      Header="Thu BHTN NLĐ (đầu năm)"
+                                                      Binding="{Binding FThuBHTNNLDQTDauNam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHTN NLĐ" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHTNNSD6DN"
+                                                      Header="Thu BHTN NSD (đầu năm)"
+                                                      Binding="{Binding FThuBHTNNSDQTDauNam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHTN NSD" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+
+                        <!--Ước thực hiện 6 tháng cuối năm-->
+                        <component:DataGridTextColumn x:Name="FThuBHXHNLD6CN"
+                                                      Header="Thu BHXH NLĐ (cuối năm)"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHXHNLDQTCuoiNam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                                <Grid>
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHXHNLD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHXHNSD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNLD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNSD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNLD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNSD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <TextBlock Name="HeaderGroup"
+                                                               HorizontalAlignment="Center"
+                                                               Text="Ước thực hiện 6 tháng cuối năm" />
+                                                </Grid>
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Text="BHXH NLĐ"
+                                                       HorizontalAlignment="Center" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHXHNSD6CN"
+                                                      Header="Thu BHXH NSD (cuối năm)"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHXHNSDQTCuoiNam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHXH NSD" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHYTNLD6CN"
+                                                      Header="Thu BHYT NLĐ (cuối năm)"
+                                                      Binding="{Binding FThuBHYTNSDQTCuoiNam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHYT NLĐ" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHYTNSD6CN"
+                                                      Header="Thu BHYT NSD (cuối năm)"
+                                                      Binding="{Binding FThuBHYTNLDQTCuoiNam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHYT NSD" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHTNNLD6CN"
+                                                      Header="Thu BHTN NLĐ (cuối năm)"
+                                                      Binding="{Binding FThuBHTNNLDQTCuoiNam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHTN NLĐ" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="FThuBHTNNSD6CN"
+                                                      Header="Thu BHTN NSD (cuối năm)"
+                                                      Binding="{Binding FThuBHTNNSDQTCuoiNam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHTN NSD" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+
+                        <!--So sánh-->
+                        <component:DataGridTextColumn x:Name="SSThuBHXHNLDTang"
+                                                      IsReadOnly="True"
+                                                      Header="BHXH NLĐ đóng (tăng)"
+                                                      Binding="{Binding FThuBHXHNLDTang}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                                <Grid>
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="SSThuBHXHNLDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHXHNSDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHXHNLDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHXHNSDGiam"
+                                                                                 Path="ActualWidth" />
+
+                                                                        <Binding ElementName="SSThuBHYTNLDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHYTNSDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHYTNLDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHYTNSDGiam"
+                                                                                 Path="ActualWidth" />
+
+                                                                        <Binding ElementName="SSThuBHTNNLDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHTNNSDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHTNNLDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHTNNSDGiam"
+                                                                                 Path="ActualWidth" />
+
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <TextBlock Name="HeaderGroup"
+                                                               HorizontalAlignment="Center"
+                                                               Text="So sánh" />
+                                                </Grid>
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Text="BHXH NLĐ đóng (tăng)"
+                                                       HorizontalAlignment="Center" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="SSThuBHXHNSDTang"
+                                                      IsReadOnly="True"
+                                                      Header="BHXH NSD LĐ (tăng)"
+                                                      Binding="{Binding FThuBHXHNSDTang}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHXH NSD LĐ (tăng)" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="SSThuBHXHNLDGiam"
+                                                      Header="BHXH NLĐ đóng (giảm)"
+                                                      Binding="{Binding FThuBHXHNLDGiam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHXH NLĐ đóng (giảm)" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="SSThuBHXHNSDGiam"
+                                                      Header="BHXH NSD LĐ đóng (giảm)"
+                                                      Binding="{Binding FThuBHXHNSDGiam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHXH NSD LĐ đóng (giảm)" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        
+                        <component:DataGridTextColumn x:Name="SSThuBHYTNLDTang"
+                                                      Header="BHYT NLĐ đóng (tăng)"
+                                                      Binding="{Binding FThuBHYTNLDTang}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHYT NLĐ đóng (tăng)" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="SSThuBHYTNSDTang"
+                                                      Header="BHYT NSD LĐ đóng (tăng)"
+                                                      Binding="{Binding FThuBHYTNSDTang}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHYT NSD LĐ đóng (tăng)" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="SSThuBHYTNLDGiam"
+                                                      Header="BHYT NLĐ đóng (giảm)"
+                                                      Binding="{Binding FThuBHYTNLDGiam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHYT NLĐ đóng (giảm)" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="SSThuBHYTNSDGiam"
+                                                      Header="BHYT NSD LĐ đóng (giảm)"
+                                                      Binding="{Binding FThuBHYTNSDGiam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHYT NSD LĐ đóng (giảm)" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        
+                        <component:DataGridTextColumn x:Name="SSThuBHTNNLDTang"
+                                                      Header="BHTN NLĐ đóng (tăng)"
+                                                      Binding="{Binding FThuBHTNNLDTang}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHTN NLĐ đóng (tăng)" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="SSThuBHTNNSDTang"
+                                                      Header="BHTN NSD LĐ đóng (tăng)"
+                                                      Binding="{Binding FThuBHTNNSDTang}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHTN NSD LĐ đóng (tăng)" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="SSThuBHTNNLDGiam"
+                                                      Header="BHTN NLĐ đóng (giảm)"
+                                                      Binding="{Binding FThuBHTNNLDGiam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 0 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHTN NLĐ đóng (giảm)" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn x:Name="SSThuBHTNNSDGiam"
+                                                      Header="BHTN NSD LĐ đóng (giảm)"
+                                                      Binding="{Binding FThuBHTNNSDGiam}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      IsReadOnly="True"
+                                                      HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border BorderThickness="0 0 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}">
+                                            <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            </Canvas>
+                                        </Border>
+                                        <Border Grid.Row="1"
+                                                Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                                BorderThickness="0 1 1 0"
+                                                BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock Name="HeaderGroup"
+                                                       HorizontalAlignment="Center"
+                                                       Text="BHTN NSD LĐ đóng (giảm)" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+
+                        <DataGridTemplateColumn Header="Lỗi">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl x:Name="Function" />
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding ImportStatus}"
+                                                     Value="False">
+                                            <Setter TargetName="Function"
+                                                    Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                                ToolTip="Xem thông tin lỗi"
+                                                                Width="25"
+                                                                Height="25"
+                                                                Command="{Binding Path=DataContext.ShowErrorCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
+                                                            <materialDesign:PackIcon Foreground="DarkRed"
+                                                                                     Width="15"
+                                                                                     Height="15"
+                                                                                     Kind="EyeRemove" />
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Visibility="{Binding IsChecked, ElementName=RbMLNS, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="DgMLNS"
+                              Grid.Row="2"
+                              Style="{StaticResource MaterialDesignDataGrid}"
+                              CellStyle="{StaticResource GenericDataGridCellDetail}"
+                              RowStyle="{StaticResource GenericDataGridRowDetail}"
+                              VerticalAlignment="Top"
+                              ItemsSource="{Binding ExistedMlns}"
+                              AutoGenerateColumns="False"
+                              CanUserResizeColumns="True"
+                              BorderThickness="1"
+                              HorizontalScrollBarVisibility="Auto"
+                              FrozenColumnCount="3"
+                              CanUserAddRows="False"
+                              SelectedItem="{Binding SelectedParent}"
+                              EnableRowVirtualization="True"
+                              GridLinesVisibility="All">
+                        <DataGrid.Resources>
+                            <Style TargetType="CheckBox"
+                                   x:Key="style">
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsModified}"
+                                                       Value="false" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="IsEnabled"
+                                                Value="False" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            
+                            <DataGridTextColumn Width="Auto"
+                                                Header="LNS"
+                                                Binding="{Binding SLNS}"
+                                                IsReadOnly="True" />
+                            <DataGridTextColumn Width="Auto"
+                                                Header="L"
+                                                Binding="{Binding SL}"
+                                                IsReadOnly="True" />
+                            <DataGridTextColumn Width="Auto"
+                                                Header="K"
+                                                Binding="{Binding SK}"
+                                                IsReadOnly="True" />
+                            <DataGridTextColumn Width="Auto"
+                                                Header="M"
+                                                Binding="{Binding SM}"
+                                                IsReadOnly="True" />
+                            <DataGridTextColumn Width="Auto"
+                                                Header="TM"
+                                                Binding="{Binding STM}"
+                                                IsReadOnly="True" />
+                            <DataGridTextColumn Width="Auto"
+                                                Header="TTM"
+                                                Binding="{Binding STTM}"
+                                                IsReadOnly="True" />
+                            <DataGridTextColumn Width="Auto"
+                                                Header="NG"
+                                                Binding="{Binding SNG}"
+                                                IsReadOnly="True" />
+                            <DataGridTextColumn Width="Auto"
+                                                Header="TNG"
+                                                Binding="{Binding STNG}"
+                                                IsReadOnly="True" />
+                            <DataGridTextColumn Width="*"
+                                                Header="Mô tả"
+                                                Binding="{Binding SMoTa}"
+                                                IsReadOnly="True" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Grid>
+            <component:ProgressDialog></component:ProgressDialog>
+        </Grid>
+
+        <StackPanel Grid.Row="3"
+                    Orientation="Horizontal"
+                    Margin="0 15 0 0"
+                    HorizontalAlignment="Right">
+            <Button IsDefault="True"
+                    Margin="5 0 0 0"
+                    IsEnabled="{Binding IsSaveData}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding SaveCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ContentSave" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                               Text="Lưu dữ liệu" />
+                </StackPanel>
+            </Button>
+            <Button IsCancel="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{Binding CloseCommand}"
+                    CommandParameter="{Binding ElementName=ImportKhtBHXHViewWindow}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CloseOutline" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                               Text="Đóng" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReleaseNoteModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReleaseDate>2024-11-11T18:00:07.701445+07:00</ReleaseDate>
+	<NoteDetails>
+		<ReleaseNoteDetailModel>
+			<Module>Ngân sách</Module>
+			<Features>
+				<string>Số liệu thực thu: Màn chi tiết chi tiết chứng từ: Bổ sung button Đóng màn chi tiết chứng từ</string>
+			</Features>
+			<BugFixes>
+				<string>Sửa tìm kiếm nhanh màn hình thêm mới ô tìm kiếm nhanh ko thực hiện tìm kiếm theo giá trị đã nhập</string>
+				<string>Sửa thông báo màn hình thêm mới khi không chọn LNS hiển thị</string>
+				<string>Sửa màn hình chi tiết chứng từ hiển thị cột chưa đúng với cấu hình của MLNS</string>
+				<string>Sửa tên và thứ tự các cột chưa sắp xếp đúng</string>
+			</BugFixes>
+			<Improvements />
+		</ReleaseNoteDetailModel>
+	</NoteDetails>
+</ReleaseNoteModel>

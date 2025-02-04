@@ -1,0 +1,208 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Forex.ForexMuaSam.ChuanBiDauTu.MSCBDTInvestmentDecision.MSCBDTInvestmentDecisionItemDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d"
+             >
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <DockPanel>
+                <materialDesign:PackIcon Kind="{Binding IconKind}" Style="{StaticResource DialogScreenIconStyle}"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" ext:TextBlockTransform.CharacterCasing="Upper"></TextBlock>
+                    <TextBlock Text="{Binding Description}"></TextBlock>
+                </StackPanel>
+            </DockPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Margin="0 10 0 0" IsEnabled="{Binding IsDetail, Converter={StaticResource InvertBooleanConverter}}">
+            <TextBlock FontWeight="SemiBold" Text="THÔNG TIN HẠNG MỤC"></TextBlock>
+            <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
+                <Button 
+                    Style="{StaticResource SearchBarBtnStyle}"
+                    Command="{Binding AddQdDauTuHangMucCommand}"
+                    CommandParameter="{StaticResource TrueValue}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Plus" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tạo mới (F3)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button 
+                    Style="{StaticResource SearchBarBtnStyle}"
+                    Command="{Binding AddQdDauTuHangMucCommand}"
+                    CommandParameter="{StaticResource FalseValue}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Plus" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tạo mới dòng con (Ctrl+F3)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button 
+                    Style="{StaticResource SearchBarBtnStyle}" 
+                    Command="{Binding DeleteQdDauTuHangMucCommand}"
+                    ToolTip="Xóa dữ liệu">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Delete" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xóa (F4)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button 
+                    Style="{StaticResource SearchBarBtnStyle}" 
+                    Command="{Binding ReOrderQdDauTuHangMucCommand}"
+                    ToolTip="Sắp xếp lại">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Sort" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Sắp xếp"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+
+        <component:ExpandedDataGrid 
+            Margin="0 5 0 0"
+            Grid.Row="2"
+            ScrollViewer.CanContentScroll="True"
+            FrozenColumnCount="1"
+            AutoGenerateColumns="False"
+            CanUserResizeColumns="True"
+            HorizontalScrollBarVisibility="Auto"
+            CanUserAddRows="False"
+            GridLinesVisibility="All"
+            BorderThickness="1"
+            CellStyle="{StaticResource DataGridCellDetail}"
+            RowStyle="{StaticResource DataGridRowDetail}"
+            Style="{StaticResource MaterialDesignDataGrid}"
+            SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+            ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            BeginningEdit="dgNhQdDauTuHangMuc_BeginningEdit">
+            <DataGrid.Resources>
+                <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+            </DataGrid.Resources>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="CellEditEnding">
+                    <i:InvokeCommandAction Command="{Binding CellEditEndingCommand}" PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <DataGrid.Columns>
+                <DataGridTextColumn 
+                    x:Name="STT"
+                    Header="STT"
+                    IsReadOnly="True"
+                    Binding="{Binding SMaHangMuc, UpdateSourceTrigger=LostFocus}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"/>
+                <DataGridTextColumn 
+                    x:Name="TenHangMuc"
+                    Header="Tên Hạng mục" 
+                    Binding="{Binding STenHangMuc, UpdateSourceTrigger=LostFocus}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"/>
+
+                <DataGridTextColumn 
+                    Header="Tên nguồn vốn" 
+                    IsReadOnly="True"
+                    Binding="{Binding STenNguonVon, UpdateSourceTrigger=LostFocus}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" />
+
+                <DataGridTextColumn 
+                    Header="Tên nguồn chi phí" 
+                    IsReadOnly="True"
+                    Binding="{Binding STenChiPhi, UpdateSourceTrigger=LostFocus}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" />
+                <DataGridTemplateColumn Header="Loại công trình">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataTemplate.Resources>
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource {ComponentResourceKey TypeInTargetAssembly={x:Type ComboBox}, ResourceId=MaterialDataGridComboBoxColumnEditingStyle}}" ></Style>
+                            </DataTemplate.Resources>
+                            <StackPanel >
+                                <ComboBox
+                                    DisplayMemberPath="DisplayItem"
+                                    SelectedValuePath="ValueItem"
+                                    SelectedValue="{Binding IIdLoaiCongTrinhId, UpdateSourceTrigger=LostFocus}"
+                                    ItemsSource="{Binding Data.ItemsLoaiCongTrinh, Source={StaticResource DataContextProxy}}">
+                                </ComboBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+              
+                <component:DataGridTextColumn
+                    x:Name="FGiaTriUsd"
+                    StringFormat="{}{0:N0}"
+                    Header="USD"
+                    MinWidth="120"
+                    Binding="{Binding FGiaTriUsd, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                <!--<component:DataGridTextColumn
+                    x:Name="FGiaTriEur"
+                    StringFormat="{}{0:N0}"
+                    Header="EUR"
+                    Binding="{Binding FGiaTriEur, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>-->
+                <component:DataGridTextColumn
+                    x:Name="FGiaTriVnd"
+                    StringFormat="{}{0:N0}"
+                    Header="VND"
+                    MinWidth="120"
+                    Binding="{Binding FGiaTriVnd, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                <!--<component:DataGridTextColumn
+                    x:Name="FGiaTriNgoaiTeKhac"
+                    StringFormat="{}{0:N0}"
+                    Header="Ngoại tệ khác"
+                    Binding="{Binding FGiaTriNgoaiTeKhac, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>-->
+            </DataGrid.Columns>
+        </component:ExpandedDataGrid>
+
+        <StackPanel Grid.Row="3">
+            <StackPanel
+                Orientation="Horizontal"
+                Margin="0 10 0 0"
+                HorizontalAlignment="Right"
+                IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBooleanConverter}}">
+                <Button 
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding SaveCommand}"
+                    IsEnabled="{Binding IsDetail, Converter={StaticResource InvertBooleanConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lưu dữ liệu</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{Binding CloseCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,184 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.NewSalary.NewCadres.NewCadresAdvancedSearch"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:extensions="clr-namespace:VTS.QLNS.CTC.App.Extensions">
+    <Grid Margin="16">
+        <Grid.Resources>
+            <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+                <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                <Setter Property="Margin" Value="10 5 0 0" />
+                <Setter Property="Width" Value="200" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="materialDesign:HintAssist.FloatingScale" Value="0.8"/>
+            </Style>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                <Setter Property="Margin" Value="10 5 0 0" />
+                <Setter Property="Width" Value="200" />
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="materialDesign:HintAssist.FloatingScale" Value="0.8"/>
+                <Setter Property="IsEditable" Value="True"/>
+            </Style>
+            <Style TargetType="DatePicker" BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}">
+                <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                <Setter Property="Margin" Value="10 5 0 0" />
+                <Setter Property="Width" Value="200" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="materialDesign:HintAssist.FloatingScale" Value="0.8"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.ColumnSpan="3">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="ClipboardSearchOutline" Style="{StaticResource DialogScreenIconStyle}"/>
+                <StackPanel 
+                    Orientation="Vertical" 
+                    VerticalAlignment="Center" 
+                    Margin="10 0">
+                    <TextBlock  Text="{Binding Title}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding Description}"/>
+                </StackPanel>
+            </DockPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+        </StackPanel>
+
+        <TextBlock
+            Margin="0 5 0 5"
+            Grid.ColumnSpan="3"
+            Grid.Row="1"
+            Text="Tìm kiếm nâng cao đối tượng hưởng lương, phụ cấp"
+            FontWeight="SemiBold"
+            extensions:TextBlockTransform.CharacterCasing="Upper">
+        </TextBlock>
+
+        <StackPanel 
+            Grid.Row="2"
+            Margin="-5 0 0 0">
+            <ComboBox
+                TabIndex="1"
+                materialDesign:HintAssist.Hint="Tháng làm việc"
+                DisplayMemberPath="DisplayItem"
+                SelectedValuePath="ValueItem"
+                ItemsSource="{Binding Months}"
+                SelectedItem="{Binding MonthSelected}"/>
+            <TextBox
+                TabIndex="5"
+                materialDesign:HintAssist.Hint="Tên đối tượng hưởng lương, phụ cấp" 
+                Text="{Binding SearchTenDoiTuong}" />
+            <DatePicker 
+                Language="vi-VN"
+                TabIndex="9"
+                materialDesign:HintAssist.Hint="Ngày nhập ngũ (từ)"  
+                SelectedDate="{Binding FromNgayNn}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="1">
+            <ComboBox
+                TabIndex="2"
+                materialDesign:HintAssist.Hint="Năm làm việc"
+                DisplayMemberPath="DisplayItem"
+                SelectedValuePath="ValueItem"
+                ItemsSource="{Binding Years}"
+                SelectedItem="{Binding YearSelected}"/>
+            <TextBox
+                TabIndex="6"
+                materialDesign:HintAssist.Hint="Số tài khoản" 
+                Text="{Binding SearchSoTaiKhoan}" />
+            <DatePicker 
+                Language="vi-VN"
+                TabIndex="10"
+                materialDesign:HintAssist.Hint="Ngày nhập ngũ (đến)"  
+                SelectedDate="{Binding ToNgayNn}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="2">
+            <ComboBox
+                TabIndex="3"
+                materialDesign:HintAssist.Hint="Chọn đơn vị" 
+                ItemsSource="{Binding DonViItems}"
+                SelectedItem="{Binding SelectedDonVi}"
+                DisplayMemberPath="TenDonVi"/>
+            <ComboBox
+                TabIndex="7"
+                materialDesign:HintAssist.Hint="Hệ số chức vụ" 
+                ItemsSource="{Binding ItemsChucVu}"
+                SelectedItem="{Binding SelectedChucVu}"
+                DisplayMemberPath="ChucVuDisplay"/>
+            <TextBox
+                TabIndex="11"
+                materialDesign:HintAssist.Hint="Năm thâm niên (từ)" 
+                Text="{Binding FromNtn}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="3">
+            <TextBox
+                TabIndex="4"
+                materialDesign:HintAssist.Hint="Mã hưởng lương, phụ cấp" 
+                Text="{Binding SearchMaHuongLuong}" />
+            <ComboBox 
+                TabIndex="8"
+                materialDesign:HintAssist.Hint="Cấp bậc"
+                ItemsSource="{Binding ItemsCapBac}"
+                SelectedItem="{Binding SelectedCapBac}"
+                DisplayMemberPath="CapBacDisplay"/>
+            <TextBox
+                TabIndex="12"
+                materialDesign:HintAssist.Hint="Năm thâm niên (đến)" 
+                Text="{Binding ToNtn}" />
+        </StackPanel>
+
+        <StackPanel 
+            Grid.Row="3" 
+            Grid.ColumnSpan="4"
+            Margin="0 5 0 0">
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <StackPanel Orientation="Horizontal" Margin="0 15 0 0" HorizontalAlignment="Right">
+                <Button
+                    TabIndex="12"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding SearchCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Search" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Tìm kiếm</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button
+                    TabIndex="13"
+                    IsCancel="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                    <Button.CommandParameter>
+                        <system:Boolean>False</system:Boolean>
+                    </Button.CommandParameter>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

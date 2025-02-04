@@ -1,0 +1,127 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Salary.TransferData.TranferDataKtdt.TransferDataKtdtIndex"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Salary.TransferData.TranferDataKtdt"
+             mc:Ignorable="d"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:converter="clr-namespace:VTS.QLNS.CTC.App.Converters"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0">
+            <materialDesign:PackIcon Kind="FolderSwapOutline" Height="32" Width="32" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold" Text="{Binding Title}"/>
+                <TextBlock Text="{Binding Description}"/>
+                <Separator Background="{StaticResource MaterialDesignDivider}" Margin="0 5 0 0"/>
+            </StackPanel>
+        </DockPanel>
+
+        <StackPanel Margin="0 5 0 0" Grid.Row="1">
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                <Button
+                    ext:Permission.Identifier="SALARY_CHUYEN_DOI_DU_LIEU_KTDT_INDEX_CONFIG"
+                    Style="{DynamicResource SearchBarBtnStyle}"
+                    Command="{Binding OpenCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="DatabaseCogOutline"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Cấu hình Database"/>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+                <Button
+                    ext:Permission.Identifier="SALARY_CHUYEN_DOI_DU_LIEU_KTDT_INDEX_SAVE"
+                    IsEnabled="{Binding IsEnabled}"
+                    Style="{DynamicResource SearchBarBtnStyle}"
+                    Command="{Binding SaveCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu (F10)"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <StackPanel Orientation="Horizontal" Margin="0 8 0 0">
+                <RadioButton
+                    x:Name="RbDonVi"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    IsChecked="True"
+                    GroupName="TabIndex"
+                    Content="THÔNG TIN ĐƠN VỊ" />
+                <RadioButton
+                    x:Name="RbDoiTuong"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    GroupName="TabIndex"
+                    Content="THÔNG TIN ĐỐI TƯỢNG" />
+            </StackPanel>
+            <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0 0 0 1" />
+        </StackPanel>
+
+        <component:ExpandedDataGrid
+            Visibility="{Binding IsChecked, ElementName=RbDonVi, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Grid.Row="2"
+            Margin="0 5 0 0"
+            x:Name="dgDonVi"
+            IsReadOnly="False"
+            BorderThickness="1"
+            CanUserAddRows="False"
+            CanUserResizeColumns="False"
+            HorizontalScrollBarVisibility="Auto"
+            IsSynchronizedWithCurrentItem="True"
+            FrozenColumnCount="3"
+            GridLinesVisibility="All"
+            ext:DataGridBehavior.DisplayRowNumber="True"
+            RowStyle="{StaticResource DataGridRowIndex}"
+            Style="{StaticResource MaterialDesignDataGrid}"
+            ItemsSource="{Binding DtDonVi}"
+            AutoGenerateColumns="False"
+            ColumnInfo="{Binding Columns}"
+            ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+            ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}">
+            <DataGrid.Columns>
+                <materialDesign:DataGridTextColumn
+                    Header="Mã đơn vị"
+                    Binding="{Binding MA_CBO}">
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn
+                    Header="Tên đơn vị"
+                    Binding="{Binding TEN_CBO}">
+                </materialDesign:DataGridTextColumn>
+            </DataGrid.Columns>
+        </component:ExpandedDataGrid>
+
+        <component:ExpandedDataGrid
+            Visibility="{Binding IsChecked, ElementName=RbDoiTuong, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Grid.Row="2"
+            Margin="0 5 0 0"
+            x:Name="dgDoiTuong"
+            IsReadOnly="False"
+            BorderThickness="1"
+            CanUserAddRows="False"
+            CanUserResizeColumns="False"
+            HorizontalScrollBarVisibility="Auto"
+            IsSynchronizedWithCurrentItem="True"
+            FrozenColumnCount="3"
+            GridLinesVisibility="All"
+            ext:DataGridBehavior.DisplayRowNumber="True"
+            RowStyle="{StaticResource DataGridRowIndex}"
+            Style="{StaticResource MaterialDesignDataGrid}"
+            AutoGenerateColumns="True"
+            ColumnInfo="{Binding Columns}"
+            ItemsSource="{Binding DtDoiTuong}"
+            ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+            ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}">
+        </component:ExpandedDataGrid>
+    </Grid>
+</UserControl>

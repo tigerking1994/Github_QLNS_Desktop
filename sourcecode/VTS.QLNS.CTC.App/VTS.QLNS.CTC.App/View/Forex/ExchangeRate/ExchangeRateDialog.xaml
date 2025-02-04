@@ -1,0 +1,212 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Forex.ExchangeRate.ExchangeRateDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Investment.MediumTermPlan.PlanManagerApproved"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             mc:Ignorable="d">
+    <Grid Margin="16">
+        <StackPanel Orientation="Vertical">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="PlaylistPlus" Style="{StaticResource DialogScreenIconStyle}"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                    <TextBlock  Text="{Binding Name}" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding Description}"></TextBlock>
+                </StackPanel>
+            </DockPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <Grid Margin="-4 0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" MinWidth="250"/>
+                    <ColumnDefinition Width="1*" MinWidth="250"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.Resources>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                        <Setter Property="Margin" Value="4 2 4 2" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+
+                    <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+                        <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                        <Setter Property="Margin" Value="4 2 4 2" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+
+                    <Style TargetType="DatePicker" BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}">
+                        <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                        <Setter Property="Margin" Value="4 2 4 2" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                </Grid.Resources>
+
+                <TextBox
+                    Grid.Row="1"
+                    materialDesign:HintAssist.Hint="Mã tỉ giá (*)"
+                    Text="{Binding Model.SMaTiGia, Mode=TwoWay}"
+                    VerticalAlignment="Center" />
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    IsReadOnly="true"
+                    materialDesign:HintAssist.Hint="Tên tỉ giá (*)"
+                    Text="{Binding Model.STenTiGia, Mode=TwoWay}"
+                    VerticalAlignment="Center" />
+
+                <TextBox
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    PreviewTextInput="NumberValidationTextBox"
+                    materialDesign:HintAssist.Hint="Năm"
+                    Text="{Binding INamTiGia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    MaxLength="4"
+                    VerticalAlignment="Center" >
+                </TextBox>
+                <ComboBox
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    IsEditable="True"
+                    DisplayMemberPath="DisplayItem"
+                    SelectedValuePath="Id"
+                    TextSearch.TextPath="ValueItem"
+                    materialDesign:HintAssist.Hint="Tháng (*)"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    SelectedItem="{Binding MonthSelected, UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding Months}"/>
+                <TextBox
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    materialDesign:HintAssist.Hint="Số thông báo BKNN"
+                    Text="{Binding Model.SSoThongBaoKBNN, Mode=TwoWay}"
+                    VerticalAlignment="Center" />
+                <DatePicker
+                    Language="vi-VN"
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    materialDesign:HintAssist.Hint="Ngày ban hành thông báo KBNN (*)"
+                    SelectedDate="{Binding Model.DNgayBanHanhKBNN, Mode=TwoWay}" />
+                <TextBox
+                    Grid.Row="4"
+                    materialDesign:HintAssist.Hint="Mô tả"
+                    Text="{Binding Model.SMoTaTiGia, Mode=TwoWay}"
+                    VerticalAlignment="Center" />
+                <ComboBox
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    IsEditable="True"
+                    DisplayMemberPath="DisplayItem"
+                    SelectedValuePath="Id"
+                    TextSearch.TextPath="ValueItem"
+                    materialDesign:HintAssist.Hint="Mã tiền tệ gốc (*)"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    SelectedItem="{Binding SelectedLoaiTienTe, UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding ItemsLoaiTienTe}"/>
+                <StackPanel
+                    Grid.Row="5"
+                    Grid.ColumnSpan="2"
+                    Margin="4 20 4 10">
+                    <StackPanel>
+                        <TextBlock Margin="0 5 0 0" FontWeight="SemiBold" Text="THÔNG TIN TỈ GIÁ CHI TIẾT"></TextBlock>
+                        <Border>
+                            <DataGrid 
+                                x:Name="dgdDataTiGiaChiTietDetail"
+                                Margin="0 5 0 0"
+                                MaxHeight="250"
+                                BorderThickness="1"
+                                CanUserResizeColumns="True"
+                                CanUserAddRows="False"
+                                AutoGenerateColumns="False"
+                                FrozenColumnCount="1"
+                                VerticalAlignment="Top"
+                                GridLinesVisibility="All"
+                                HorizontalScrollBarVisibility="Auto"
+                                Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                Style="{StaticResource MaterialDesignDataGrid}"
+                                CellStyle="{StaticResource DataGridCellDetail}"
+                                RowStyle="{StaticResource DataGridRowDetail}"
+                                SelectedItem="{Binding SelectedTiGiaChiTiet}"
+                                ItemsSource="{Binding ItemsTiGiaChiTiet}"
+                                BeginningEdit="dgdDataTiGiaChiTietDetail_BeginningEdit">
+                                <DataGrid.Resources>
+                                    <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <component:DataGridTextColumn
+                                        x:Name="SMaTienTeGoc"
+                                        Header="Mã Tiền tệ gốc"
+                                        Width="150"
+                                        IsReadOnly="True"
+                                        Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SelectedLoaiTienTe.DisplayItem}"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}"/>
+                                    <materialDesign:DataGridTextColumn
+                                        x:Name="FTiGia"
+                                        Width="*"
+                                        Header="Tỉ giá"
+                                        Binding="{Binding FTiGia, Converter={StaticResource NumberToStringEmptyNoExponentialConverter}, UpdateSourceTrigger=LostFocus}"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"/>
+                                    <component:DataGridTextColumn
+                                        x:Name="IIdTienTeId"
+                                        Width="150"
+                                        Header="Mã tiền tệ quy đổi"
+                                        IsReadOnly="True"
+                                        Binding="{Binding SMaTienTeQuyDoi}"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+            <StackPanel Orientation="Horizontal" Margin="0 5 0 0" HorizontalAlignment="Right">
+                <Button
+                    ext:Permission.Identifier="INVESTMENT_MEDIUM_TERM_PLAN_PLAN_MANAGER_APPROVED_DIALOG_SAVE"
+                    IsDefault="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding SaveCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lưu dữ liệu</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button
+                    IsCancel="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                    <Button.CommandParameter>
+                        <system:Boolean>False</system:Boolean>
+                    </Button.CommandParameter>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

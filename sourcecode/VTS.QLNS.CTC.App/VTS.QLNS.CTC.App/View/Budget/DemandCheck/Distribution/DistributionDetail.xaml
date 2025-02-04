@@ -1,0 +1,842 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Budget.DemandCheck.Distribution.DistributionDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+        xmlns:extensions="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:distribution="clr-namespace:VTS.QLNS.CTC.App.ViewModel.Budget.DemandCheck.Distribution"
+        xmlns:compt="clr-namespace:VTS.QLNS.CTC.App.Component"
+        xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+        x:Name="DetailWindow"
+        d:DataContext="{d:DesignInstance distribution:DistributionDetailViewModel, IsDesignTimeCreatable=True}"
+        mc:Ignorable="d"
+        Style="{StaticResource MaterialDesignWindow}"
+        Title="Quản lý ngân sách - Cục tài chính"
+        Height="768" Width="1280"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        Icon="/favicon.ico">
+    <Window.InputBindings>
+        <KeyBinding Key="F4" Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=DgDistributionDetail, Path=.}"/>
+        <KeyBinding Key="F10" Command="{Binding SaveCommand}" />
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}" />
+    </Window.InputBindings>
+    <Window.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="groupingHeaderTemplate">
+                <TextBlock
+                    Text="test"
+                    Foreground="Navy"
+                    FontWeight="Bold"
+                    FontSize="12" />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    <materialDesign:DialogHost Identifier="{x:Static localEnum:DemandCheckScreen.DETAIL_DIALOG}" DialogTheme="Inherit">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel
+                Grid.Row="0"
+                Orientation="Vertical">
+                <DockPanel>
+                    <materialDesign:PackIcon Kind="Dollar" Style="{StaticResource DialogScreenIconStyle}" />
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Title}" FontWeight="Bold" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Description}" />
+                        </Grid>
+                    </StackPanel>
+                </DockPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}" />
+            </StackPanel>
+            <ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                          HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                <StackPanel Margin="0 5">
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            extensions:Permission.Identifier="BUDGET_DEMANDCHECK_DISTRIBUTION_DETAIL_DELETE"
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding DeleteCommand}"
+                            CommandParameter="{Binding ElementName=DgDistributionDetail, Path=.}"
+                            IsEnabled="{Binding Path=IsLock, Converter={StaticResource InvertBooleanConverter}}"
+                            ToolTip="Xóa dữ liệu">
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="DeleteForever" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xóa (F4)" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button
+                            ext:Permission.Identifier="BUDGET_DEMANDCHECK_DISTRIBUTION_DETAIL_DELETE_ALL"
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            IsEnabled="{Binding IsDeleteAll}"
+                            Command="{Binding DeleteAllCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="DeleteForever" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xóa tất cả" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button
+                            extensions:Permission.Identifier="BUDGET_DEMANDCHECK_DISTRIBUTION_DETAIL_SAVE"
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding SaveCommand}"
+                            IsEnabled="{Binding IsSaveData}"
+                            ToolTip="Lưu dữ liệu">
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Kind="ContentSave" />
+                                <TextBlock
+                                    Style="{StaticResource SearchBarBtnTextStyle}"
+                                    Text="Lưu dữ liệu (F10)" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            ToolTip="Refresh"
+                            Command="{Binding RefreshCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Refresh" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="(F5)" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button
+                            x:Name="btnPrint"
+                            extensions:Permission.Identifier="BUDGET_DEMANDCHECK_DISTRIBUTION_DETAIL_REPORT"
+                            Command="{Binding BtnPrintCommand}"
+                            Style="{StaticResource SearchBarBtnStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Printer" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">In báo cáo</TextBlock>
+                                <materialDesign:PopupBox
+                                    Margin="-10,0,0,0"
+                                    HorizontalAlignment="Right"
+                                    IsPopupOpen="{Binding IsOpenPrintPopup, Mode=TwoWay}">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="MenuDown" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel>
+                                        <Button
+                                            Command="{Binding PrintCommand}"
+                                            CommandParameter="{x:Static localEnum:DemandCheckPrintType.REPORT_PHAN_BO_SO_KIEM_TRA_THEO_DON_VI}"
+                                            Content="Báo cáo chi tiết phân bổ số kiểm tra theo đơn vị" />
+                                        <Button
+                                            Command="{Binding PrintCommand}"
+                                            CommandParameter="{x:Static localEnum:DemandCheckPrintType.REPORT_TONG_HOP_PHAN_BO_SO_KIEM_TRA}"
+                                            Content="Báo cáo tổng hợp phân bổ số kiểm tra" />
+                                        <Button
+                                            Command="{Binding PrintCommand}"
+                                            CommandParameter="{x:Static localEnum:DemandCheckPrintType.REPORT_CHI_TIET_PHAN_BO_SO_KIEM_TRA_THEO_NGANH}"
+                                            Content="Báo cáo chi tiêt phân bổ số kiểm tra theo ngành" />
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button x:Name="btnShowCol" Style="{StaticResource SearchBarBtnStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Ẩn/hiện cột" />
+                                <materialDesign:PopupBox
+                                    Name="pbDynamicColumn"
+                                    Margin="-10 0 0 0"
+                                    HorizontalAlignment="Right"
+                                    StaysOpen="True">
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialDesign:PackIcon Kind="MenuDown" />
+                                    </materialDesign:PopupBox.ToggleContent>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <ComboBox
+                            Name="cbFrozenColumn"
+                            materialDesign:HintAssist.Hint="Cố định cột"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <ComboBox
+                            materialDesign:HintAssist.Hint="-- Khối đơn vị --"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            DisplayMemberPath="DisplayItem"
+                            Visibility="{Binding ShowFilterKhoiDonVi, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            SelectedItem="{Binding SelectedKhoiDonVi}"
+                            ItemsSource="{Binding KhoiDonViItems}"
+                            Style="{StaticResource SearchBarHorizontalComboBoxStyle}" />
+                        <Separator Visibility="{Binding ShowFilterKhoiDonVi, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding ElementName=DetailWindow}"
+                            Style="{StaticResource SearchBarBtnStyle}">
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="CloseOutline" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Đóng" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <Separator Background="{DynamicResource MaterialDesignDivider}" />
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox
+                            materialDesign:TextFieldAssist.HasClearButton="False"
+                            materialDesign:HintAssist.Hint="-- Hiển thị --"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            Width="150"
+                            SelectedItem="{Binding SelectedDataState}"
+                            ItemsSource="{Binding DataStateItems}"
+                            Style="{StaticResource SearchBarHorizontalComboBoxStyle}" />
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <TextBox
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            materialDesign:HintAssist.Hint="--MLSKT--"
+                            Style="{StaticResource SearchBarHorizontalTextBoxStyle}"
+                            Width="120"
+                            Text="{Binding NsSktChungTuChiTietSearchModel.SKyHieu, UpdateSourceTrigger=PropertyChanged }">
+                            <TextBox.InputBindings>
+                                <KeyBinding
+                                    Command="{Binding SearchCommand}"
+                                    Key="Return" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <materialDesign:PopupBox
+                            Margin="-10 0 0 0"
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            StaysOpen="True"
+                            IsPopupOpen="{Binding IsPopupOpen, Mode=TwoWay}">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:PackIcon
+                                    Kind="MenuDown" />
+                            </materialDesign:PopupBox.ToggleContent>
+                            <Grid
+                                Margin="10"
+                                Height="400">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBox
+                                    Grid.Row="0"
+                                    materialDesign:HintAssist.Hint="Tìm kiếm"
+                                    Text="{Binding SktMucLucSearch, UpdateSourceTrigger=PropertyChanged}" />
+                                <DataGrid
+                                    Grid.Row="1"
+                                    Margin="0 10 0 0"
+                                    Name="dgdPopup"
+                                    ItemsSource="{Binding SktMucLucItems}"
+                                    AutoGenerateColumns="False"
+                                    CanUserResizeColumns="True"
+                                    BorderThickness="1"
+                                    SelectedItem="{Binding SelectedSktMucLuc}"
+                                    CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn
+                                            Header="Ký hiệu"
+                                            Binding="{Binding SKyHieu}"
+                                            IsReadOnly="True" />
+                                        <DataGridTextColumn
+                                            Header="STT"
+                                            Binding="{Binding SSTT}"
+                                            IsReadOnly="True" />
+                                        <DataGridTextColumn
+                                            Header="Mô tả"
+                                            Binding="{Binding SMoTa}"
+                                            IsReadOnly="True" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </materialDesign:PopupBox>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <ComboBox
+                            materialDesign:HintAssist.Hint="-- Nhóm ngành --"
+                            Width="140"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            DisplayMemberPath="DisplayMemberPath"
+                            SelectedItem="{Binding SelectedNNganh}"
+                            ItemsSource="{Binding NNganhItems}"
+                            Style="{StaticResource SearchBarHorizontalComboBoxStyle}" />
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <ComboBox
+                            materialDesign:HintAssist.Hint="-- Chuyên ngành --"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            Width="150"
+                            DisplayMemberPath="DisplayMemberPath"
+                            SelectedItem="{Binding SelectedCNganh}"
+                            ItemsSource="{Binding CNganhItems}"
+                            Style="{StaticResource SearchBarHorizontalComboBoxStyle}" />
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <ComboBox
+                            materialDesign:HintAssist.Hint="-- Đơn vị --"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            DisplayMemberPath="DisplayMemberPath"
+                            SelectedItem="{Binding SelectedDonVi}"
+                            ItemsSource="{Binding DonViItems}"
+                            Style="{StaticResource SearchBarHorizontalComboBoxStyle}" />
+                        <Button
+                            Command="{Binding SearchCommand}"
+                            Style="{StaticResource SearchBarBtnStyle}">
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Kind="Search" />
+                                <TextBlock
+                                    Style="{StaticResource SearchBarBtnTextStyle}">
+                                    Tìm kiếm
+                                </TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding ClearSearchCommand}">
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Kind="FilterRemoveOutline" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Visibility="{Binding ShowColNSSD}" Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            IsEnabled="{Binding IsEnablePhanBoAll}"
+                            Visibility="{Binding ShowColNSSD}"
+                            Command="{Binding PhanBoConLaiCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Transfer" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Phân bổ toàn bộ cho đơn vị đang chọn" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Visibility="{Binding ShowColNSBD}" Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            Visibility="{Binding ShowColNSBD}"
+                            Command="{Binding GetDataNganhThamDinh}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Transfer" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lấy số ngành thẩm định" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Visibility="{Binding ShowColNSBD}" Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            Visibility="{Binding ShowColNSBD}"
+                            Command="{Binding GetDataNganhThamDinhExcel}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Transfer" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Nhập dữ liệu ngành thẩm định từ tệp Excel" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+
+                        <Button Style="{StaticResource SearchBarBtnStyle}"
+                                IsEnabled="{Binding Path=IsLock, Converter={StaticResource InvertBooleanConverter}}"
+                                Command="{Binding CopySoNhuCau}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Copyright" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Sao chép số nhu cầu"></TextBlock>
+                            </StackPanel>
+                        </Button>
+
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button Style="{StaticResource SearchBarBtnStyle}"
+                                IsEnabled="{Binding Path=IsLock, Converter={StaticResource InvertBooleanConverter}}"
+                                Command="{Binding CopySoDuToan}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ContentCopy" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Sao chép số dự toán"></TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+            <compt:ExpandedDataGrid
+                x:Name="DgDistributionDetail1"
+                Grid.Row="3"
+                FrozenColumnCount="6"
+                Margin="0 0 0 10"
+                VerticalAlignment="Top"
+                BorderThickness="1"
+                GridLinesVisibility="All"
+                HorizontalScrollBarVisibility="Auto"
+                wpf:DataGridAssist.CornerRadius="0 0 4 4"
+                CanUserAddRows="False"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                CanUserDeleteRows="False"
+                ScrollViewer.ScrollChanged="dgdData_ScrollChanged"
+                ColumnInfo="{Binding Columns}"
+                ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                Style="{StaticResource MaterialDesignDataGrid}"
+                CellStyle="{StaticResource DataGridCellCheckDetail}"
+                RowStyle="{StaticResource DataGridRowDetail}"
+                ext:DataGridBehavior.LastColumnFill="True"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem}">
+                <DataGrid.Resources>
+                    <helper:BindingProxy
+                        x:Key="DataContextProxy"
+                        Data="{Binding }" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        x:Name="KyHieu"
+                        Header="Ký hiệu"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                        Binding="{Binding SKyHieu}"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn x:Name="Loai"
+                        Header="Loại"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                        Binding="{Binding SL}"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn x:Name="Khoan"
+                        Header="Khoản"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                        Binding="{Binding SK}"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn x:Name="Muc"
+                        Header="Mục"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                        Binding="{Binding SM}"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn x:Name="Nganh"
+                        Header="Ngành"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                        Binding="{Binding Nganh}"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        x:Name="Stt"
+                        Header="STT"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                        Binding="{Binding Stt}"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        x:Name="MoTa"
+                        Header="Mô tả"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                        Binding="{Binding SMoTa}"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        x:Name="DonVi"
+                        Header="Đơn vị"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                        Binding="{Binding TenDonViIdDonVi}"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        x:Name="SoNhuCau"
+                        Binding="{Binding SoNhuCau, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}}"
+                        IsReadOnly="True"
+                        Visibility="{Binding Data.ShowColNSSD, Source={StaticResource DataContextProxy}}"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock
+                                Text="{Binding DataContext.SoNhuCau, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        x:Name="SoNhuCauMHHV"
+                        Header="SoNhuCauMHHV"
+                        Binding="{Binding SoNhuCauMHHV, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}}"
+                        IsReadOnly="True"
+                        Visibility="{Binding Data.ShowColNSBD, Source={StaticResource DataContextProxy}}"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                        HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border
+                                        Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="SoNhuCauMHHV" Path="ActualWidth"/>
+                                                                    <Binding ElementName="SoNhuCauDT" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text= "{Binding DataContext.SoNhuCau, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                        Grid.Row="1"
+                                        Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                        BorderThickness="0 1 1 0"
+                                        BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" Text="Mua hàng cấp hiện vật"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        x:Name="SoNhuCauDT"
+                        Header="Đặc thù"
+                        Binding="{Binding SoNhuCauDT, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}}"
+                        IsReadOnly="True"
+                        Visibility="{Binding Data.ShowColNSBD, Source={StaticResource DataContextProxy}}"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                        HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                        HeaderTemplate="{StaticResource RightHeader}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="SoKiemTra"
+                                        Binding="{Binding SoKiemTra, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}}"
+                                        IsReadOnly="True"
+                                        Visibility="{Binding Data.ShowColNSSD, Source={StaticResource DataContextProxy}}"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding DataContext.SoKiemTra, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="DuToan"
+                                        Binding="{Binding DuToan, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}}"
+                                        IsReadOnly="True"
+                                        Visibility="{Binding Data.ShowColNSSD, Source={StaticResource DataContextProxy}}"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding DataContext.DuToan, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        x:Name="SoKiemTraMHHV"
+                        Header="SoKiemTraMHHV"
+                        Binding="{Binding SoKiemTraMHHV, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}}"
+                        IsReadOnly="True"
+                        Visibility="{Binding Data.ShowColNSBD, Source={StaticResource DataContextProxy}}"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"                        
+                        HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border
+                                        Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="SoKiemTraMHHV" Path="ActualWidth"/>
+                                                                    <Binding ElementName="SoKiemTraDT" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text= "{Binding DataContext.SoKiemTra, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                        Grid.Row="1"
+                                        Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                        BorderThickness="0 1 1 0"
+                                        BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" Text="Mua hàng cấp hiện vật"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="SoKiemTraDT"
+                                        Header="Đặc thù"
+                                        Binding="{Binding SoKiemTraDT, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}}"
+                                        IsReadOnly="True"
+                                        Visibility="{Binding Data.ShowColNSBD, Source={StaticResource DataContextProxy}}"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                        HeaderTemplate="{StaticResource RightHeader}">
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn
+                        x:Name="DuToanMHCHV"
+                        Header="DuToanMHCHV"
+                        Width="Auto"
+                        Binding="{Binding DuToanMHCHV, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}}"
+                        Visibility="{Binding Data.ShowColNSBD, Source={StaticResource DataContextProxy}}"
+                        IsReadOnly="True"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                        HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border
+                                        Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="DuToanMHCHV" Path="ActualWidth"/>
+                                                                    <Binding ElementName="DuToanDT" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text= "{Binding DataContext.DuToan, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                        Grid.Row="1"
+                                        Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                        BorderThickness="0 1 1 0"
+                                        BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" Text="Mua hàng cấp hiện vật"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        x:Name="DuToanDT"
+                        Header="Đặc thù"
+                        Width="Auto"
+                        Binding="{Binding DuToanDT, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}}"
+                        IsReadOnly="True"
+                        Visibility="{Binding Data.ShowColNSBD, Source={StaticResource DataContextProxy}}"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                        HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                        HeaderTemplate="{StaticResource RightHeader}">
+                    </DataGridTextColumn>
+
+                    <compt:DataGridTextColumn
+                        x:Name="TuChi"
+                        Header="Tự chi"
+                        StringFormat="{}{0:N0}"
+                        Visibility="{Binding Data.ShowColNSSD, Source={StaticResource DataContextProxy}}"
+                        Binding="{Binding FTuChi, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                        IsReadOnly="{Binding Data.IsReadOnly, Source={StaticResource DataContextProxy}}"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                    <compt:DataGridTextColumn
+                        x:Name="fhuydongtonkho"
+                        Header="Huy động tồn kho"
+                        StringFormat="{}{0:N0}"
+                        Visibility="{Binding Data.ShowColNSBD, Source={StaticResource DataContextProxy}}"
+                        Binding="{Binding FHuyDongTonKho, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                    <compt:DataGridTextColumn
+                        x:Name="MuaHangHienVat"
+                        Header="Mua hàng cấp hiện vật"
+                        StringFormat="{}{0:N0}"
+                        Visibility="{Binding Data.ShowColNSBD, Source={StaticResource DataContextProxy}}"
+                        Binding="{Binding FMuaHangCapHienVat, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                    <compt:DataGridTextColumn
+                        x:Name="DacThu"
+                        Header="Đặc thù"
+                        StringFormat="{}{0:N0}"
+                        Visibility="{Binding Data.ShowColNSBD, Source={StaticResource DataContextProxy}}"
+                        Binding="{Binding FPhanCap, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                    <compt:DataGridTextColumn
+                        x:Name="ThongBaoDonVi"
+                        Header="Thông báo trực tiếp cho đơn vị"
+                        StringFormat="{}{0:N0}"
+                        IsReadOnly="True"
+                        Visibility="{Binding Data.ShowColNSBD, Source={StaticResource DataContextProxy}}"
+                        Binding="{Binding FThongBaoDonVi, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                    <DataGridTextColumn
+                        x:Name="Tang"
+                        Header="Tăng"
+                        Binding="{Binding Tang, Converter={ StaticResource NegativeNumberToStringConverter}, StringFormat={}{0:N0}}"
+                        IsReadOnly="True"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" />
+                    <DataGridTextColumn
+                        x:Name="Giam"
+                        Header="Giảm"
+                        Binding="{Binding Giam, Converter={ StaticResource NegativeNumberToStringConverter}, StringFormat={}{0:N0}}"
+                        IsReadOnly="True"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" />
+                    <DataGridTextColumn
+                        x:Name="GhiChu"
+                        Header="Ghi chú"
+                        Width="*"
+                        Binding="{Binding SGhiChu}"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" />
+                </DataGrid.Columns>
+            </compt:ExpandedDataGrid>
+            <ScrollViewer Grid.Row="4" x:Name="scrollFooter" HorizontalScrollBarVisibility="Hidden"
+                          VerticalScrollBarVisibility="Hidden">
+                <StackPanel
+                    Grid.Row="4"
+                    Orientation="Horizontal">
+                    <Grid Width="{Binding ElementName=KyHieu, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=KyHieu, Path=Visibility}" />
+                    <Grid Width="{Binding ElementName=Loai, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=Loai, Path=Visibility}" />
+                    <Grid Width="{Binding ElementName=Khoan, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=Khoan, Path=Visibility}" />
+                    <Grid Width="{Binding ElementName=Muc, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=Muc, Path=Visibility}" />
+                    <Grid Width="{Binding ElementName=Nganh, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=Nganh, Path=Visibility}" />
+                    <Grid Width="{Binding ElementName=Stt, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=Stt, Path=Visibility}" />
+                    <Grid Width="{Binding ElementName=MoTa, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=MoTa, Path=Visibility}" />
+                    <Grid Width="{Binding ElementName=DonVi, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=DonVi, Path=Visibility}" />
+                    <Grid Width="{Binding ElementName=SoNhuCau, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=SoNhuCau, Path=Visibility}">
+                        <TextBox
+                            Text="{Binding Model.TongSoNhuCau, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=SoNhuCauMHHV, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=SoNhuCauMHHV, Path=Visibility}">
+                        <TextBox
+                            Text="{Binding Model.TongSoNhuCauMHHV, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=SoNhuCauDT, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=SoNhuCauDT, Path=Visibility}">
+                        <TextBox
+                            Text="{Binding Model.TongSoNhuCauDT, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=SoKiemTra, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=SoKiemTra, Path=Visibility}">
+                        <TextBox Text="{Binding Model.TongSoKiemTra, StringFormat={}{0:N0}}"
+                                 Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=DuToan, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=DuToan, Path=Visibility}">
+                        <TextBox Text="{Binding Model.TongCanCuDuToan, StringFormat={}{0:N0}}"
+                                 Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=SoKiemTraMHHV, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=SoKiemTraMHHV, Path=Visibility}">
+                        <TextBox
+                            Text="{Binding Model.TongSoKiemTraMHHV, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=SoKiemTraDT, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=SoKiemTraDT, Path=Visibility}">
+                        <TextBox
+                            Text="{Binding Model.TongSoKiemTraDT, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=DuToanMHCHV, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=DuToanMHCHV, Path=Visibility}">
+                        <TextBox
+                            Text="{Binding Model.TongCanCuDuToanMHCHV, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=DuToanDT, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=DuToanDT, Path=Visibility}">
+                        <TextBox
+                            Text="{Binding Model.TongCanCuDuToanDT, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=TuChi,Path=ActualWidth}"
+                          Visibility="{Binding ElementName=TuChi, Path=Visibility}">
+                        <TextBox
+                            Text="{Binding Model.FTongTuChi, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=fhuydongtonkho,Path=ActualWidth}"
+                          Visibility="{Binding ElementName=fhuydongtonkho, Path=Visibility}">
+                        <TextBox Focusable="False"
+                                 Text="{Binding FTongHuyDongTonKho, StringFormat={}{0:N0}}"
+                                 Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=MuaHangHienVat,Path=ActualWidth}"
+                          Visibility="{Binding ElementName=MuaHangHienVat, Path=Visibility}">
+                        <TextBox
+                            Text="{Binding Model.FTongMuaHangCapHienVat, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=DacThu,Path=ActualWidth}"
+                          Visibility="{Binding ElementName=DacThu, Path=Visibility}">
+                        <TextBox
+                            Text="{Binding Model.FTongPhanCap, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=ThongBaoDonVi,Path=ActualWidth}"
+                          Visibility="{Binding ElementName=ThongBaoDonVi, Path=Visibility}">
+                        <TextBox
+                            Focusable="False"
+                            Text="{Binding Model.FTongThongBaoDonVi, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=Tang,Path=ActualWidth}"
+                          Visibility="{Binding ElementName=Tang, Path=Visibility}">
+                        <TextBox
+                            Text="{Binding Model.TongTangPhanBo, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=Giam,Path=ActualWidth}"
+                          Visibility="{Binding ElementName=Giam, Path=Visibility}">
+                        <TextBox
+                            Text="{Binding Model.TongGiamPhanBo, StringFormat={}{0:N0}}"
+                            Style="{StaticResource TextBoxTotalCell}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=GhiChu, Path=ActualWidth}"
+                          Visibility="{Binding ElementName=GhiChu, Path=Visibility}" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

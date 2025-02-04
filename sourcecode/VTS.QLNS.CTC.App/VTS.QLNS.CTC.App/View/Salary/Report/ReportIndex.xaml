@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Salary.Report.ReportIndex"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component">
+    <UserControl.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}"/>
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <materialDesign:PackIcon Kind="FormatListText" Height="32" Width="32" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold" Text="{Binding Name}"></TextBlock>
+                <TextBlock Text="{Binding Description}"></TextBlock>
+                <Separator Background="{DynamicResource MaterialDesignDivider}" Margin="0 5 0 0"/>
+            </StackPanel>
+        </DockPanel>
+        <ScrollViewer
+            Grid.Row="1"
+            Margin="0 5 0 0"
+            HorizontalScrollBarVisibility="Auto">
+            <StackPanel Orientation="Vertical">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            ext:Permission.Identifier="SALARY_MANAGEMENT_REPORTS_INDEX_SAVE"
+                            Style="{DynamicResource SearchBarBtnStyle}"
+                            Command="{Binding EditCommand}"
+                            IsEnabled="{Binding IsEnabled}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="AccountEdit"/>
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu dữ liệu"/>
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+                        <Button
+                            Style="{DynamicResource SearchBarBtnStyle}"
+                            Command="{Binding RefreshCommand}"
+                            HorizontalAlignment="Right">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Refresh"/>
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="(F5)"/>
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+                        <TextBox
+                            Width="250"
+                            materialDesign:HintAssist.Hint="Nhập từ khóa tìm kiếm"
+                            materialDesign:HintAssist.IsFloating="True"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            Text="{Binding TenBaoCao, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <Button Margin="10 0 0 0" Style="{StaticResource SearchBarBtnStyle}" Command="{Binding SearchCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Search"/>
+                                <TextBlock 
+                                    Padding="8 0 0 0"
+                                    Style="{StaticResource SearchBarBtnTextStyle}"
+                                    Text="Tìm kiếm"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <component:ExpandedDataGrid
+            x:Name="dgListReport"
+            Grid.Row="2"
+            Margin=" 0 5 0 0"
+            BorderThickness="1"
+            CanUserAddRows="False"
+            CanUserResizeColumns="False"
+            HorizontalScrollBarVisibility="Auto"
+            FrozenColumnCount="1"
+            GridLinesVisibility="All"
+            AutoGenerateColumns="False"
+            ext:DataGridBehavior.DisplayRowNumber="True" 
+            Style="{StaticResource MaterialDesignDataGrid}"
+            RowStyle="{StaticResource DataGridRowDetail}"
+            CellStyle="{StaticResource DataGridCellDetail}"
+            ItemsSource="{Binding Items}"
+            SelectedItem="{Binding SelectedItem}"
+            ext:SelectionMouseDoubleClickBehaviour.Command="{Binding ShowPopupExportCommand}" >
+            <DataGrid.Columns>
+                <materialDesign:DataGridTextColumn 
+                    Header="STT"
+                    IsReadOnly="True"
+                    Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}, Path=Header}">
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn 
+                    Header="Tên báo cáo" 
+                    ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                    Binding="{Binding TenBaoCao}">
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn 
+                    Header="Ghi chú" 
+                    MinWidth="250"
+                    Binding="{Binding Note}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                </materialDesign:DataGridTextColumn>
+            </DataGrid.Columns>
+        </component:ExpandedDataGrid>
+    </Grid>
+</UserControl>

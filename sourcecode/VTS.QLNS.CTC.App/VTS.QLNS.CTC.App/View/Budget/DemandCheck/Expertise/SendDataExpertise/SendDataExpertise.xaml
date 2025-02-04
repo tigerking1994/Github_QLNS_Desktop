@@ -1,0 +1,128 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Budget.DemandCheck.Expertise.SendDataExpertise.SendDataExpertise"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Budget.DemandCheck.Expertise.SendDataExpertise"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:system="clr-namespace:System;assembly=mscorlib" 
+             xmlns:custom="clr-namespace:VTS.QLNS.CTC.Custom;assembly=VTS.QLNS.CTC.Custom" 
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Width="500"
+        Margin="20,20,20,10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <materialDesign:PackIcon Kind="MicrosoftExcel" Style="{StaticResource DialogScreenIconStyle}"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                <TextBlock Text="GỬI DỮ LIỆU" FontWeight="Bold"/>
+                <TextBlock Text="Chọn tiêu chí yêu cầu"/>
+            </StackPanel>
+        </DockPanel>
+        <Separator Grid.Row="1" Background="{DynamicResource MaterialDesignDivider}"/>
+
+        <Grid Grid.Row="2">
+            <StackPanel Orientation="Vertical">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                        <Setter Property="Margin" Value="0 4 10 2" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                        <Setter Property="Margin" Value="0 4 10 2" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                </StackPanel.Resources>
+                <TextBox
+                    materialDesign:HintAssist.Hint="Tên báo cáo"
+                    Text="{Binding TenBaoCao}" />
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Margin="0 10 8 0" Visibility="{Binding NormalVisibility, UpdateSourceTrigger=PropertyChanged}">
+            <materialDesign:ColorZone Mode="PrimaryLight">
+            </materialDesign:ColorZone>
+            <DataGrid
+                CanUserResizeColumns="True"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                VerticalAlignment="Stretch"
+                MaxHeight="300"
+                ItemsSource="{Binding ListChildAgency}">    
+                <DataGrid.Resources>
+                    <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn
+                    Binding="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                    EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                        <DataGridCheckBoxColumn.Header>
+                            <Border Background="Transparent">
+                                <CheckBox IsChecked="{Binding Data.SelectAllAgency, Source={StaticResource DataContextProxy}}" />
+                            </Border>
+                        </DataGridCheckBoxColumn.Header>
+                        <DataGridCheckBoxColumn.HeaderStyle>
+                            <Style
+                        TargetType="{x:Type DataGridColumnHeader}"
+                        BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridCheckBoxColumn.HeaderStyle>
+                    </DataGridCheckBoxColumn>
+                    <DataGridTextColumn
+                    Header="Mã đơn vị"
+                    Binding="{Binding Code}"
+                    IsReadOnly="True"/>
+                    <DataGridTextColumn
+                    Header="Tên đơn vị"
+                    Binding="{Binding Name}"
+                    IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 12 10 2">
+            <Button 
+                    IsDefault="True"
+                    Margin="5 0 0 0"
+                    IsEnabled="{Binding IsSaveData}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding ExportCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="FileExcel" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="{Binding TitleButton}"/>
+                </StackPanel>
+            </Button>
+
+            <Button
+                    Margin="10,0,0,0"
+                    Command="{x:Static wpf:DialogHost.CloseDialogCommand}"
+                    IsCancel="True"
+                    Style="{StaticResource MaterialDesignOutlinedButton}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CloseOutline" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                </StackPanel>
+                <Button.CommandParameter>
+                    <system:Boolean>False</system:Boolean>
+                </Button.CommandParameter>
+            </Button>
+        </StackPanel>
+        <component:ProgressDialog 
+            Grid.Row="2"/>
+    </Grid></UserControl>

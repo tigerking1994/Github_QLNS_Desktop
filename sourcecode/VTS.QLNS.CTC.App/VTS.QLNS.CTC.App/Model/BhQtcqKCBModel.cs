@@ -1,0 +1,108 @@
+﻿using FlexCel.Core;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace VTS.QLNS.CTC.App.Model
+{
+    public class BhQtcqKCBModel : BindableBase
+    {
+        public Guid Id { get; set; }
+        public Guid IIdDonVi { get; set; }
+        public string IIdMaDonVi { get; set; }
+        public string SSoChungTu { get; set; }
+        public DateTime DNgayChungTu { get; set; }
+        public string SSoQuyetDinh { get; set; }
+        public DateTime DNgayQuyetDinh { get; set; }
+        public int IQuyChungTu { get; set; }
+        public int INamChungTu { get; set; }
+        public string SMoTa { get; set; }
+        public DateTime DNgaySua { get; set; }
+        public DateTime DNgayTao { get; set; }
+        public string SNguoiSua { get; set; }
+        public string SNguoiTao { get; set; }
+        public string STongHop { get; set; }
+        public Guid? IIdTongHopID { get; set; }
+        public int ILoaiTongHop { get; set; }
+        public bool BIsKhoa { get; set; }
+
+        public Double? _fTongTienDuToanNamTruocChuyenSang;
+        public Double? FTongTienDuToanNamTruocChuyenSang { get => _fTongTienDuToanNamTruocChuyenSang; set => SetProperty(ref _fTongTienDuToanNamTruocChuyenSang, value); }
+
+        public Double? _fTongTienDuToanGiaoNamNay;
+        public Double? FTongTienDuToanGiaoNamNay { get => _fTongTienDuToanGiaoNamNay; set => SetProperty(ref _fTongTienDuToanGiaoNamNay, value); }
+
+        public Double? _fTongTienTongDuToanDuocGiao;
+        public Double? FTongTienTongDuToanDuocGiao { get => _fTongTienTongDuToanDuocGiao; set => SetProperty(ref _fTongTienTongDuToanDuocGiao, value); }
+
+        public Double? _fTongTienThucChi;
+        public Double? FTongTienThucChi { get => _fTongTienThucChi; set => SetProperty(ref _fTongTienThucChi, value); }
+
+        public Double? _fTongTienQuyetToanDaDuyet;
+        public Double? FTongTienQuyetToanDaDuyet { get => _fTongTienQuyetToanDaDuyet; set => SetProperty(ref _fTongTienQuyetToanDaDuyet, value); }
+
+        public Double? _fTongTienDeNghiQuyetToanQuyNay;
+        public Double? FTongTienDeNghiQuyetToanQuyNay { get => _fTongTienDeNghiQuyetToanQuyNay; set => SetProperty(ref _fTongTienDeNghiQuyetToanQuyNay, value); }
+
+        public Double? _fTongTienXacNhanQuyetToanQuyNay;
+        public Double? FTongTienXacNhanQuyetToanQuyNay { get => _fTongTienXacNhanQuyetToanQuyNay; set => SetProperty(ref _fTongTienXacNhanQuyetToanQuyNay, value); }
+        public string SDSSoChungTuTongHop { get; set; }
+        public string SDSLNS { get; set; }
+
+        public string SQuy => IQuyChungTu switch
+        {
+            1 => "Quý I",
+            2 => "Quý II",
+            3 => "Quý III",
+            4 => "Quý IV",
+            _ => string.Empty
+        };
+
+        private bool _selected;
+        public bool Selected
+        {
+            get => _selected;
+            set => SetProperty(ref _selected, value);
+        }
+        private bool _bDaTongHop;
+        public bool BDaTongHop
+        {
+            get => _bDaTongHop;
+            set => SetProperty(ref _bDaTongHop, value);
+        }
+        public string BDaTongHopString => BDaTongHop ? "Đã tổng hợp" : "";
+
+        private bool _isSummaryVocher;
+        public bool IsSummaryVocher
+        {
+            get => _isSummaryVocher;
+            set => SetProperty(ref _isSummaryVocher, value);
+        }
+        public string SoChungTuParent { get; set; }
+
+        private bool _isExpand;
+        public bool IsExpand
+        {
+            get => _isExpand;
+            set => SetProperty(ref _isExpand, value);
+        }
+        public bool IsChildSummary { get; set; }
+        private bool _isCollapse;
+        public bool IsCollapse
+        {
+            get => _isCollapse;
+            set => SetProperty(ref _isCollapse, value);
+        }
+        public string STenDonVi { get; set; }
+
+        private bool _isFilter;
+        public bool IsFilter
+        {
+            get => _isFilter;
+            set => SetProperty(ref _isFilter, value);
+        }
+    }
+}

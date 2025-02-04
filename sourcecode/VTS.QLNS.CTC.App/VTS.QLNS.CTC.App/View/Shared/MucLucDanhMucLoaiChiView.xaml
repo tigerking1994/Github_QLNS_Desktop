@@ -1,0 +1,904 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Shared.MucLucDanhMucLoaiChiView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Shared"
+             xmlns:extensions="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="800">
+    <UserControl.InputBindings>
+    </UserControl.InputBindings>
+    <Grid x:Name="pageControlCustom">
+        <Grid.InputBindings>
+            <KeyBinding Key="F5" Command="{Binding RefreshCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}"/>
+            <KeyBinding Key="F3" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}"/>
+            <KeyBinding Key="F4" Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}"/>
+            <KeyBinding Key="F10" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}"/>
+            <KeyBinding Key="F1" Command="{Binding OpenFilterPopupCommand}" />
+            <KeyBinding Key="F6" Command="{Binding OpenReferencePopupCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}" />
+            <KeyBinding Key="F7" Command="{Binding ViewDetailCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}" />
+            <KeyBinding Key="LeftAlt" Command="{Binding SaveReferenceCommand}" />
+            <KeyBinding Gesture="Ctrl+F3" Command="{Binding AddChildCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}"/>
+            <KeyBinding Gesture="Ctrl+F6" Command="{Binding SelectMlnsParentCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}"/>
+        </Grid.InputBindings>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0">
+            <materialDesign:PackIcon Kind="DriveDocument" Height="32" Width="32" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold" Text="{Binding Title}"></TextBlock>
+                <DockPanel>
+                    <TextBlock Text="{Binding Description}"></TextBlock>
+                    <TextBlock Text="{Binding Total}" HorizontalAlignment="Left"></TextBlock>
+                    <TextBlock Text="{Binding Hint}" HorizontalAlignment="Right"></TextBlock>
+                    <!--
+                    <TextBlock Text="[F3] Thêm dòng, [F4] Xóa dòng, [F10] Lưu" HorizontalAlignment="Right" FontWeight="Medium"></TextBlock>
+                    -->
+                </DockPanel>
+                <Separator Background="{StaticResource MaterialDesignDivider}" Margin="0 5 0 0"/>
+            </StackPanel>
+        </DockPanel>
+
+        <ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+            <StackPanel Margin="0 5" Orientation="Horizontal" Visibility="{Binding IsDialog, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <Setter Property="Width" Value="150"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Visibility="{Binding IsVisibleAddBtn, Converter={StaticResource BooleanToVisibilityConverter}}"  Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}" HorizontalAlignment="Right"  x:Name="btnAdd" >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Plus"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tạo Mới (F3)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Visibility="{Binding IsVisibleAddBtn, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+                <Button Visibility="{Binding IsEnableAddChild, Converter={StaticResource BooleanToVisibilityConverter}}"  Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding AddChildCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}" HorizontalAlignment="Right"  x:Name="btnAddChild" >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Plus"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tạo Mới Dòng Con (Ctrl+F3)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Visibility="{Binding IsEnableAddChild, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+                <Button Visibility="{Binding IsVisibleDeleteBtn, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}" HorizontalAlignment="Right"  x:Name="btnDelete" >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Delete"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xóa (F4)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Visibility="{Binding IsVisibleDeleteBtn, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+                <Button Visibility="{Binding IsVisibleSaveBtn, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}" HorizontalAlignment="Right"  x:Name="btnSave" >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu dữ liệu (F10)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Visibility="{Binding IsVisibleSaveBtn, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+                <Button Visibility="{Binding IsVisibleRefreshBtn, Converter={StaticResource BooleanToVisibilityConverter}}"  Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding RefreshCommand}" CommandParameter="{Binding ElementName=dgdDataMLNS, Path=.}"  HorizontalAlignment="Right"  x:Name="btnRefesh"  >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Refresh"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Refesh (F5)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Visibility="{Binding IsVisibleRefreshBtn, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+                <ComboBox Name="cbFrozenColumn"
+                            materialDesign:HintAssist.Hint="Cố định cột"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"/>
+                <Separator Visibility="{Binding IsVisibleToggleBtn, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button x:Name="btnShowCol" Style="{StaticResource SearchBarBtnStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Ẩn/hiện cột" />
+                        <materialDesign:PopupBox
+                                Name="pbDynamicColumn"
+                                Margin="-10 0 0 0"
+                                HorizontalAlignment="Right"
+                                StaysOpen="True">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:PackIcon Kind="MenuDown"/>
+                            </materialDesign:PopupBox.ToggleContent>
+                        </materialDesign:PopupBox>
+                    </StackPanel>
+                </Button>
+                <Separator Visibility="{Binding IsVisibleToggleBtn, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+                <Button Visibility="{Binding ExportBtnVisibility}" x:Name="btnExcel" Style="{StaticResource SearchBarBtnStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FileExcel" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Excel</TextBlock>
+                        <materialDesign:PopupBox
+                        Margin="-10 0 0 0"
+                        Grid.Column="1" 
+                        HorizontalAlignment="Right"
+                        IsPopupOpen="{Binding IsOpenExcelPopup, Mode=TwoWay}">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:PackIcon Kind="MenuDown" />
+                            </materialDesign:PopupBox.ToggleContent>
+                            <StackPanel>
+                                <Button Content="Xuất file Excel" Command="{Binding ExportCommand}" IsEnabled="{Binding IsEnableExportExcel}"/>
+                                <Button Content="Import từ file Excel" Command="{Binding ImportExcelCommand}" IsEnabled="{Binding IsEnableImportExcel}"/>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                    </StackPanel>
+                </Button>
+                <Separator Visibility="{Binding ExportBtnVisibility}" Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+                <Button Visibility="{Binding IsVisibleViewDetailBtn, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding ViewDetailCommand}" HorizontalAlignment="Right" >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Eye"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xem chi tiết (F7)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Visibility="{Binding IsVisibleFilterByMlnsMappingType, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+                <Button Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding SelectMlnsParentCommand}" HorizontalAlignment="Right" >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CodeJson"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Chọn Mlns cha (Ctrl + F6)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Visibility="{Binding IsVisibleFilterByMlnsMappingType, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+                <Button Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding SelectPhuCapCommand}" HorizontalAlignment="Right" >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CodeJson"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Cấu hình phụ cấp"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </ScrollViewer>
+
+        <component:CategoryExpandedDataGrid
+            x:Name="dgdDataMLNS"
+            Grid.Row="2"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            BorderThickness="1"
+            GridLinesVisibility="All"
+            FrozenColumnCount="3"
+            ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+            ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+            Style="{StaticResource MaterialDesignDataGrid}"
+            CellStyle="{StaticResource GenericDataGridCellDetail}"
+            RowStyle="{StaticResource GenericDataGridRowDetail}"
+            SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            extensions:GridAutoGeneratingColumnBehaviour.Command="{Binding AutoGeneratingColumnsCommand}"
+            BeginningEdit="DataGrid_BeginningEdit"
+            extensions:SelectedCellChangedProperty.Command="{Binding SelectedCellChangeCommand}"
+            MaxWidth="2560"
+            MaxHeight="1600"
+            AutoGenerateColumns="False"
+            >
+            <DataGrid.Resources>
+                <helper:BindingProxy
+                        x:Key="DataContextProxy"
+                        Data="{Binding}" />
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Header="Chọn" Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Data.IsShowCheckBox, Source={StaticResource DataContextProxy}, Converter={StaticResource InverseBoolToVisConverter}}">
+
+                </DataGridCheckBoxColumn>
+                <materialDesign:DataGridTextColumn Binding="{Binding SLNS, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Visibility="{Binding Data.SLNS, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:DataGridTextColumn.CellStyle>
+
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lns</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="Lnspopupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0"
+                                                    Text="{Binding Data.FilterModel.SLNS, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="Lnstxtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data, Source={StaticResource DataContextProxy}}" CommandParameter="SLNS" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="SLNS" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="Filter"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn Binding="{Binding SL, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Visibility="{Binding Data.SL, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:DataGridTextColumn.CellStyle>
+
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">L</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="Lpopupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0"
+                                                    Text="{Binding Data.FilterModel.SL, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="Ltxtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="SL" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="SL" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="Filter" Background="White"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn Binding="{Binding SK, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Visibility="{Binding Data.SK, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:DataGridTextColumn.CellStyle>
+
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">K</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="Kpopupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0"
+                                                    Text="{Binding Data.FilterModel.SK, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="Ktxtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="SK" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="SK" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="Filter" Background="White"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn Binding="{Binding SM, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Visibility="{Binding Data.SM, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:DataGridTextColumn.CellStyle>
+
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">M</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="Mpopupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0"
+                                                    Text="{Binding Data.FilterModel.SM, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="Mtxtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="SM" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="SM" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="Filter" Background="White"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn Binding="{Binding STM, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Visibility="{Binding Data.STM, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:DataGridTextColumn.CellStyle>
+
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">TM</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="TMpopupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0"
+                                                    Text="{Binding Data.FilterModel.STM, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="TMtxtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STM" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STM" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="Filter" Background="White"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn Binding="{Binding STTM, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Visibility="{Binding Data.STTM, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:DataGridTextColumn.CellStyle>
+
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">TTM</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="TTMpopupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0"
+                                                    Text="{Binding Data.FilterModel.STTM, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="TTMtxtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STTM" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STTM" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="Filter" Background="White"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn Binding="{Binding SNG, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Visibility="{Binding Data.SNG, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:DataGridTextColumn.CellStyle>
+
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">NG</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="NGpopupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0"
+                                                    Text="{Binding Data.FilterModel.SNG, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="NGtxtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="SNG" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="SNG" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="Filter" Background="White"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn Binding="{Binding STNG, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Visibility="{Binding Data.STNG, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:DataGridTextColumn.CellStyle>
+
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">TNG</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="TNGpopupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0" 
+                                                    Text="{Binding Data.FilterModel.STNG, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="TNGtxtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STNG" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STNG" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="Filter" Background="White"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+
+                <!--<materialDesign:DataGridTextColumn Binding="{Binding STNG1, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Visibility="{Binding Data.STNG1, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:DataGridTextColumn.CellStyle>
+
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">TNG1</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="TNG1popupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0"
+                                                    Text="{Binding Data.FilterModel.STNG1, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="TNG1txtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STNG1" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STNG1" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="Filter" Background="White"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn Binding="{Binding STNG2, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Visibility="{Binding Data.STNG2, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:DataGridTextColumn.CellStyle>
+
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">TNG2</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="TNG2popupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0"
+                                                    Text="{Binding Data.FilterModel.STNG2, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="TNG2txtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STNG2" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STNG2" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="Filter" Background="White"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn Binding="{Binding STNG3, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" Visibility="{Binding Data.STNG3, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:DataGridTextColumn.CellStyle>
+
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">TNG3</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="TNG3popupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0" 
+                                                    Text="{Binding Data.FilterModel.STNG3, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="TNG3txtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STNG3" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STNG3" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="Filter" Background="White"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>-->
+
+                <materialDesign:DataGridTextColumn Binding="{Binding SMoTa, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Mô tả</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="MoTapopupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0"
+                                                    Text="{Binding Data.FilterModel.SMoTa, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="MoTatxtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="SMoTa" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="SMoTa" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="FilterOutline" Background="White" Opacity="0.5"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+
+                <materialDesign:DataGridComboBoxColumn 
+                    ItemsSource="{Binding Data.LstTrangThai, Source={StaticResource DataContextProxy}}" SelectedValueBinding="{Binding ITrangThai}" 
+                    DisplayMemberPath="DisplayItem" 
+                    SelectedValuePath="ValueItem">
+                    <materialDesign:DataGridComboBoxColumn.Header>
+                        <StackPanel>
+                            <TextBlock Text="Trạng thái"/>
+                        </StackPanel>
+                    </materialDesign:DataGridComboBoxColumn.Header>
+                    <DataGridComboBoxColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEditableStatus}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridComboBoxColumn.CellStyle>
+                </materialDesign:DataGridComboBoxColumn>
+                <materialDesign:DataGridTextColumn IsReadOnly="True" Binding="{Binding MlnsParentName, UpdateSourceTrigger=PropertyChanged}"  Visibility="{Binding Data.IsDialog, Source={StaticResource DataContextProxy}, Converter={StaticResource InverseBoolToVisConverter}}" ElementStyle="{StaticResource DataGridTextColumnStyle}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">MLNS Cha (F6)</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="MlnsParentNamepopupbox"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0"
+                                                    Text="{Binding Data.FilterModel.SMoTa, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="MlnsParentNametxtbox" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="MlnsParentName" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="MlnsParentName" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="FilterOutline" Background="White" Opacity="0.5"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+
+                <materialDesign:DataGridComboBoxColumn 
+                    ItemsSource="{Binding Data.LstCapBac, Source={StaticResource DataContextProxy}}" 
+                    SelectedValueBinding="{Binding SMaCB}" 
+                    DisplayMemberPath="DisplayItem" 
+                    SelectedValuePath="ValueItem">
+                    <materialDesign:DataGridComboBoxColumn.Header>
+                        <StackPanel>
+                            <TextBlock Text="Đối tượng"/>
+                        </StackPanel>
+                    </materialDesign:DataGridComboBoxColumn.Header>
+                    <DataGridComboBoxColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DataGridCellDetail}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEnableMaCB}" Value="True" >
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEnableMaCB}" Value="False" >
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridComboBoxColumn.CellStyle>
+                </materialDesign:DataGridComboBoxColumn>
+
+                <materialDesign:DataGridTextColumn Binding="{Binding STenPhuCap, UpdateSourceTrigger=PropertyChanged}" ElementStyle="{StaticResource DataGridTextColumnStyle}" EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    <materialDesign:DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Phụ cấp</TextBlock>
+                            <materialDesign:PopupBox
+                                Name="PhuCap"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Right">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="FilterOutline" Opacity="0.5"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <materialDesign:ColorZone Mode="PrimaryLight">
+                                        <Border Background="White" Margin="5,5,5,5" MaxHeight="30" CornerRadius="3" BorderThickness="1,1,1,1">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Width="150" Margin="5,0,0,0" BorderThickness="0,0,0,0"
+                                                    Text="{Binding Data.FilterModel.STenPhuCap, Source={StaticResource DataContextProxy}, UpdateSourceTrigger=PropertyChanged}"    
+                                                    VerticalAlignment="Center" Name="PhuCaptxt" Loaded="Lnstxtbox_Loaded">
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Command="{Binding Data.FilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STenPhuCap" Key="Return" />
+                                                        <KeyBinding Command="{Binding Data.EscapteFilterCommand, Source={StaticResource DataContextProxy}}" CommandParameter="STenPhuCap" Key="Esc" />
+                                                    </TextBox.InputBindings>
+                                                </TextBox>
+                                                <Button Height="30" Width="30" Style="{StaticResource MaterialDesignToolButton}">
+                                                    <materialDesign:PackIcon Kind="FilterOutline" Background="White" Opacity="0.5"></materialDesign:PackIcon>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:ColorZone>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </materialDesign:DataGridTextColumn.Header>
+                </materialDesign:DataGridTextColumn>
+
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button                               
+                                BorderBrush="Transparent"
+                                BorderThickness="0" 
+                                Margin="-16 -8 -16 -8"
+                                Visibility="{Binding IsEnableCheckData, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                x:Name="btnAdd"
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CheckDataCommand}"
+                                Style="{StaticResource SearchBarBtnStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="WarningCircleOutline" />
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </component:CategoryExpandedDataGrid>
+        <StackPanel Orientation="Horizontal" Margin="0 15 15 15" HorizontalAlignment="Right" Visibility="{Binding VisibilityDialogBtn}" Grid.Row="3">
+            <Button 
+                IsDefault="True"
+                Margin="5 0 0 0"
+                Command="{Binding SaveReferenceCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ContentSave"/>
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Chọn (Alt+Enter)</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button
+                Margin="5 0 0 0"
+                IsCancel="True"
+                Style="{StaticResource MaterialDesignOutlinedButton}"
+                Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CloseOutline" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

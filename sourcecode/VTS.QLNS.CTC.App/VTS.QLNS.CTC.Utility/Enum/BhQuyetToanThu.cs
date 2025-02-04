@@ -1,0 +1,24 @@
+﻿namespace VTS.QLNS.CTC.Utility.Enum
+{
+    public enum QttType
+    {
+        QUYET_TOAN_THU_NOP_BHXH_BHYT_BHTN_QUY = 1,
+        QUYET_TOAN_THU_NOP_BHXH_BHYT_BHTN_NAM = 2,
+        QUYET_TOAN_THU_BHXH = 3,
+        QUYET_TOAN_THU_BHTN = 4,
+        QUYET_TOAN_THU_BHYT_QUAN_NHAN = 5,
+        QUYET_TOAN_THU_BHYT_NLD = 6,
+        QUYET_TOAN_TONG_HOP_NAM = 7,
+        QUYET_TOAN_THU_CHI_TONG_HOP = 8,
+        THAM_DINH_QUYET_TOAN_THU_CHI = 9,
+        THONG_TRI_QUYET_TOAN_THU = 10,
+        QUYET_TOAN_THU_NOP_BHXH_BHYT_BHTN_THEO_THOI_GIAN = 11,
+    }
+
+    public enum QttmType
+    {
+        QUYET_TOAN_THU_MUA_BHYT_THAN_NHAN_NLD = 1,
+        QUYET_TOAN_THU_MUA_BHYT_THAN_NHAN = 2,
+        QUYET_TOAN_THU_MUA_BHYT_BHYT_HSSV_HVQS_SQDB = 3
+    }
+}

@@ -1,0 +1,245 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.SystemAdmin.Utilities.QueryData"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:avalon="http://icsharpcode.net/sharpdevelop/avalonedit"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding QueryCommand}" />
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <materialDesign:PackIcon Kind="{Binding IconKind}" Style="{StaticResource HeaderIconStyle}"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock 
+                    FontWeight="Bold" 
+                    Text="{Binding Name}" 
+                    ext:TextBlockTransform.CharacterCasing="Upper" />
+                <TextBlock Text="{Binding Description}"/>
+                <Separator Margin="0 5 0 0" Background="{DynamicResource MaterialDesignDivider}"/>
+            </StackPanel>
+        </DockPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel 
+                    Grid.Row="0"
+                    Margin="5"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Left">
+                    <Button 
+                        x:Name="btnAdd"
+                        Command="{Binding OpenSqlCommand}"
+                        Style="{StaticResource SearchBarBtnStyle}" >
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FolderOutline" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Mở file Sql"/>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button 
+                        Style="{StaticResource SearchBarBtnStyle}"
+                        Command="{Binding SaveSqlCommand}"
+                        IsEnabled="{Binding IsSave}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu"/>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button 
+                        Style="{StaticResource SearchBarBtnStyle}"
+                        Click="Comment"
+                        ToolTip="Comment">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Comment" />
+                        </StackPanel>
+                    </Button>
+                    <Button 
+                        Style="{StaticResource SearchBarBtnStyle}"
+                        Click="Uncomment"
+                        ToolTip="Uncomment"
+                        Margin="10 0 0 0">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CommentOff" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button 
+                        Style="{StaticResource SearchBarBtnStyle}"
+                        Command="{Binding QueryCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="LightningBolt" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Thực hiện"/>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button 
+                        Style="{StaticResource SearchBarBtnStyle}"
+                        Command="{Binding ExportCommand}"
+                        IsEnabled="{Binding IsExport}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileExcel" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xuất file Excel"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <Grid
+                    Grid.Row="1"
+                    Margin="10 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Grid.Row="0">
+                        <RadioButton
+                            x:Name="RbQuery"
+                            Style="{StaticResource MaterialDesignTabRadioButton}"
+                            IsChecked="{Binding TabSelection, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:QueryToolSelection.SqlQuery}}"
+                            Content="Query" />
+                        <RadioButton
+                            x:Name="RbResult"
+                            Style="{StaticResource MaterialDesignTabRadioButton}"
+                            IsChecked="{Binding TabSelection, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:QueryToolSelection.Result}}"
+                            Content="Kết quả" />
+                        <RadioButton
+                            x:Name="RbNoti"
+                            Style="{StaticResource MaterialDesignTabRadioButton}"
+                            IsChecked="{Binding TabSelection, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:QueryToolSelection.Notification}}"
+                            Content="Thông báo" />
+                    </StackPanel>
+                    <component:TextIntelliSenseEditor
+                        Grid.Row="1"
+                        x:Name="QueryEditor"
+                        Margin="0 10 0 0"
+                        Visibility="{Binding IsChecked, ElementName=RbQuery, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        ShowLineNumbers="True"
+                        Document="{Binding Document}"
+                        SuggestionWords="{Binding SuggestionWords}"
+                        SyntaxHighlighting="TSQL">
+                    </component:TextIntelliSenseEditor>
+                    <Grid Grid.Row="1" Visibility="{Binding IsChecked, ElementName=RbResult, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <DataGrid
+                            Grid.Row="0"
+                            Margin="0 10 0 0"
+                            GridLinesVisibility="All"
+                            BorderThickness="1"
+                            Visibility="{Binding HasData, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            ItemsSource="{Binding Result, Mode=TwoWay}"
+                            IsReadOnly="True"
+                            AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"
+                            ext:SelectionChangedBehaviour.Command="{Binding SelectionCommand}">
+                        </DataGrid>
+                    </Grid>
+                    <TextBox 
+                        Grid.Row="2"
+                        IsReadOnly="True"
+                        Margin="0 10 0 0"
+                        Text="{Binding Notification}"
+                        Visibility="{Binding IsChecked, ElementName=RbNoti, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    </TextBox>
+                </Grid>
+                <StackPanel
+                    Grid.Row="2"
+                    Orientation="Horizontal"
+                    Margin="10 0 0 0">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Margin" Value="0 3 0 0" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <TextBlock Text="Bản ghi hiện tại: "/>
+                    <TextBlock Text="{Binding CurrentRecord}" FontWeight="SemiBold"/>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <TextBlock Text="Tổng số bản ghi: "/>
+                    <TextBlock Text="{Binding TotalRecord}" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Border
+                    Margin="5 10 5 0"
+                    BorderThickness="1"
+                    BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <materialDesign:ColorZone
+                            Grid.Row="0"
+                            Mode="PrimaryLight">
+                            <Grid Margin="8">
+                                <Border
+                                    Margin="8 0 0 0"
+                                    Background="White"
+                                    MaxHeight="30"
+                                    CornerRadius="3"
+                                    ToolTip="Enter to search, ignore case">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button
+                                            x:Name="SearchButton"
+                                            Style="{DynamicResource MaterialDesignToolButton}"
+                                            Height="24"
+                                            Width="24">
+                                            <materialDesign:PackIcon Margin="0" Kind="Magnify" Opacity=".56"/>
+                                        </Button>
+                                        <TextBox
+                                            Grid.Column="1"
+                                            Margin="5 0 0 0"
+                                            materialDesign:HintAssist.Hint="Search" x:Name="SearchBox"
+                                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                            Text="{Binding SearchTableText, UpdateSourceTrigger=PropertyChanged}"
+                                            BorderThickness="0"
+                                            MinWidth="150"
+                                            VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </materialDesign:ColorZone>
+                        <ListView Grid.Row="1" ItemsSource="{Binding Tables}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon 
+                                            Height="18"
+                                            Width="18"
+                                            Kind="{Binding Icon}" />
+                                        <TextBlock Text="{Binding TableName}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

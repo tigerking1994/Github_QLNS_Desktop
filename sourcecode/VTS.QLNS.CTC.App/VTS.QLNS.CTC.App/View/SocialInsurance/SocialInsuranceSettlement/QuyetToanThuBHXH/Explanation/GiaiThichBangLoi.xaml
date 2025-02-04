@@ -1,0 +1,173 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.SocialInsurance.SocialInsuranceSettlement.QuyetToanThuBHXH.Explanation.GiaiThichBangLoi"
+        x:Name="VerbalExplanationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.SocialInsurance.SocialInsuranceSettlement.QuyetToanThuBHXH.Explanation"
+        xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="Quyết toán - Chứng từ chi tiết - Giải thích bằng lời"
+        Height="650"
+        Width="800"
+        Style="{StaticResource MaterialDesignWindow}"
+        TextElement.FontSize="14"
+        WindowStartupLocation="CenterScreen"
+        Icon="/favicon.ico">
+    <materialDesign:DialogHost Identifier="VerbalExplanationDialog"
+                               DialogTheme="Inherit">
+        <Grid Margin="15">
+            <StackPanel Orientation="Vertical">
+                <DockPanel>
+                    <materialDesign:PackIcon Kind="PlaylistPlus"
+                                             Style="{StaticResource DialogScreenIconStyle}" />
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Center"
+                                Margin="10 0">
+                        <TextBlock Text="Quyết toán - Chứng từ chi tiết - Giải thích bằng lời"
+                                   FontWeight="Bold"
+                                   ext:TextBlockTransform.CharacterCasing="Upper" />
+                        <TextBlock></TextBlock>
+                    </StackPanel>
+                </DockPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="- Loại thu:"
+                               FontWeight="Bold"
+                               VerticalAlignment="Bottom" />
+                    <ComboBox Grid.Column="1"
+                              materialDesign:HintAssist.Hint="-- Loại thu --"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              SelectedValue="{Binding CollectTypeDisplaysSelected}"
+                              ItemsSource="{Binding CollectTypeDisplays}"
+                              Style="{StaticResource MaterialDesignComboBox}">
+                    </ComboBox>
+                </Grid>
+                <Grid Margin="0 10 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="1. Số tiền phải nộp:"
+                               FontWeight="Bold"
+                               VerticalAlignment="Bottom" />
+                    <TextBox Grid.Column="1"
+                             IsReadOnly="True"
+                             FontWeight="Bold"
+                             Text="{Binding SettlementVoucherDetailExplain.FPhaiNopBHXH, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                             Style="{StaticResource TbData}" />
+                </Grid>
+                <Grid Margin="0 10 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="- Số tiền phải nộp trong quý (năm):"
+                               VerticalAlignment="Bottom" />
+                    <TextBox Grid.Column="1"
+                             Text="{Binding SettlementVoucherDetailExplain.FPhaiNopTrongQuyNam, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                             Style="{StaticResource TbDataEdit}" />
+                </Grid>
+                <Grid Margin="0 10 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="- Số tiền truy thu quý trước (năm trước):"
+                               VerticalAlignment="Bottom" />
+                    <TextBox Grid.Column="1"
+                             Text="{Binding SettlementVoucherDetailExplain.FTruyThuQuyNamTruoc, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                             Style="{StaticResource TbDataEdit}" />
+                </Grid>
+                <Grid Margin="0 10 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="- Số tiền còn phải nộp quý trước (năm trước):"
+                               VerticalAlignment="Bottom" />
+                    <TextBox Grid.Column="1"
+                             Text="{Binding SettlementVoucherDetailExplain.FPhaiNopQuyNamTruoc, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                             Style="{StaticResource TbDataEdit}" />
+                </Grid>
+                <Grid Margin="0 10 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="2. Tổng số tiền đã nộp trong quý (năm):"
+                               FontWeight="Bold"
+                               VerticalAlignment="Bottom" />
+                    <TextBox Grid.Column="1"
+                             Text="{Binding SettlementVoucherDetailExplain.FDaNopTrongQuyNam, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                             Style="{StaticResource TbDataEdit}" />
+                </Grid>
+                <Grid Margin="0 10 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="3. Số tiền còn phải nộp tiếp:"
+                               FontWeight="Bold"
+                               VerticalAlignment="Bottom" />
+                    <TextBox Grid.Column="1"
+                             Text="{Binding SettlementVoucherDetailExplain.FConPhaiNopTiep, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                             Style="{StaticResource TbDataEdit}" />
+                </Grid>
+                <StackPanel Orientation="Vertical"
+                            Margin="0 10 0 0">
+                    <TextBlock Text="4. Kiến nghị"
+                               Height="50"
+                               FontWeight="Bold" />
+                    <TextBox Text="{Binding SettlementVoucherDetailExplain.SKienNghi}"
+                             Height="100"
+                             VerticalScrollBarVisibility="Auto"
+                             VerticalAlignment="Stretch"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            Margin="0 30 0 0"
+                            HorizontalAlignment="Right">
+                    <Button IsDefault="True"
+                            Margin="5 0 0 0"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Command="{Binding SaveCommand}"
+                            CommandParameter="{Binding ElementName=VerbalExplanationWindow}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Lưu dữ liệu" />
+                        </StackPanel>
+                    </Button>
+                    <Button IsCancel="True"
+                            Margin="5 0 0 0"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding ElementName=VerbalExplanationWindow}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CloseOutline" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Đóng" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

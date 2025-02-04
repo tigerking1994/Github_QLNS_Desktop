@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ReleaseNoteModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReleaseDate>2024-12-01T09:15:07.701445+07:00</ReleaseDate>
+	<NoteDetails>
+		<ReleaseNoteDetailModel>
+			<Module>Ngân sách</Module>
+			<Features>
+				<string>Bổ sung cột Số tiền đề nghị "THU NỘP NGÂN SÁCH: Số liệu thực thu: Màn chi tiết chứng từ"</string>
+				<string>Thêm công thức cho báo cáo "Thống kê phân bổ dự toán theo đợt"</string>
+				<string>Thêm công thức cho báo cáo "Tổng hợp dự toán - Tổng hợp chung"</string>
+			</Features>
+			<Improvements />
+		</ReleaseNoteDetailModel>
+	</NoteDetails>
+</ReleaseNoteModel>

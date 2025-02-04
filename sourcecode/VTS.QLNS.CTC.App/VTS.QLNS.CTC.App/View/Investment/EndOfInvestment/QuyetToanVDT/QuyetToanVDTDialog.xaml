@@ -1,0 +1,197 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Investment.EndOfInvestment.QuyetToanVDT.QuyetToanVDTDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Investment.EndOfInvestment.QuyetToanVDT"
+             mc:Ignorable="d" 
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:custom="clr-namespace:VTS.QLNS.CTC.Custom;assembly=VTS.QLNS.CTC.Custom"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="16">
+        <StackPanel Orientation="Vertical">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="PlaylistPlus" Style="{StaticResource DialogScreenIconStyle}"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                    <TextBlock  Text="{Binding Name}" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding Description}"></TextBlock>
+                </StackPanel>
+            </DockPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <Grid Margin="0 8">
+                <Grid.Resources>
+                    <Style TargetType="custom:AutoCompleteComboBox" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding HiddenTongHop }">
+                        <custom:AutoCompleteComboBox
+                            x:Uid="cbxDonViQuanLy"
+                            Margin="0 2 10 2"
+                            Width="510"
+                            IsEditable="True"
+                            TextSearch.TextPath="DisplayItem"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            materialDesign:HintAssist.Hint="Đơn vị"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            SelectedItem="{Binding CbxLoaiDonViSelected, UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding CbxLoaiDonVi}"
+                            Visibility="{Binding AgregateVisibility, UpdateSourceTrigger=PropertyChanged}"
+                            IsEnabled="{Binding IsInsert}"/>
+                        <TextBox
+                            Margin="0 2 0 2"
+                            Width="250"
+                            materialDesign:HintAssist.Hint="Năm kế hoạch"
+                            VerticalAlignment="Center"
+                            IsEnabled="{Binding IsInsert}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            PreviewTextInput="NumberValidationTextBox"
+                            MaxLength="4">
+
+                            <Binding Path="INamKeHoach">
+                                <Binding.ValidationRules>
+                                    <helper:CharacterLimitRule MiniumCharacter="4" ErrorMessage="Không đúng định dạng năm!"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                            
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox
+                            Width="250"
+                            Margin="0 2 10 2"
+                            VerticalAlignment="Center" 
+                            materialDesign:HintAssist.Hint="Số văn bản"
+                            Text="{Binding SSoDeNghi}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" ext:TextTrimBehavior.IsEnabled ="True"/>
+                        <DatePicker
+                            Language="vi-VN"
+                            Width="250"
+                            Margin="0 2 10 2"
+                            materialDesign:HintAssist.Hint="Ngày đề nghị"
+                            SelectedDate="{Binding DNgayDeNghi}"
+                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}"/>
+                        <custom:AutoCompleteComboBox
+                            Width="250"
+                            IsEditable="True"
+                            Margin="0 2 10 2"
+                            TextSearch.TextPath="DisplayItem"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            materialDesign:HintAssist.Hint="Nguồn vốn"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            SelectedItem="{Binding CbxNguonVonSelected, UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding CbxNguonVon}"
+                            Visibility="{Binding AgregateVisibility, UpdateSourceTrigger=PropertyChanged}"
+                            IsEnabled="{Binding IsInsert}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <custom:AutoCompleteComboBox
+                            Width="510"
+                            IsEditable="True"
+                            Margin="0 2 10 2"
+                            TextSearch.TextPath="DisplayItem"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            materialDesign:HintAssist.Hint="Loại báo cáo"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            SelectedItem="{Binding CbxLoaiThanhToanSelected, UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding CbxLoaiThanhToan}"
+                            Visibility="{Binding AgregateVisibility, UpdateSourceTrigger=PropertyChanged}"
+                            IsEnabled="{Binding IsInsert}"/>
+                        <!--<custom:AutoCompleteComboBox
+                            Width="250"
+                            IsEditable="True"
+                            Margin="0 2 10 2"
+                            TextSearch.TextPath="DisplayItem"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            materialDesign:HintAssist.Hint="Cơ quan thanh toán"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            SelectedItem="{Binding CbxCoQuanThanhToanSelected, UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding CbxCoQuanThanhToan}"
+                            Visibility="{Binding AgregateVisibility, UpdateSourceTrigger=PropertyChanged}"
+                            IsEnabled="{Binding IsInsert}"/>-->
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox
+                            Width="770"
+                            Margin="0 2 0 2"
+                            VerticalAlignment="Center" 
+                            materialDesign:HintAssist.Hint="Mô tả"
+                            Text="{Binding SMoTa}"
+                            TextWrapping="Wrap"
+                            Height="80"
+                            VerticalScrollBarVisibility="Auto" ext:TextTrimBehavior.IsEnabled ="True"/>
+                    </StackPanel>
+                </StackPanel>
+                <ScrollViewer 
+                    Grid.Row="1" 
+                    Margin="-4 5 -4 0" 
+                    VerticalScrollBarVisibility="Auto" 
+                    HorizontalScrollBarVisibility="Auto"
+                    Visibility="{Binding ShowTongHop }">
+                    <DataGrid
+                        x:Name="dgdQuyetToanTongHopDialog"
+                        BorderThickness="1"
+                        CanUserResizeColumns="True"
+                        HorizontalScrollBarVisibility="Auto"
+                        CanUserAddRows="False"
+                        IsSynchronizedWithCurrentItem="True"
+                        GridLinesVisibility="All"
+                        RowStyle="{StaticResource DataGridRowIndex}"
+                        Style="{StaticResource MaterialDesignDataGrid}"
+                        ItemsSource="{Binding ItemsTongHopQuyetToan}"
+                        MinHeight="150"
+                        AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Số đề nghị" IsReadOnly="True" Binding="{Binding SSoDeNghi}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Ngày đề nghị" IsReadOnly="True" Binding="{Binding DNgayDeNghi, Converter={StaticResource DateTimeToStringConverter}}" ElementStyle="{StaticResource DataGridTextColumnCenterStyle}" ></DataGridTextColumn>
+                            <DataGridTextColumn Header="Năm kế hoạch" IsReadOnly="True" Binding="{Binding INamKeHoach}" ElementStyle="{StaticResource DataGridTextColumnCenterStyle}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Đơn vị" IsReadOnly="True" Binding="{Binding STenDonVi}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+            </Grid>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <StackPanel Orientation="Horizontal" Margin="0 15 0 0" HorizontalAlignment="Right">
+                <Button 
+                    IsDefault="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding SaveCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lưu dữ liệu</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button
+                    IsCancel="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                    <Button.CommandParameter>
+                        <system:Boolean>False</system:Boolean>
+                    </Button.CommandParameter>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

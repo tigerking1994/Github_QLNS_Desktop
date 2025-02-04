@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ReleaseNoteModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReleaseDate>2024-11-10T18:00:07.701445+07:00</ReleaseDate>
+	<NoteDetails>
+		<ReleaseNoteDetailModel>
+			<Module>Bảo hiểm xã hội</Module>
+			<Features />
+			<BugFixes>
+				<string>Sửa lỗi Báo cáo Thông báo phân bổ dự toán chi – Đơn vị</string>
+			</BugFixes>
+			<Improvements />
+		</ReleaseNoteDetailModel>
+		<ReleaseNoteDetailModel>
+			<Module>Ngân sách</Module>
+			<Features>
+				<string>Bổ sung Báo cáo so sánh SKT năm trước - năm nay</string>
+			</Features>
+			<BugFixes>
+				<string>Sửa lại phần Số liệu thực thu (Thu nộp ngân sách)</string>
+			</BugFixes>
+			<Improvements />
+		</ReleaseNoteDetailModel>
+	</NoteDetails>
+</ReleaseNoteModel>

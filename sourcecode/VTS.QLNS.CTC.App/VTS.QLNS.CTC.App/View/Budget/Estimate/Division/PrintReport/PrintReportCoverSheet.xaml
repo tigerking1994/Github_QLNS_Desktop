@@ -1,0 +1,228 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Budget.Estimate.Division.PrintReport.PrintReportCoverSheet"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Budget.Estimate.Division.PrintReport"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:printreport="clr-namespace:VTS.QLNS.CTC.App.ViewModel.Budget.Estimate.Division.PrintReport"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             d:DataContext="{d:DesignInstance Type=printreport:PrintReportCoverSheetViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="16">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <materialDesign:PackIcon Kind="Printer" Style="{StaticResource DialogScreenIconStyle}"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0 0 0">
+                    <TextBlock Style="{StaticResource DialogScreenHeaderStyle}">In chỉ tiêu - Tờ bìa</TextBlock>
+                    <TextBlock>Chọn đợt cần in tờ bìa chỉ tiêu dự toán</TextBlock>
+                </StackPanel>
+            </StackPanel>
+            <Separator Grid.Row="1" Background="{DynamicResource MaterialDesignDivider}" />
+            <Grid Grid.Row="2" Margin="0 0 0 50">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <StackPanel Orientation="Vertical" Margin="0 10 0 0">
+                        <ComboBox
+                            materialDesign:HintAssist.Hint="CHỌN ĐỢT:"
+                            materialDesign:ComboBoxAssist.ClassicMode="True"
+                            Width="auto"
+                            DisplayMemberPath="DisplayItem"
+                            ItemsSource="{Binding DataDotIn}"
+                            SelectedItem="{Binding SelectedDotIn}"
+                            SelectedIndex="0"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        </ComboBox>
+                        <CheckBox 
+                            IsChecked="{Binding IsLuyKeToiDot}" 
+                            Margin="0 10 0 10"
+                            Content="Lũy kế đến đợt"/>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="295"></ColumnDefinition>
+                                <ColumnDefinition Width="225"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                materialDesign:HintAssist.Hint="In tới mức"
+                                Width="auto"
+                                DisplayMemberPath="DisplayItem"
+                                ItemsSource="{Binding DataInToiMuc}"
+                                SelectedItem="{Binding SelectedInToiMuc,Mode=TwoWay}"
+                                SelectedIndex="0"
+                                Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            </ComboBox>
+                        </Grid>
+                       
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="0 10 0 0">
+                        <TextBox
+                            materialDesign:HintAssist.Hint="Tiêu đề 1"
+                            Width="590"
+                            Height="60"
+                            Text="{Binding TieuDe1}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            VerticalAlignment="Center" 
+                            TextWrapping="Wrap"/>
+                        <TextBox
+                            materialDesign:HintAssist.Hint="Tiêu đề 2"
+                            Width="590"
+                            Text="{Binding TieuDe2}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            VerticalAlignment="Center" 
+                            AcceptsReturn="True"
+                            Height="60"
+                            TextWrapping="Wrap"/>
+                        <TextBox
+                            materialDesign:HintAssist.Hint="Tiêu đề 3"
+                            Width="590"
+                            Text="{Binding TieuDe3}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            VerticalAlignment="Center" 
+                            AcceptsReturn="True"
+                            Height="60"
+                            TextWrapping="Wrap"/>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="295"></ColumnDefinition>
+                                <ColumnDefinition Width="295"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                materialDesign:HintAssist.Hint="Đơn vị tính:"
+                                Width="auto"
+                                DisplayMemberPath="DisplayItem"
+                                ItemsSource="{Binding DataDonViTinh}"
+                                SelectedItem="{Binding SelectedDonViTinh,Mode=TwoWay}"
+                                SelectedIndex="0"
+                                Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            </ComboBox>
+                            <DatePicker  
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="10 0 0 0"
+                                Width="auto"
+                                Language="vi-VN"
+                                materialDesign:HintAssist.Hint="{Binding ReportDateTitle}"
+                                materialDesign:HintAssist.IsFloating="True"
+                                SelectedDate="{Binding ReportDate}"
+                                Text="{Binding ReportDate}"/>
+                        </Grid>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="295"></ColumnDefinition>
+                                <ColumnDefinition Width="225"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                materialDesign:HintAssist.Hint="Kiểu giấy in"
+                                materialDesign:TextFieldAssist.HasClearButton="False"
+                                DisplayMemberPath="DisplayItem"
+                                SelectedValuePath="ValueItem"
+                                SelectedItem="{Binding PaperPrintTypeSelected}"
+                                ItemsSource="{Binding PaperPrintTypes}"
+                                Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            </ComboBox>
+                        </Grid>
+                       
+
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+            <Separator Grid.Row="3" Background="{DynamicResource MaterialDesignDivider}" Margin="0 10 0 0"/>
+            <Grid Grid.Row="4" Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button x:Name="btnPrint" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ShowPopupPrintCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Printer" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xuất Excel" />
+                            <materialDesign:PopupBox
+                                Margin="-10 0 -10 0"
+                                Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                IsPopupOpen="{Binding IsOpenPrintPopup, Mode=TwoWay}">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel>
+                                    <Button IsEnabled="{Binding IsEnableButtonPrint}" Command="{Binding PrintExcelCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FileExcel" />
+                                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xuất Excel" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button IsEnabled="{Binding IsEnableButtonPrint}" Command="{Binding PrintPDFCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="FilePdf" />
+                                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xuất PDF" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <Button 
+                        Margin="10 0 0 0"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding ConfigSignCommand}" >
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Draw" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Chữ ký"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button IsDefault="True" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding PrintBrowserCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Printer" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">In báo cáo</TextBlock>
+                        </StackPanel>
+                        <Button.CommandParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button IsCancel="True" Margin="10 0 0 0" Style="{StaticResource MaterialDesignOutlinedButton}" Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CloseOutline" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                        </StackPanel>
+                        <Button.CommandParameter>
+                            <system:Boolean>False</system:Boolean>
+                        </Button.CommandParameter>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <component:ProgressDialog />
+    </Grid>
+</UserControl>

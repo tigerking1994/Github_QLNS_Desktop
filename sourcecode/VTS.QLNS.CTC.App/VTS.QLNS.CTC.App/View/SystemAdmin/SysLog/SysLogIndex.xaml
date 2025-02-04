@@ -1,0 +1,139 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.SystemAdmin.SysLog.SysLogIndex"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.SystemAdmin.SysLog"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+              xmlns:cvt="clr-namespace:VTS.QLNS.CTC.App.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.InputBindings>
+            <KeyBinding Key="F4" Command="{Binding DeleteCommand}" />
+        </Grid.InputBindings>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <materialDesign:PackIcon Kind="{Binding IconKind}" Style="{StaticResource HeaderIconStyle}"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold" Text="{Binding Name}" ext:TextBlockTransform.CharacterCasing="Upper"></TextBlock>
+                <TextBlock Text="{Binding Description}"></TextBlock>
+                <Separator Margin="0 5 0 0" Background="{DynamicResource MaterialDesignDivider}"/>
+            </StackPanel>
+        </DockPanel>
+        <StackPanel 
+            Grid.Row="1"
+            Margin="0 5"
+            Orientation="Horizontal"
+            HorizontalAlignment="Left">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                    <Setter Property="Width" Value="150"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Style="{StaticResource SearchBarBtnStyle}" ToolTip="Refresh (F5)" Command="{Binding RefreshCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Refresh" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Refresh (F5)"></TextBlock>
+                </StackPanel>
+            </Button>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+            <Button Style="{StaticResource SearchBarBtnStyle}" Command="{Binding DeleteCommand}" IsEnabled="{Binding IsEdit}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Delete" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xóa (F4)"></TextBlock>
+                </StackPanel>
+            </Button>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+            <ComboBox
+                    Name="cbFrozenColumn"
+                    materialDesign:HintAssist.Hint="Cố định cột"
+                    DisplayMemberPath="DisplayItem"
+                    SelectedValuePath="ValueItem"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+            <Button x:Name="btnShowCol" Style="{StaticResource SearchBarBtnStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Ẩn/hiện cột" />
+                    <materialDesign:PopupBox
+                            Margin="-10 0 0 0"
+                            Name="pbDynamicColumn"
+                            HorizontalAlignment="Right"
+                            StaysOpen="True">
+                        <materialDesign:PopupBox.ToggleContent>
+                            <materialDesign:PackIcon Kind="MenuDown"/>
+                        </materialDesign:PopupBox.ToggleContent>
+                    </materialDesign:PopupBox>
+                </StackPanel>
+            </Button>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+            <DatePicker Language="vi-VN"
+                        materialDesign:HintAssist.Hint="Ngày bắt đầu"
+                        SelectedDate="{Binding SearchModel.StartTime}"
+                        />
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+            <DatePicker Language="vi-VN"
+                        materialDesign:HintAssist.Hint="Ngày kết thúc"
+                        SelectedDate="{Binding SearchModel.EndTime}"
+                        />
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+            <TextBox Margin="0 -7 0 0" VerticalAlignment="Top"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    materialDesign:HintAssist.Hint="Người thực hiện" 
+                    Text="{Binding SearchModel.Account, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                </TextBox.InputBindings>
+            </TextBox>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" Margin="5 7"/>
+            <Button Style="{StaticResource SearchBarBtnStyle}" Command="{Binding SearchCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Search" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tìm kiếm"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <component:ExpandedDataGrid 
+            Grid.Row="2"
+            x:Name="Imported" 
+            Style="{StaticResource MaterialDesignDataGrid}"
+            CellStyle="{StaticResource GenericDataGridCellDetail}"
+            RowStyle="{StaticResource GenericDataGridRowDetail}"
+            VerticalAlignment="Top" 
+            ItemsSource="{Binding SysLogs}"  
+            AutoGenerateColumns="False" CanUserResizeColumns="True"
+            BorderThickness="1"
+            HorizontalScrollBarVisibility="Auto"
+            FrozenColumnCount ="3"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            IsReadOnly="True"
+            ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+            ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+            SelectedItem="{Binding SelectedItem}"
+            GridLinesVisibility="All">
+            <DataGrid.Resources>
+                <helper:BindingProxy
+                        x:Key="DataContextProxy"
+                        Data="{Binding}" />
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="Auto" Header="Danh mục" Binding="{Binding ServiceCode}" IsReadOnly="True"/>
+                <DataGridTextColumn Width="Auto" Header="Thời gian bắt đầu" Binding="{Binding StartTimeToString}" IsReadOnly="True"/>
+                <DataGridTextColumn Width="Auto" Header="Thời gian kết thúc" Binding="{Binding EndTimeToString}" IsReadOnly="True"/>
+                <DataGridTextColumn Width="Auto" Header="Kết quả" Binding="{Binding TransactionStatusToString}" IsReadOnly="True"/>
+                <DataGridTextColumn Width="Auto" Header="Hành động" Binding="{Binding ActionName}" IsReadOnly="True"/>
+                <DataGridTextColumn Width="Auto" Header="Người thực hiện" Binding="{Binding UserName}" IsReadOnly="True"/>
+                <DataGridTextColumn Width="Auto" Header="Lỗi" Binding="{Binding ErrorDescription}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </component:ExpandedDataGrid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Category.NsBaoCaoGhiChuCongKhaiDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Category"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:localEnumSystem="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:utility="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:compt="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:ghichu="clr-namespace:VTS.QLNS.CTC.App.ViewModel.Category"
+             mc:Ignorable="d"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             Height="Auto"
+             Width="1095">
+    <Grid Margin="16">
+        <StackPanel Orientation="Vertical">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="PlaylistPlus"
+                                         Style="{StaticResource DialogScreenIconStyle}" />
+                <StackPanel Margin="10,0"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                    <TextBlock FontWeight="Bold"
+                               Text="{Binding Name}" />
+                    <TextBlock Text="{Binding Description}" />
+                </StackPanel>
+            </DockPanel>
+
+            <Separator Background="{DynamicResource MaterialDesignDivider}"
+                       Margin="0 0 0 0" />
+            <Grid Margin="0 5 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <ListBox ItemsSource="{Binding ReportType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <RadioButton GroupName="RadioList"
+                                         Tag="{Binding}"
+                                         IsChecked="{Binding IsEnabled}"
+                                         Content="{Binding DisplayItem}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                
+                <Border  Grid.Column="1"
+                         Margin="0 0 0 0"
+                         BorderThickness="1"
+                         Width="{Binding NoteColWidth}"
+                         BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <TextBox materialDesign:HintAssist.Hint="Nhập ghi chú"
+                             Padding="6"
+                             MaxHeight="300"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             HorizontalScrollBarVisibility="Disabled"
+                             VerticalScrollBarVisibility="Auto"
+                             Text="{Binding TxtGhiChu, UpdateSourceTrigger=PropertyChanged}" />
+                </Border>
+            </Grid>
+            <!--Save <> Close-->
+            <StackPanel Grid.Row="3"
+                        Margin="0,15,0,0"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                <Button Margin="5,0,0,0"
+                        Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding BhKhtmBHYTModel}"
+                        IsDefault="True"
+                        Style="{StaticResource MaterialDesignRaisedButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lưu dữ liệu</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Margin="5,0,0,0"
+                        Command="{x:Static wpf:DialogHost.CloseDialogCommand}"
+                        IsCancel="True"
+                        Style="{StaticResource MaterialDesignOutlinedButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

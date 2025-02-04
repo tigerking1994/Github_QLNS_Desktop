@@ -1,0 +1,1640 @@
+﻿using AutoMapper;
+using log4net;
+using MaterialDesignThemes.Wpf;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Data;
+using VTS.QLNS.CTC.App.Command;
+using VTS.QLNS.CTC.App.Extensions;
+using VTS.QLNS.CTC.App.Helper;
+using VTS.QLNS.CTC.App.Model;
+using VTS.QLNS.CTC.App.Model.Control;
+using VTS.QLNS.CTC.App.Model.Report;
+using VTS.QLNS.CTC.App.Properties;
+using VTS.QLNS.CTC.App.Service;
+using VTS.QLNS.CTC.App.Service.Impl;
+using VTS.QLNS.CTC.App.View.Budget.Settlement.Import;
+using VTS.QLNS.CTC.App.View.Budget.Settlement.PrintReport;
+using VTS.QLNS.CTC.App.View.Budget.Settlement.RegularBudget;
+using VTS.QLNS.CTC.App.ViewModel.Budget.Settlement.Import;
+using VTS.QLNS.CTC.App.ViewModel.Budget.Settlement.PrintReport;
+using VTS.QLNS.CTC.App.ViewModel.Budget.Settlement.RegularBudget.ExportDemandBudget;
+using VTS.QLNS.CTC.App.ViewModel.Budget.Settlement.RegularBudget.SendDataRegularBudget;
+using VTS.QLNS.CTC.Core.Domain;
+using VTS.QLNS.CTC.Core.Domain.Criteria;
+using VTS.QLNS.CTC.Core.Domain.Query;
+using VTS.QLNS.CTC.Core.Service;
+using VTS.QLNS.CTC.Utility;
+using VTS.QLNS.CTC.Utility.Enum;
+
+namespace VTS.QLNS.CTC.App.ViewModel.Budget.Settlement.RegularBudget
+{
+    public class RegularBudgetIndexViewModel : GridViewModelBase<SettlementVoucherModel>
+    {
+        private readonly INsDonViService _donViService;
+        private readonly IHTTPUploadFileService _hTTPUploadFileService;
+        private readonly ICryptographyService _cryptographyService;
+        private readonly INsQtChungTuService _chungTuService;
+        private readonly INsQtChungTuChiTietService _chungTuChiTietService;
+        private readonly INsMucLucNganSachService _mucLucNganSachService;
+        private readonly INsNguoiDungDonViService _iNsNguoiDungDonViService;
+        private readonly IMapper _mapper;
+        private readonly ISessionService _sessionService;
+        private readonly IExportService _exportService;
+        private readonly IVdtFtpRootService _ftpService;
+        private readonly FtpStorageService _ftpStorageService;
+        private ICollectionView _listSettlementVoucher;
+        private ICollectionView _listSettlementVoucherSummary;
+        private readonly IDanhMucService _danhMucService;
+        private SessionInfo _sessionInfo;
+        private List<NsQtChungTuQuery> _listChungTu;
+        private readonly INsPhongBanService _phongBanService;
+        private DonVi _aggregateAgency;
+        private readonly INsQtChungTuChiTietGiaiThichService _chungTuChiTietGiaiThichService;
+
+        public PrintSummaryRegularSettlementViewModel PrintSummaryRegularSettlementViewModel { get; set; }
+        public PrintSettlementVoucherViewModel PrintSettlementVoucherViewModel { get; set; }
+        public PrintCommunicateSettlementLNSViewModel PrintCommunicateSettlementLNSViewModel { get; set; }
+        public PrintCommunicateSettlementAgencyViewModel PrintCommunicateSettlementAgencyViewModel { get; set; }
+        public PrintSummaryLNSViewModel PrintSummaryLNSViewModel { get; set; }
+        public PrintReportYearSettlementSumaryYearBudgetViewModel PrintReportYearSettlementSumaryYearBudgetViewModel { get; set; }
+        public PrintEstimateSettlementViewModel PrintEstimateSettlementViewModel { get; set; }
+        public PrintSummaryYearSettlementViewModel PrintSummaryYearSettlementViewModel { get; set; }
+        public PrintReceiveSettlementViewModel PrintReceiveSettlementViewModel { get; set; }
+        public PrintReportPublicSettlementViewModel PrintReportPublicSettlementViewModel { get; set; }
+        public PrintSummaryAgencyViewModel PrintSummaryAgencyViewModel { get; set; }
+        public SettlementImportViewModel SettlementImportViewModel { get; set; }
+        public SettlementImportJsonViewModel SettlementImportJsonViewModel { get; set; }
+        public ExportRegularBudgetViewModel ExportRegularBudgetViewModel { get; set; }
+        public SendDataRegularBudgetViewModel SendDataRegularBudgetViewModel { get; set; }
+
+
+        private SettlementImport _settlementImportView;
+        private readonly ILog _logger;
+        private SettlementVoucherCriteria _condition;
+        private SettlementVoucherModel SelectedVoucher;
+        private List<SettlementVoucherDetailModel> _settlementVoucherDetailExports;
+        private SettlementImportJson _importJsonView;
+
+
+        public override string FuncCode => NSFunctionCode.BUDGET_SETTLEMENT_REGULARBUDGET;
+        public override string GroupName => MenuItemContants.GROUP_FUNCTION;
+        public override string Name => "Ngân sách thường xuyên";
+        public override Type ContentType => typeof(View.Budget.Settlement.RegularBudget.RegularBudgetIndex);
+        public override string Description => "Quyết toán Lương, Phụ cấp, Trợ cấp, Tiền ăn";
+        public override PackIconKind IconKind => PackIconKind.Dollar;
+
+        private ObservableCollection<SettlementVoucherModel> _settlementVouchers;
+        public ObservableCollection<SettlementVoucherModel> SettlementVouchers
+        {
+            get => _settlementVouchers;
+            set => SetProperty(ref _settlementVouchers, value);
+        }
+
+        private ObservableCollection<SettlementVoucherModel> _settlementVoucherSummaries;
+        public ObservableCollection<SettlementVoucherModel> SettlementVoucherSummaries
+        {
+            get => _settlementVoucherSummaries;
+            set => SetProperty(ref _settlementVoucherSummaries, value);
+        }
+
+        //public bool IsButtonEnable => LockStatusSelected != null && !LockStatusSelected.ValueItem.Equals("0");
+        public bool IsButtonEnable
+        {
+            get
+            {
+                bool result = false;
+                ObservableCollection<SettlementVoucherModel> lstItem = (TabIndex == ImportTabIndex.Data) ? SettlementVouchers : SettlementVoucherSummaries;
+                List<SettlementVoucherModel> lstSelected = lstItem.Where(x => x.Selected).ToList();
+                if (LockStatusSelected != null && !LockStatusSelected.ValueItem.Equals("0") && lstSelected.Any())
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = lstSelected.Any() && (lstSelected.All(x => x.BKhoa) || lstSelected.All(x => !x.BKhoa));
+                    IsLock = lstSelected.Any(x => x.BKhoa);
+                }
+                return result;
+            }
+        }
+
+
+        private SettlementVoucherModel _selectedItemSummary;
+        public SettlementVoucherModel SelectedItemSummary
+        {
+            get => _selectedItemSummary;
+            set
+            {
+                if (SetProperty(ref _selectedItemSummary, value))
+                    OnSelectedItemChanged();
+            }
+        }
+
+
+        private List<ComboboxItem> _months;
+        public List<ComboboxItem> Months
+        {
+            get => _months;
+            set => SetProperty(ref _months, value);
+        }
+
+        private ComboboxItem _monthSelected;
+        public ComboboxItem MonthSelected
+        {
+            get => _monthSelected;
+            set
+            {
+                SetProperty(ref _monthSelected, value);
+                _listSettlementVoucher.Refresh();
+                _listSettlementVoucherSummary.Refresh();
+            }
+        }
+
+        private List<ComboboxItem> _agencies;
+        public List<ComboboxItem> Agencies
+        {
+            get => _agencies;
+            set => SetProperty(ref _agencies, value);
+        }
+
+        private ComboboxItem _agencySelected;
+        public ComboboxItem AgencySelected
+        {
+            get => _agencySelected;
+            set
+            {
+                SetProperty(ref _agencySelected, value);
+                _listSettlementVoucher.Refresh();
+                _listSettlementVoucherSummary.Refresh();
+            }
+        }
+
+        private ObservableCollection<ComboboxItem> _lockStatus = new ObservableCollection<ComboboxItem>();
+
+        public ObservableCollection<ComboboxItem> LockStatus
+        {
+            get => _lockStatus;
+            set => SetProperty(ref _lockStatus, value);
+        }
+
+        private ComboboxItem _lockStatusSelected;
+
+        public ComboboxItem LockStatusSelected
+        {
+            get => _lockStatusSelected;
+            set
+            {
+                SetProperty(ref _lockStatusSelected, value);
+                OnPropertyChanged(nameof(IsButtonEnable));
+                if (_lockStatusSelected != null && _lockStatusSelected.ValueItem.Equals("1"))
+                {
+                    IsLock = true;
+                }
+                else if (_lockStatusSelected != null && _lockStatusSelected.ValueItem.Equals("2"))
+                {
+                    IsLock = false;
+                }
+                _listSettlementVoucher.Refresh();
+                _listSettlementVoucherSummary.Refresh();
+            }
+        }
+
+
+        private bool _isOpenPrintPopup;
+        public bool IsOpenPrintPopup
+        {
+            get => _isOpenPrintPopup;
+            set => SetProperty(ref _isOpenPrintPopup, value);
+        }
+
+        private bool _isOpenExcelPopup;
+        public bool IsOpenExcelPopup
+        {
+            get => _isOpenExcelPopup;
+            set => SetProperty(ref _isOpenExcelPopup, value);
+        }
+
+        //public bool IsLock => TabIndex == ImportTabIndex.Data ? SelectedItem != null && SelectedItem.BKhoa : SelectedItemSummary != null && SelectedItemSummary.BKhoa;
+        private bool _isLock;
+        public bool IsLock
+        {
+            get => _isLock;
+            set => SetProperty(ref _isLock, value);
+        }
+        public bool IsEdit => TabIndex == ImportTabIndex.Data ? (SelectedItem != null && !SelectedItem.BKhoa) : (SelectedItemSummary != null && !SelectedItemSummary.BKhoa);
+
+        public bool IsButtonSendDataEnable => TabIndex != ImportTabIndex.Data;
+
+        public bool IsDelete => TabIndex == ImportTabIndex.Data ? (SelectedItem != null && !SelectedItem.BKhoa) : (SelectedItemSummary != null && !SelectedItemSummary.BKhoa);
+
+        private bool _isOpenDialog;
+        public bool IsOpenDialog
+        {
+            get => _isOpenDialog;
+            set => SetProperty(ref _isOpenDialog, value);
+        }
+
+        public bool IsAggregate
+        {
+            get
+            {
+                IEnumerable<SettlementVoucherModel> listSelected = _settlementVouchers.Where(x => x.Selected);
+                if (listSelected.Count() > 0)
+                    if (listSelected.Any(x => !string.IsNullOrEmpty(x.STongHop)))
+                        return false;
+                    else return true;
+                return false;
+            }
+        }
+
+        private ImportTabIndex _tabIndex;
+        public ImportTabIndex TabIndex
+        {
+            get => _tabIndex;
+            set
+            {
+                SetProperty(ref _tabIndex, value);
+                OnSelectedItemChanged();
+                OnPropertyChanged(nameof(IsExportAggregateData));
+            }
+        }
+
+        public bool IsExportAggregateData => (TabIndex == ImportTabIndex.Aggregate && _selectedItemSummary != null) || (TabIndex == ImportTabIndex.Data && SelectedItem != null);
+
+        /// <summary>
+        /// Checkbox select all property
+        /// </summary>
+        public bool? IsAllItemsSelected
+        {
+            get
+            {
+                if (SettlementVouchers != null)
+                {
+                    List<bool> selected = SettlementVouchers.Select(item => item.Selected).Distinct().ToList();
+                    return selected.Count == 1 ? selected.Single() : (bool?)null;
+                }
+                return false;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    SelectAll(value.Value, SettlementVouchers);
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool? IsAllItemSummariesSelected
+        {
+            get
+            {
+                if (SettlementVoucherSummaries != null)
+                {
+                    List<bool> selected = SettlementVoucherSummaries.Select(item => item.Selected).Distinct().ToList();
+                    return selected.Count == 1 ? selected.Single() : (bool?)null;
+                }
+                return false;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    SelectAll(value.Value, SettlementVoucherSummaries);
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public RegularBudgetDialogViewModel RegularBudgetDialogViewModel { get; set; }
+        public RegularBudgetDetailViewModel RegularBudgetDetailViewModel { get; set; }
+        public RelayCommand ExcelCommand { get; }
+        public RelayCommand PrintCommand { get; }
+        public RelayCommand PrintActionCommand { get; }
+        public RelayCommand AggregateCommand { get; }
+        public RelayCommand ExportAggregateDataCommand { get; }
+        public RelayCommand ExportDataCommand { get; }
+        public RelayCommand ImportDataCommand { get; }
+        public RelayCommand UploadFileCommandHTTP { get; set; }
+        public RelayCommand UploadFileCommandFTP { get; set; }
+        public RelayCommand ImportJsonCommand { get; }
+        public RelayCommand ExportJsonCommand { get; }
+
+        protected override void OnSelectedItemChanged()
+        {
+            base.OnSelectedItemChanged();
+            OnPropertyChanged(nameof(IsEdit));
+            OnPropertyChanged(nameof(IsDelete));
+            OnPropertyChanged(nameof(IsButtonSendDataEnable));
+            OnPropertyChanged(nameof(IsButtonEnable));
+            OnPropertyChanged(nameof(IsExportAggregateData));
+            //OnPropertyChanged(nameof(IsLock));
+        }
+
+        protected override void OnSelectionDoubleClick(object obj)
+        {
+            base.OnSelectionDoubleClick(obj);
+            SettlementVoucherModel settlementVoucher = (SettlementVoucherModel)obj;
+            if (settlementVoucher != null)
+                OpenRegularBudgetDetailDialog(settlementVoucher);
+        }
+
+        public RegularBudgetIndexViewModel(RegularBudgetDialogViewModel regularBudgetDialogViewModel,
+                                           IHTTPUploadFileService hTTPUploadFileService,
+                                           ICryptographyService cryptographyService,
+                                           RegularBudgetDetailViewModel regularBudgetDetailViewModel,
+                                           PrintEstimateSettlementViewModel printEstimateSettlementViewModel,
+                                           PrintSummaryRegularSettlementViewModel printSummaryRegularSettlementViewModel,
+                                           PrintSettlementVoucherViewModel printSettlementVoucherViewModel,
+                                           PrintCommunicateSettlementLNSViewModel printCommunicateSettlementLNSViewModel,
+                                           PrintCommunicateSettlementAgencyViewModel printCommunicateSettlementAgencyViewModel,
+                                           PrintSummaryLNSViewModel printSummaryLNSViewModel,
+                                           PrintSummaryYearSettlementViewModel printSummaryYearSettlementViewModel,
+                                           PrintReceiveSettlementViewModel printReceiveSettlementViewModel,
+                                           PrintReportYearSettlementSumaryYearBudgetViewModel printReportYearSettlementSumaryYearBudgetViewModel,
+                                           PrintReportPublicSettlementViewModel printReportPublicSettlementViewModel,
+                                           PrintSummaryAgencyViewModel printSummaryAgencyViewModel,
+                                           SettlementImportJsonViewModel settlementImportJsonViewModel,
+                                           ExportRegularBudgetViewModel exportRegularBudgetViewModel,
+                                           SendDataRegularBudgetViewModel sendDataRegularBudgetViewModel,
+                                           INsDonViService donViService,
+                                           INsPhongBanService phongBanService,
+                                           INsQtChungTuChiTietGiaiThichService chungTuChiTietGiaiThichService,
+                                           INsQtChungTuService chungTuService,
+                                           INsQtChungTuChiTietService chungTuChiTietService,
+                                           INsMucLucNganSachService mucLucNganSachService,
+                                           INsNguoiDungDonViService iNsNguoiDungDonViService,
+                                           IMapper mapper,
+                                           ISessionService sessionService,
+                                           IExportService exportService,
+                                           SettlementImportViewModel settlementImportViewModel,
+                                           IDanhMucService danhMucService,
+                                           IVdtFtpRootService ftpService,
+                                           FtpStorageService ftpStorageService,
+                                           ILog logger)
+
+        {
+            RegularBudgetDialogViewModel = regularBudgetDialogViewModel;
+            RegularBudgetDetailViewModel = regularBudgetDetailViewModel;
+            PrintEstimateSettlementViewModel = printEstimateSettlementViewModel;
+            PrintSummaryRegularSettlementViewModel = printSummaryRegularSettlementViewModel;
+            PrintSettlementVoucherViewModel = printSettlementVoucherViewModel;
+            PrintCommunicateSettlementLNSViewModel = printCommunicateSettlementLNSViewModel;
+            PrintCommunicateSettlementAgencyViewModel = printCommunicateSettlementAgencyViewModel;
+            PrintSummaryLNSViewModel = printSummaryLNSViewModel;
+            PrintSummaryYearSettlementViewModel = printSummaryYearSettlementViewModel;
+            PrintReceiveSettlementViewModel = printReceiveSettlementViewModel;
+            PrintReportYearSettlementSumaryYearBudgetViewModel = printReportYearSettlementSumaryYearBudgetViewModel;
+            PrintReportPublicSettlementViewModel = printReportPublicSettlementViewModel;
+            PrintSummaryAgencyViewModel = printSummaryAgencyViewModel;
+            SettlementImportViewModel = settlementImportViewModel;
+            SettlementImportJsonViewModel = settlementImportJsonViewModel;
+            ExportRegularBudgetViewModel = exportRegularBudgetViewModel;
+            SendDataRegularBudgetViewModel = sendDataRegularBudgetViewModel;
+            _donViService = donViService;
+            _chungTuService = chungTuService;
+            _cryptographyService = cryptographyService;
+            _chungTuChiTietGiaiThichService = chungTuChiTietGiaiThichService;
+            _hTTPUploadFileService = hTTPUploadFileService;
+            _phongBanService = phongBanService;
+            _chungTuChiTietService = chungTuChiTietService;
+            _mucLucNganSachService = mucLucNganSachService;
+            _iNsNguoiDungDonViService = iNsNguoiDungDonViService;
+            _mapper = mapper;
+            _sessionService = sessionService;
+            _exportService = exportService;
+            _danhMucService = danhMucService;
+            _ftpService = ftpService;
+            _ftpStorageService = ftpStorageService;
+            _logger = logger;
+
+            PrintCommand = new RelayCommand(obj => IsOpenPrintPopup = true);
+            ExcelCommand = new RelayCommand(obj => IsOpenExcelPopup = true);
+            PrintActionCommand = new RelayCommand(obj => OpenPrintDialog(obj));
+            AggregateCommand = new RelayCommand(obj => OnAggregate());
+            ExportDataCommand = new RelayCommand(obj => OnExportAggregateData());
+            ExportAggregateDataCommand = new RelayCommand(obj => OnExportAggregateDataDialog());
+            ImportDataCommand = new RelayCommand(obj => OnImportData());
+            UploadFileCommandHTTP = new RelayCommand(obj => OnUploadDialog(true));
+            UploadFileCommandFTP = new RelayCommand(obj => OnUploadDialog(false));
+            ImportJsonCommand = new RelayCommand(obj => OnImportJson());
+            ExportJsonCommand = new RelayCommand(obj => OnExportJson());
+        }
+
+        private void LoadLockStatus()
+        {
+            List<ComboboxItem> lockStatus = new List<ComboboxItem>
+            {
+                new ComboboxItem {DisplayItem = "Toàn bộ", ValueItem = "0"},
+                new ComboboxItem {DisplayItem = "Đã khóa", ValueItem = "1"},
+                new ComboboxItem {DisplayItem = "Chưa khóa", ValueItem = "2"},
+            };
+
+            LockStatus = new ObservableCollection<ComboboxItem>(lockStatus);
+            LockStatusSelected = LockStatus.ElementAt(0);
+        }
+        public override void Init()
+        {
+            base.Init();
+            _sessionInfo = _sessionService.Current;
+            ResetCondition();
+            LoadAgencies();
+            _months = FnCommonUtils.LoadMonths();
+            LoadRegularBudget();
+            LoadLockStatus();
+        }
+
+        private void ResetCondition()
+        {
+            _monthSelected = null;
+            _agencySelected = null;
+            _tabIndex = ImportTabIndex.Data;
+
+            OnPropertyChanged(nameof(MonthSelected));
+            OnPropertyChanged(nameof(AgencySelected));
+            OnPropertyChanged(nameof(TabIndex));
+        }
+        private bool IsDonViRoot(string iIDMaDonVi) => iIDMaDonVi == _sessionInfo.IdDonVi;
+
+        /// <summary>
+        /// Lấy dữ liệu chứng từ hiển thị ban đầu
+        /// </summary>
+        private void LoadRegularBudget()
+        {
+            _condition = new SettlementVoucherCriteria
+            {
+                SettlementType = SettlementType.REGULAR_BUDGET,
+                YearOfWork = _sessionInfo.YearOfWork,
+                YearOfBudget = _sessionInfo.YearOfBudget,
+                BudgetSource = _sessionInfo.Budget,
+                Status = (int)Status.ACTIVE,
+                UserName = _sessionInfo.Principal
+            };
+            if (MonthSelected != null)
+                _condition.QuarterMonth = Convert.ToInt32(MonthSelected.ValueItem);
+            if (AgencySelected != null)
+                _condition.AgencyId = AgencySelected.ValueItem;
+            _listChungTu = _chungTuService.FindByCondition(_condition);
+
+            if (_sessionService.Current.IsQuanLyDonViCha)
+            {
+                SettlementVouchers = _mapper.Map<ObservableCollection<SettlementVoucherModel>>(_listChungTu.Where(x => !IsDonViRoot(x.IIdMaDonVi) && x.BDaTongHop.HasValue && !x.BDaTongHop.Value));
+
+                List<SettlementVoucherModel> listChungTuTongHop = new List<SettlementVoucherModel>();
+                foreach (NsQtChungTuQuery chungTu in _listChungTu.Where(x => IsDonViRoot(x.IIdMaDonVi)))
+                {
+                    SettlementVoucherModel parent = _mapper.Map<SettlementVoucherModel>(chungTu);
+                    parent.IsExpand = true;
+                    listChungTuTongHop.Add(parent);
+                    if (!string.IsNullOrEmpty(chungTu.STongHop))
+                    {
+                        List<SettlementVoucherModel> listChild = _mapper.Map<List<SettlementVoucherModel>>(_listChungTu.Where(x => chungTu.STongHop.Split(",").Contains(x.SSoChungTu) && x.BDaTongHop.HasValue && x.BDaTongHop.Value).ToList());
+                        listChild.ForEach(x => { x.IsChildSummary = true; x.SoChungTuParent = chungTu.SSoChungTu; });
+                        listChungTuTongHop.AddRange(listChild);
+                    }
+                }
+                SettlementVoucherSummaries = new ObservableCollection<SettlementVoucherModel>(listChungTuTongHop);
+            }
+            else
+            {
+                SettlementVouchers = _mapper.Map<ObservableCollection<SettlementVoucherModel>>(_listChungTu.Where(x => !IsDonViRoot(x.IIdMaDonVi)));
+                SettlementVoucherSummaries = new ObservableCollection<SettlementVoucherModel>();
+            }
+
+
+            foreach (SettlementVoucherModel model in SettlementVouchers)
+            {
+                model.PropertyChanged += Model_PropertyChanged;
+            }
+
+            foreach (SettlementVoucherModel model in SettlementVoucherSummaries)
+            {
+                model.PropertyChanged += Model_PropertyChanged;
+                model.TypeIcon = model.IsSent ? "CheckBold" : "CancelBold";
+            }
+
+            _listSettlementVoucher = CollectionViewSource.GetDefaultView(SettlementVouchers);
+            _listSettlementVoucher.Filter = ListSettlementVoucherFilter;
+            _listSettlementVoucherSummary = CollectionViewSource.GetDefaultView(SettlementVoucherSummaries);
+            _listSettlementVoucherSummary.Filter = ListSettlementVoucherFilter;
+            SelectedItem = SettlementVouchers.FirstOrDefault();
+            SelectedItemSummary = SettlementVoucherSummaries.FirstOrDefault();
+        }
+
+        private void Model_PropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            SettlementVoucherModel model = (SettlementVoucherModel)sender;
+            if (args.PropertyName == nameof(SettlementVoucherModel.Selected))
+            {
+                if (TabIndex == ImportTabIndex.Data)
+                    OnPropertyChanged(nameof(IsAllItemsSelected));
+                else OnPropertyChanged(nameof(IsAllItemSummariesSelected));
+                OnPropertyChanged(nameof(IsAggregate));
+                OnPropertyChanged(nameof(IsButtonEnable));
+                OnPropertyChanged(nameof(IsExportAggregateData));
+            }
+
+            if (args.PropertyName == nameof(SettlementVoucherModel.IsCollapse))
+            {
+                ExpandChild();
+            }
+        }
+
+        private void ExpandChild()
+        {
+            if (SelectedItemSummary != null)
+            {
+                SettlementVoucherSummaries.Where(n => n.SoChungTuParent == SelectedItemSummary.SSoChungTu).Select(n => { n.IsExpand = !n.IsExpand; return n; }).ToList();
+            }
+            OnPropertyChanged(nameof(SettlementVoucherSummaries));
+        }
+
+        private bool ListSettlementVoucherFilter(object obj)
+        {
+            bool result = true;
+            SettlementVoucherModel item = (SettlementVoucherModel)obj;
+            if (MonthSelected != null)
+                result = result && item.IThangQuy == Convert.ToInt32(MonthSelected.ValueItem);
+            if (AgencySelected != null)
+                result = result && item.IIdMaDonVi == AgencySelected.ValueItem;
+            if (LockStatusSelected != null)
+            {
+                if (LockStatusSelected.ValueItem.Equals("1"))
+                {
+                    result = result && item.BKhoa;
+                }
+                if (LockStatusSelected.ValueItem.Equals("2"))
+                {
+                    result = result && !item.BKhoa;
+                }
+            }
+            item.IsFilter = result;
+            return result;
+        }
+
+        /// <summary>
+        /// Tạo data cho combobox đơn vị
+        /// </summary>
+        private void LoadAgencies()
+        {
+            _aggregateAgency = _donViService.FindByIdDonVi(_sessionInfo.IdDonVi, _sessionInfo.YearOfWork);
+            List<DonVi> listDonVi = _donViService.FindByUser(_sessionInfo.Principal, _sessionInfo.YearOfWork, LoaiDonVi.NOI_BO).ToList();
+            _agencies = _mapper.Map<List<ComboboxItem>>(listDonVi);
+        }
+
+        /// <summary>
+        /// Action when checkbox select all is selected
+        /// </summary>
+        /// <param name="select">true/false</param>
+        /// <param name="models">items source of data grid</param>
+        private static void SelectAll(bool select, IEnumerable<SettlementVoucherModel> models)
+        {
+            foreach (SettlementVoucherModel model in models.Where(x => x.IsFilter))
+            {
+                model.Selected = select;
+            }
+        }
+
+        protected override void OnAdd()
+        {
+            base.OnAdd();
+            RegularBudgetDialogViewModel.Id = Guid.Empty;
+            int voucherNoIndex = _chungTuService.CreateVoucherIndex(_condition);
+            RegularBudgetDialogViewModel.VoucherNoIndex = voucherNoIndex;
+            RegularBudgetDialogViewModel.IsAggregate = false;
+            RegularBudgetDialogViewModel.Init();
+            RegularBudgetDialogViewModel.IsAdjustEnabled = true;
+            RegularBudgetDialogViewModel.SavedAction = obj =>
+            {
+                this.OnRefresh();
+                OpenRegularBudgetDetailDialog((SettlementVoucherModel)obj);
+            };
+            RegularBudgetDialog view = new RegularBudgetDialog { DataContext = RegularBudgetDialogViewModel };
+            DialogHost.Show(view, SettlementScreen.ROOT_DIALOG);
+        }
+
+        protected override void OnUpdate()
+        {
+            base.OnUpdate();
+            SettlementVoucherModel model = TabIndex == ImportTabIndex.Data ? SelectedItem : SelectedItemSummary;
+
+            if (model.SNguoiTao != _sessionInfo.Principal)
+            {
+                MessageBoxHelper.Warning(string.Format(Resources.MsgRoleEdit));
+                return;
+            }
+
+            RegularBudgetDialogViewModel.Id = model.Id;
+            RegularBudgetDialogViewModel.IsAggregate = false;
+            RegularBudgetDialogViewModel.IsAdjustEnabled = false;
+            RegularBudgetDialogViewModel.Init();
+            RegularBudgetDialogViewModel.SavedAction = obj =>
+            {
+                this.OnRefresh();
+            };
+            RegularBudgetDialog view = new RegularBudgetDialog { DataContext = RegularBudgetDialogViewModel };
+            DialogHost.Show(view, SettlementScreen.ROOT_DIALOG);
+        }
+
+        protected override void OnRefresh()
+        {
+            base.OnRefresh();
+            LoadRegularBudget();
+            _listSettlementVoucher.Refresh();
+            _listSettlementVoucherSummary.Refresh();
+        }
+
+        /// <summary>
+        /// Mở màn hình in
+        /// </summary>
+        /// <param name="param"></param>
+        private void OpenPrintDialog(object param)
+        {
+            int dialogType = (int)param;
+            switch (dialogType)
+            {
+                case (int)SettlementPrintType.PRINT_RECEIVE_SETTLEMENT:
+                    PrintReceiveSettlementViewModel.Init();
+                    PrintReceiveSettlementViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_COMMUNICATE_SETTLEMENT_LNS:
+                    PrintCommunicateSettlementLNSViewModel.SettlementVoucher = TabIndex == ImportTabIndex.Data ? SelectedItem : SelectedItemSummary;
+                    if (PrintCommunicateSettlementLNSViewModel.SettlementVoucher is null)
+                    {
+                        new NSMessageBoxViewModel(Resources.AlertEmptySettlementVoucher).ShowDialogHost();
+                        return;
+                    }
+                    PrintCommunicateSettlementLNSViewModel.Init();
+                    PrintCommunicateSettlementLNSViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_COMMUNICATE_SETTLEMENT_AGENCY:
+                    PrintCommunicateSettlementAgencyViewModel.SettlementTypeValue = SettlementType.REGULAR_BUDGET;
+                    PrintCommunicateSettlementAgencyViewModel.Init();
+                    PrintCommunicateSettlementAgencyViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_REGULARLY_SETTLEMENT:
+                    PrintSummaryLNSViewModel.SettlementTypeValue = SettlementType.REGULAR_BUDGET;
+                    PrintSummaryLNSViewModel.SettlementVoucher = SelectedItemSummary;
+                    PrintSummaryLNSViewModel.TieuDeBaoCao = Name;
+                    PrintSummaryLNSViewModel.IsShowDatePeople = false;
+                    PrintSummaryLNSViewModel.Init();
+                    PrintSummaryLNSViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_DEFENSE_SETTLEMENT:
+                    PrintSummaryLNSViewModel.SettlementTypeValue = SettlementType.DEFENSE_BUDGET;
+                    PrintSummaryLNSViewModel.TieuDeBaoCao = Name;
+                    PrintSummaryLNSViewModel.IsShowDatePeople = true;
+                    PrintSummaryLNSViewModel.Init();
+                    PrintSummaryLNSViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_STATE_SETTLEMENT:
+                    PrintSummaryLNSViewModel.SettlementTypeValue = SettlementType.STATE_BUDGET;
+                    PrintSummaryLNSViewModel.TieuDeBaoCao = Name;
+                    PrintSummaryLNSViewModel.IsShowDatePeople = false;
+                    PrintSummaryLNSViewModel.Init();
+                    PrintSummaryLNSViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_FOREX_SETTLEMENT:
+                    PrintSummaryLNSViewModel.SettlementTypeValue = SettlementType.FOREX_BUDGET;
+                    PrintSummaryLNSViewModel.TieuDeBaoCao = Name;
+                    PrintSummaryLNSViewModel.IsShowDatePeople = false;
+                    PrintSummaryLNSViewModel.Init();
+                    PrintSummaryLNSViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_EXPENSE_SETTLEMENT:
+                    PrintSummaryLNSViewModel.SettlementTypeValue = SettlementType.EXPENSE_BUDGET;
+                    PrintSummaryLNSViewModel.TieuDeBaoCao = Name;
+                    PrintSummaryLNSViewModel.IsShowDatePeople = false;
+                    PrintSummaryLNSViewModel.Init();
+                    PrintSummaryLNSViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_LNS_SETTLEMENT:
+                    PrintSummaryLNSViewModel.SettlementTypeValue = SettlementType.LNS;
+                    PrintSummaryLNSViewModel.TieuDeBaoCao = Name;
+                    PrintSummaryLNSViewModel.IsShowDatePeople = false;
+                    PrintSummaryLNSViewModel.Init();
+                    PrintSummaryLNSViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_SUMMARY_AGENCY:
+                    PrintSummaryAgencyViewModel.Init();
+                    PrintSummaryAgencyViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_ESTIMATE_SETTLEMENT:
+                    PrintEstimateSettlementViewModel.Init();
+                    PrintEstimateSettlementViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_SUMMARY_YEAR_SETTLEMENT:
+                    PrintSummaryYearSettlementViewModel.Init();
+                    PrintSummaryYearSettlementViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_REPORT_PUBLIC_SETTLEMENT:
+                    PrintReportPublicSettlementViewModel.Init();
+                    PrintReportPublicSettlementViewModel.ShowDialogHost();
+                    break;
+                case (int)SettlementPrintType.PRINT_YEAR_SETTLEMENT_SUMARY_BUBGET:
+                    PrintReportYearSettlementSumaryYearBudgetViewModel.TieuDeBaoCao = Name;
+                    PrintReportYearSettlementSumaryYearBudgetViewModel.IsShowDatePeople = false;
+                    PrintReportYearSettlementSumaryYearBudgetViewModel.SettlementTypeValue = SettlementType.REGULAR_BUDGET;
+                    PrintReportYearSettlementSumaryYearBudgetViewModel.Init();
+                    PrintReportYearSettlementSumaryYearBudgetViewModel.ShowDialogHost();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Mở dialog confirm khóa/ mở khóa chứng từ
+        /// </summary>
+        /// <param name="obj"></param>
+        protected override void OnLockUnLock()
+        {
+            //var model = TabIndex == ImportTabIndex.Data ? SelectedItem : SelectedItemSummary;
+            //if (IsLock)
+            //{
+            //    List<DonVi> userAgency = _donViService.FindByUser(_sessionInfo.Principal, _sessionInfo.YearOfWork, LoaiDonVi.ROOT);
+            //    if (!userAgency.Any(x => x.Loai == LoaiDonVi.ROOT))
+            //    {
+            //        MessageBoxHelper.Warning(Resources.MsgRoleUnlock);
+            //        return;
+            //    }
+            //    if (model.BDaTongHop.GetValueOrDefault())
+            //    {
+            //        MessageBoxHelper.Warning(Resources.AlertUnlockAggregatedVoucher);
+            //        return;
+            //    }
+            //}
+            //else
+            //{
+            //    if (model.SNguoiTao != _sessionInfo.Principal)
+            //    {
+            //        MessageBoxHelper.Warning(string.Format(Resources.MsgRoleLock, model.SNguoiTao));
+            //        return;
+            //    }
+            //}
+            //string message = IsLock ? Resources.UnlockChungTu : Resources.LockChungTu;
+            //MessageBoxResult result = MessageBoxHelper.Confirm(message);
+            //if (result == MessageBoxResult.Yes)
+            //    LockConfirmEventHandler(model);
+            if (TabIndex == ImportTabIndex.Data)
+            {
+                if (IsLock)
+                {
+                    string listSoChungTu = string.Join(", ", SettlementVouchers.Where(n => n.Selected && n.BKhoa).Select(n => n.SSoChungTu));
+                    List<DonVi> userAgency = _donViService.FindByUser(_sessionInfo.Principal, _sessionInfo.YearOfWork, LoaiDonVi.ROOT);
+                    if (!userAgency.Any(x => x.Loai == LoaiDonVi.ROOT))
+                    {
+                        //MessageBoxHelper.Warning(Resources.MsgRoleUnlock);
+                        MessageBoxHelper.Warning(string.Format("Đồng chí không được mở khóa chứng từ {0} do không có quyền tổng hợp", listSoChungTu));
+                        return;
+                    }
+
+                    string listSoChungTuDaTongHop = string.Join(", ", SettlementVouchers.Where(n => n.Selected && n.BDaTongHop.GetValueOrDefault() && n.BKhoa && !n.IIdMaDonVi.Equals(_sessionInfo.IdDonVi)).Select(n => n.SSoChungTu));
+
+                    if (!string.IsNullOrEmpty(listSoChungTuDaTongHop))
+                    {
+                        //MessageBoxHelper.Warning(Resources.AlertUnlockAggregatedVoucher);
+                        MessageBoxHelper.Warning(string.Format("Đồng chí không được mở khóa chứng từ {0} do đã gửi lên tổng hợp", listSoChungTuDaTongHop));
+                        return;
+                    }
+
+                }
+                else
+                {
+                    string listSoChungTuInvalid = string.Join(", ", SettlementVouchers.Where(n => n.Selected & n.SNguoiTao != _sessionInfo.Principal && !n.BKhoa).Select(n => n.SSoChungTu));
+
+                    if (!string.IsNullOrEmpty(listSoChungTuInvalid))
+                    {
+                        //MessageBoxHelper.Warning(string.Format(Resources.MsgRoleLock, SelectedItemElement.SNguoiTao));
+                        MessageBoxHelper.Warning(string.Format("Đồng chí không có quyền khóa chứng từ {0} do không phải người tạo", listSoChungTuInvalid));
+                        return;
+                    }
+
+                }
+                string message = IsLock ? Resources.UnlockChungTu : Resources.LockChungTu;
+                string msgDone = IsLock ? Resources.MsgUnLockDone : Resources.MsgLockDone;
+                MessageBoxResult result = MessageBoxHelper.Confirm(message);
+                if (result == MessageBoxResult.Yes)
+                {
+                    foreach (SettlementVoucherModel SelectedItemElement in SettlementVouchers.Where(n => n.Selected))
+                    {
+                        LockConfirmEventHandler(SelectedItemElement);
+                    }
+                    MessageBoxHelper.Info(msgDone);
+                    //LockStatusSelected = IsLock ? LockStatus.ElementAt(2) : LockStatus.ElementAt(1);
+                    LockStatusSelected = LockStatus.ElementAt(0);
+
+                    //OnPropertyChanged(nameof(LockStatusSelected));
+                    //_listSettlementVoucher.Refresh();
+                    //_listSettlementVoucherSummary.Refresh();
+
+
+                }
+            }
+            else
+            {
+                if (IsLock)
+                {
+                    string listSoChungTu = string.Join(", ", SettlementVoucherSummaries.Where(n => n.Selected && n.BKhoa).Select(n => n.SSoChungTu));
+                    List<DonVi> userAgency = _donViService.FindByUser(_sessionInfo.Principal, _sessionInfo.YearOfWork, LoaiDonVi.ROOT);
+                    if (!userAgency.Any(x => x.Loai == LoaiDonVi.ROOT))
+                    {
+                        //MessageBoxHelper.Warning(Resources.MsgRoleUnlock);
+                        MessageBoxHelper.Warning(string.Format("Đồng chí không được mở khóa chứng từ {0} do không có quyền tổng hợp", listSoChungTu));
+                        return;
+                    }
+
+                    string listSoChungTuDaTongHop = string.Join(", ", SettlementVoucherSummaries.Where(n => n.Selected && n.BDaTongHop.GetValueOrDefault() && n.BKhoa).Select(n => n.SSoChungTu));
+
+                    if (!string.IsNullOrEmpty(listSoChungTuDaTongHop))
+                    {
+                        //MessageBoxHelper.Warning(Resources.AlertUnlockAggregatedVoucher);
+                        MessageBoxHelper.Warning(string.Format("Đồng chí không được mở khóa chứng từ {0} do đã gửi lên tổng hợp", listSoChungTuDaTongHop));
+                        return;
+                    }
+
+                }
+                else
+                {
+                    string listSoChungTuInvalid = string.Join(", ", SettlementVoucherSummaries.Where(n => n.Selected && n.SNguoiTao != _sessionInfo.Principal && !n.BKhoa).Select(n => n.SSoChungTu));
+
+                    if (!string.IsNullOrEmpty(listSoChungTuInvalid))
+                    {
+                        //MessageBoxHelper.Warning(string.Format(Resources.MsgRoleLock, SelectedItemSummaryElement.SNguoiTao));
+                        MessageBoxHelper.Warning(string.Format("Đồng chí không có quyền khóa chứng từ {0} do không phải người tạo", listSoChungTuInvalid));
+                        return;
+                    }
+
+                }
+                string message = IsLock ? Resources.UnlockChungTu : Resources.LockChungTu;
+                string msgDone = IsLock ? Resources.MsgUnLockDone : Resources.MsgLockDone;
+                MessageBoxResult result = MessageBoxHelper.Confirm(message);
+                if (result == MessageBoxResult.Yes)
+                {
+                    foreach (SettlementVoucherModel SelectedItemSummaryElement in SettlementVoucherSummaries.Where(n => n.Selected))
+                    {
+                        LockConfirmEventHandler(SelectedItemSummaryElement);
+                    }
+                    MessageBoxHelper.Info(msgDone);
+                    //LockStatusSelected = IsLock ? LockStatus.ElementAt(2) : LockStatus.ElementAt(1);
+                    LockStatusSelected = LockStatus.ElementAt(0);
+
+                    //OnPropertyChanged(nameof(LockStatusSelected));
+                    //_listSettlementVoucher.Refresh();
+                    //_listSettlementVoucherSummary.Refresh();
+
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// xử lý khóa/mở khóa chứng từ sau khi đóng dialog
+        /// </summary>
+        private void LockConfirmEventHandler(SettlementVoucherModel model)
+        {
+            //string msgDone = model.BKhoa ? Resources.MsgUnLockDone : Resources.MsgLockDone;
+            _chungTuService.LockOrUnlock(model.Id, !model.BKhoa);
+            model.BKhoa = !model.BKhoa;
+
+            //OnPropertyChanged(nameof(IsLock));
+            OnPropertyChanged(nameof(IsEdit));
+            OnPropertyChanged(nameof(IsDelete));
+            OnPropertyChanged(nameof(IsAggregate));
+            //MessageBoxHelper.Info(msgDone);
+        }
+
+        protected override void OnDelete()
+        {
+            base.OnDelete();
+            StringBuilder messageBuilder = new StringBuilder();
+            SettlementVoucherModel model = TabIndex == ImportTabIndex.Data ? SelectedItem : SelectedItemSummary;
+
+            if (model.SNguoiTao != _sessionInfo.Principal)
+            {
+                MessageBoxHelper.Warning(string.Format(Resources.MsgRoleDelete, model.SNguoiTao));
+                return;
+            }
+            messageBuilder.AppendFormat(Resources.DeleteChungTu, model.SSoChungTu, model.DNgayChungTu.ToString("dd/MM/yyyy"));
+
+            MessageBoxResult result = MessageBoxHelper.Confirm(messageBuilder.ToString());
+            if (result == MessageBoxResult.Yes)
+                DeleteSelectedVoucher(model);
+        }
+
+        /// <summary>
+        /// xử lý xóa chứng từ sau khi đóng dialog
+        /// </summary>
+        private void DeleteSelectedVoucher(SettlementVoucherModel model)
+        {
+            if (IsAggregatedVoucher(model))
+            {
+                MessageBoxHelper.Warning(Resources.AlertDeleteAggregatedVoucher);
+                return;
+            }
+            Guid voucherId = model.Id;
+            _chungTuService.Delete(voucherId);
+            _chungTuChiTietService.DeleteByVoucherId(voucherId);
+            NsQtChungTuChiTietGiaiThich temp = _chungTuChiTietGiaiThichService.FindByCondition(x => x.IIdQtchungTu == voucherId);
+            if (temp != null)
+            {
+                _chungTuChiTietGiaiThichService.Delete(temp.Id);
+            }
+
+            if (!string.IsNullOrEmpty(model.STongHop))
+            {
+                List<Guid> voucherIds = _settlementVoucherSummaries.Where(x => x.SoChungTuParent == model.SSoChungTu).Select(x => x.Id).ToList();
+                if (voucherIds.Any())
+                {
+                    _chungTuService.UpdateAggregateStatus(string.Join(",", voucherIds));
+                }
+            }
+            LoadRegularBudget();
+            MessageBoxHelper.Info(Resources.MsgDeleteSuccess);
+        }
+
+        private bool IsAggregatedVoucher(SettlementVoucherModel model)
+        {
+            List<string> aggregatedVouchers = SettlementVoucherSummaries.Where(x => !string.IsNullOrEmpty(x.STongHop)).Select(x => x.STongHop).ToList();
+            return aggregatedVouchers.Any(x => x.Contains(model.SSoChungTu));
+        }
+
+        /// <summary>
+        /// Mở màn hình chi tiết chứng từ
+        /// </summary>
+        /// <param name="settlementVoucher"></param>
+        private void OpenRegularBudgetDetailDialog(SettlementVoucherModel settlementVoucher)
+        {
+            SelectedVoucher = settlementVoucher;
+            if (SelectedVoucher.SNguoiTao != _sessionInfo.Principal)
+                MessageBoxHelper.Info(string.Format(Resources.AlertRoleEditDetail, SelectedVoucher.SNguoiTao));
+            RegularBudgetDetailViewModel.Model = settlementVoucher;
+            RegularBudgetDetailViewModel.UpdateSettlementVoucherEvent += RefreshAfterSaveData;
+            RegularBudgetDetailViewModel.Init();
+            RegularBudgetDetail view = new RegularBudgetDetail { DataContext = RegularBudgetDetailViewModel };
+            view.ShowDialog();
+            RegularBudgetDetailViewModel.UpdateSettlementVoucherEvent -= RefreshAfterSaveData;
+        }
+
+        private void OpenAggregateRegularBudgetDetailDialog(SettlementVoucherModel settlementVoucher)
+        {
+            SelectedVoucher = settlementVoucher;
+            if (SelectedVoucher.SNguoiTao != _sessionInfo.Principal)
+                MessageBoxHelper.Info(string.Format(Resources.AlertRoleEditDetail, SelectedVoucher.SNguoiTao));
+            RegularBudgetDetailViewModel.Model = settlementVoucher;
+            RegularBudgetDetailViewModel.FirstInit = true;
+            RegularBudgetDetailViewModel.UpdateSettlementVoucherEvent += RefreshAfterSaveData;
+            RegularBudgetDetailViewModel.Init();
+            RegularBudgetDetail view = new RegularBudgetDetail { DataContext = RegularBudgetDetailViewModel };
+            view.ShowDialog();
+            RegularBudgetDetailViewModel.UpdateSettlementVoucherEvent -= RefreshAfterSaveData;
+        }
+
+        private void RefreshAfterSaveData(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(SelectedVoucher.STongHop))
+            {
+                if (SelectedVoucher.IIdMaDonVi == _sessionInfo.IdDonVi)
+                {
+                    SettlementVoucherModel voucher = sender as SettlementVoucherModel;
+                    SettlementVoucherModel item = SettlementVoucherSummaries.FirstOrDefault(x => x.Id == voucher.Id);
+                    if (item != null)
+                    {
+                        item.FTongTuChiDeNghi = voucher.FTongTuChiDeNghi;
+                        item.FTongTuChiPheDuyet = voucher.FTongTuChiPheDuyet;
+                    }
+                } else
+                {
+                    SettlementVoucherModel voucher = sender as SettlementVoucherModel;
+                    SettlementVoucherModel item = SettlementVouchers.FirstOrDefault(x => x.Id == voucher.Id);
+                    if (item != null)
+                    {
+                        item.FTongTuChiDeNghi = voucher.FTongTuChiDeNghi;
+                        item.FTongTuChiPheDuyet = voucher.FTongTuChiPheDuyet;
+                    }
+                }
+
+            }
+            else
+            {
+                List<SettlementVoucherModel> vouchers = sender as List<SettlementVoucherModel>;
+                foreach (SettlementVoucherModel voucher in vouchers)
+                {
+                    SettlementVoucherModel item = SettlementVoucherSummaries.FirstOrDefault(x => x.Id == voucher.Id);
+                    if (item != null)
+                    {
+                        item.FTongTuChiDeNghi = voucher.FTongTuChiDeNghi;
+                        item.FTongTuChiPheDuyet = voucher.FTongTuChiPheDuyet;
+                    }
+                }
+            }
+            _listSettlementVoucher?.Refresh();
+            _listSettlementVoucherSummary?.Refresh();
+        }
+
+        private void OnAggregate()
+        {
+            //check quyền được tổng hợp
+            List<DonVi> userAgency = _donViService.FindByUser(_sessionInfo.Principal, _sessionInfo.YearOfWork, LoaiDonVi.ROOT);
+            if (!userAgency.Any(x => x.Loai == LoaiDonVi.ROOT))
+            {
+                MessageBoxHelper.Warning(Resources.MsgRoleAggregate);
+                return;
+            }
+
+            List<SettlementVoucherModel> selectedSettlementVouchers = _settlementVouchers.Where(x => x.IsFilter && x.Selected).ToList();
+            if (selectedSettlementVouchers.GroupBy(x => x.IThangQuy).ToList().Count() > 1)
+            {
+                MessageBoxHelper.Info(Resources.AlertAggregateQuarterMonth);
+                return;
+            }
+
+            if (selectedSettlementVouchers.GroupBy(x => x.ILoaiChungTu).ToList().Count() > 1)
+            {
+                MessageBoxHelper.Info(Resources.AlertAggregateAdjust);
+                return;
+            }
+
+            //kiểm tra trạng thái các bản ghi
+            if (selectedSettlementVouchers.Any(x => !x.BKhoa))
+            {
+                MessageBoxHelper.Info(Resources.AlertAggregateUnLocked);
+                return;
+            }
+
+            //kiểm tra đã tồn tại chứng từ tổng hợp từ các chứng từ đã chọn chưa
+            Dictionary<Guid, List<string>> dicTongHop = new Dictionary<Guid, List<string>>();
+            foreach (SettlementVoucherModel item in _settlementVoucherSummaries.Where(x => !x.IsChildSummary))
+            {
+                if (!dicTongHop.ContainsKey(item.Id))
+                    dicTongHop.Add(item.Id, item.STongHop?.Split(StringUtils.COMMA).ToList() ?? new List<string> { item.SSoChungTu });
+            }
+            List<string> listChungTu = selectedSettlementVouchers.Select(x => x.SSoChungTu).ToList();
+            if (dicTongHop.Values.Any(x => x.Intersect(listChungTu).Any()))
+            {
+                MessageBoxResult result = MessageBoxHelper.Confirm(Resources.AlertExistAggregateVoucher);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        foreach (KeyValuePair<Guid, List<string>> item in dicTongHop)
+                        {
+                            if (item.Value.Intersect(listChungTu).Any())
+                                _chungTuService.Delete(item.Key);
+                        }
+                        CreateAggregateVoucher(selectedSettlementVouchers);
+                        break;
+                    case MessageBoxResult.No:
+                        return;
+                }
+            }
+            else CreateAggregateVoucher(selectedSettlementVouchers);
+        }
+
+        private void CreateAggregateVoucher(List<SettlementVoucherModel> selectedSettlementVouchers)
+        {
+            int voucherNoIndex = _chungTuService.CreateVoucherIndex(_condition);
+            RegularBudgetDialogViewModel.Id = Guid.Empty;
+            RegularBudgetDialogViewModel.VoucherNoIndex = voucherNoIndex;
+            RegularBudgetDialogViewModel.AggregateSettlementVouchers = selectedSettlementVouchers;
+            RegularBudgetDialogViewModel.AggregateAgency = _aggregateAgency;
+            RegularBudgetDialogViewModel.AggregateLNS = string.Join(StringUtils.COMMA, selectedSettlementVouchers.Select(x => x.SDslns).Distinct());
+            RegularBudgetDialogViewModel.IsAggregate = true;
+            RegularBudgetDialogViewModel.Init();
+            RegularBudgetDialogViewModel.SavedAction = obj =>
+            {
+                TabIndex = ImportTabIndex.Aggregate;
+                this.OnRefresh();
+                // RefreshAfterSaveData(obj, new EventArgs());
+                OpenAggregateRegularBudgetDetailDialog((SettlementVoucherModel)obj);
+            };
+            RegularBudgetDialog view = new RegularBudgetDialog { DataContext = RegularBudgetDialogViewModel };
+            DialogHost.Show(view, SettlementScreen.ROOT_DIALOG);
+        }
+
+        private void OnExportAggregateDataDialog()
+        {
+
+            ExportRegularBudgetViewModel._settlementVoucherSummaries = _settlementVoucherSummaries;
+            ExportRegularBudgetViewModel._settlementVouchers = _settlementVouchers;
+            ExportRegularBudgetViewModel.TabIndex = TabIndex;
+            ExportRegularBudgetViewModel.AggregateAgency = _aggregateAgency;
+            ExportRegularBudgetViewModel.Init();
+            View.Budget.Settlement.RegularBudget.ExportRegularBudget.ExportRegularBudget addView = new View.Budget.Settlement.RegularBudget.ExportRegularBudget.ExportRegularBudget() { DataContext = ExportRegularBudgetViewModel };
+            DialogHost.Show(addView, SettlementScreen.ROOT_DIALOG, null, null);
+        }
+
+        /// <summary>
+        /// Xuất excel chứng từ tổng hợp
+        /// </summary>
+        private void OnExportAggregateData()
+        {
+            try
+            {
+                if (TabIndex == ImportTabIndex.Aggregate)
+                {
+                    if (_settlementVoucherSummaries.Where(s => s.Selected).Count() < 1)
+                    {
+                        MessageBoxHelper.Info(Resources.IsCheckbox);
+                        return;
+                    }
+                }
+                else
+                {
+                    if (_settlementVouchers.Where(s => s.Selected).Count() < 1)
+                    {
+                        MessageBoxHelper.Info(Resources.IsCheckbox);
+                        return;
+                    }
+                }
+
+                BackgroundWorkerHelper.Run((s, e) =>
+                {
+                    IsLoading = true;
+
+                    List<ExportResult> results = new List<ExportResult>();
+                    string templateFileName = Path.Combine(ExportPrefix.PATH_TL_QUYETTOAN, ExportFileName.RPT_NS_QUYETTOAN_CHUNGTU_TONGHOP);
+                    string fileNamePrefix;
+                    string fileNameWithoutExtension;
+
+                    string donVi1 = _danhMucService.FindDonViQuanLy(_sessionService.Current.YearOfWork).ToUpper();
+                    string donVi2 = _sessionInfo.TenDonVi;
+
+                    if (TabIndex == ImportTabIndex.Aggregate)
+                    {
+                        List<SettlementVoucherModel> settlementVouchers = _settlementVoucherSummaries.Where(x => x.Selected && IsDonViRoot(x.IIdMaDonVi)).ToList();
+                        foreach (SettlementVoucherModel item in settlementVouchers)
+                        {
+                            _settlementVoucherDetailExports = GetSettlementVoucherDetail(item);
+                            CalculateData();
+                            _settlementVoucherDetailExports = _settlementVoucherDetailExports.Where(x => x.FDuToan != 0 || x.FDaQuyetToan != 0
+                                                                || x.FTuChiDeNghi != 0 || x.FTuChiPheDuyet != 0
+                                                                || x.FSoNgay != 0 || x.FSoNguoi != 0 || x.FSoLuot != 0
+                                                                || x.FChuyenNamSauChuaCap.GetValueOrDefault() != 0
+                                                                || x.FChuyenNamSauDaCap.GetValueOrDefault() != 0
+                                                                || x.FDeNghiChuyenNamSau != 0).OrderBy(x => x.SXauNoiMa).ToList();
+                            _settlementVoucherDetailExports.ForEach(x => x.FTuChiDeNghi = x.FTuChiPheDuyet);
+                            RptQuyetToanChungTuTongHop ctTongHop = new RptQuyetToanChungTuTongHop
+                            {
+                                DonVi1 = donVi1,
+                                DonVi2 = donVi2,
+                                TieuDe1 = "Chứng từ tổng hợp",
+                                TieuDe2 = "Quyết toán ngân sách thường xuyên",
+                                ThoiGian = string.Format("Ngày chứng từ: {0}", item.DNgayChungTu.ToString("dd/MM/yyyy")),
+                                Items = _settlementVoucherDetailExports,
+                                MLNS = _mucLucNganSachService.FindAll(_sessionInfo.YearOfWork).ToList()
+                            };
+                            Dictionary<string, object> data = new Dictionary<string, object>();
+                            foreach (System.Reflection.PropertyInfo prop in ctTongHop.GetType().GetProperties())
+                            {
+                                data.Add(prop.Name, prop.GetValue(ctTongHop));
+                            }
+
+                            fileNamePrefix = item.SSoChungTu;
+                            fileNameWithoutExtension = StringUtils.CreateExportFileName(fileNamePrefix + "_" + item.STenDonVi);
+                            FlexCel.Core.ExcelFile xlsFile = _exportService.Export<SettlementVoucherDetailModel, NsMucLucNganSach>(templateFileName, data);
+                            results.Add(new ExportResult(fileNameWithoutExtension, fileNameWithoutExtension, null, xlsFile));
+                        }
+                    }
+                    else if (TabIndex == ImportTabIndex.Data)
+                    {
+                        List<SettlementVoucherModel> settlementVouchers = _settlementVouchers.Where(x => x.Selected).ToList();
+                        foreach (SettlementVoucherModel item in settlementVouchers)
+                        {
+                            _settlementVoucherDetailExports = GetSettlementVoucherDetail(item);
+                            CalculateData();
+                            _settlementVoucherDetailExports = _settlementVoucherDetailExports.Where(x => x.FDuToan != 0 || x.FDaQuyetToan != 0
+                                                                || x.FTuChiDeNghi != 0 || x.FTuChiPheDuyet != 0
+                                                                || x.FSoNgay != 0 || x.FSoNguoi != 0 || x.FSoLuot != 0
+                                                                || x.FChuyenNamSauChuaCap.GetValueOrDefault() != 0
+                                                                || x.FChuyenNamSauDaCap.GetValueOrDefault() != 0
+                                                                || x.FDeNghiChuyenNamSau != 0).OrderBy(x => x.SXauNoiMa).ToList();
+                            _settlementVoucherDetailExports.ForEach(x => x.FTuChiDeNghi = x.FTuChiPheDuyet);
+                            RptQuyetToanChungTuTongHop ctTongHop = new RptQuyetToanChungTuTongHop
+                            {
+                                DonVi1 = donVi1,
+                                DonVi2 = donVi2,
+                                TieuDe1 = "Chứng từ",
+                                TieuDe2 = "Quyết toán ngân sách thường xuyên",
+                                ThoiGian = string.Format("Ngày chứng từ: {0}", item.DNgayChungTu.ToString("dd/MM/yyyy")),
+                                Items = _settlementVoucherDetailExports,
+                                MLNS = _mucLucNganSachService.FindAll(_sessionInfo.YearOfWork).ToList()
+                            };
+                            Dictionary<string, object> data = new Dictionary<string, object>();
+                            foreach (System.Reflection.PropertyInfo prop in ctTongHop.GetType().GetProperties())
+                            {
+                                data.Add(prop.Name, prop.GetValue(ctTongHop));
+                            }
+
+                            fileNamePrefix = item.SSoChungTu;
+                            fileNameWithoutExtension = StringUtils.CreateExportFileName(fileNamePrefix + "_" + item.STenDonVi);
+                            FlexCel.Core.ExcelFile xlsFile = _exportService.Export<SettlementVoucherDetailModel, NsMucLucNganSach>(templateFileName, data);
+                            results.Add(new ExportResult(fileNameWithoutExtension, fileNameWithoutExtension, null, xlsFile));
+                        }
+                    }
+
+
+                    e.Result = results;
+                }, (s, e) =>
+                {
+                    if (e.Error == null)
+                    {
+                        List<ExportResult> result = (List<ExportResult>)e.Result;
+                        _exportService.OpenEncrypt(result, ExportType.EXCEL);
+                    }
+                    else
+                    {
+                        _logger.Error(e.Error.Message);
+                    }
+                    IsLoading = false;
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+            }
+        }
+
+        private List<SettlementVoucherDetailModel> GetSettlementVoucherDetail(SettlementVoucherModel settlementVoucher)
+        {
+            SettlementVoucherDetailSearch searchCondition = new SettlementVoucherDetailSearch
+            {
+                VoucherId = settlementVoucher.Id,
+                LNS = string.Join(",", settlementVoucher.SDslns),
+                YearOfWork = _sessionInfo.YearOfWork,
+                YearOfBudget = _sessionInfo.YearOfBudget,
+                Type = settlementVoucher.SLoai,
+                BudgetSource = _sessionInfo.Budget,
+                AgencyId = settlementVoucher.IIdMaDonVi,
+                VoucherDate = settlementVoucher.DNgayChungTu,
+                UserName = _sessionInfo.Principal,
+                QuarterMonth = settlementVoucher.IThangQuy.ToString(),
+            };
+            List<QtChungTuChiTietQuery> listChungTuChiTiet = _chungTuChiTietService.FindByCondition(searchCondition);
+            return _mapper.Map<List<SettlementVoucherDetailModel>>(listChungTuChiTiet);
+        }
+
+
+        private List<SettlementVoucherDetailModel> GetSettlementVoucherDetailDepartment(SettlementVoucherModel settlementVoucher, string department)
+        {
+            IEnumerable<string> listMlns = _mucLucNganSachService.FindByCondition(n => n.NamLamViec == _sessionInfo.YearOfWork && n.IdPhongBan == department).Select(n => n.Lns);
+            IEnumerable<string> listLns = settlementVoucher.SDslns.Split(StringUtils.COMMA).Where(x => listMlns.Contains(x));
+            SettlementVoucherDetailSearch searchCondition = new SettlementVoucherDetailSearch
+            {
+                VoucherId = settlementVoucher.Id,
+                LNS = string.Join(",", listLns),
+                YearOfWork = _sessionInfo.YearOfWork,
+                YearOfBudget = _sessionInfo.YearOfBudget,
+                Type = settlementVoucher.SLoai,
+                BudgetSource = _sessionInfo.Budget,
+                AgencyId = settlementVoucher.IIdMaDonVi,
+                VoucherDate = settlementVoucher.DNgayChungTu,
+                UserName = _sessionInfo.Principal,
+                QuarterMonth = settlementVoucher.IThangQuy.ToString(),
+            };
+            List<QtChungTuChiTietQuery> listChungTuChiTiet = _chungTuChiTietService.FindByCondition(searchCondition);
+            return _mapper.Map<List<SettlementVoucherDetailModel>>(listChungTuChiTiet);
+        }
+
+        private void OnImportData()
+        {
+            int voucherNoIndex = _chungTuService.CreateVoucherIndex(_condition);
+            SettlementImportViewModel.VoucherNoIndex = voucherNoIndex;
+            SettlementImportViewModel.SettlementImportType = SettlementType.REGULAR_BUDGET;
+            SettlementImportViewModel.SavedAction = obj =>
+            {
+                _settlementImportView.Close();
+                OnRefresh();
+                OpenRegularBudgetDetailDialog((SettlementVoucherModel)obj);
+            };
+            SettlementImportViewModel.Init();
+            _settlementImportView = new SettlementImport { DataContext = SettlementImportViewModel };
+            _settlementImportView.ShowDialog();
+        }
+
+        private void CalculateData()
+        {
+            // Reset value parrent
+            _settlementVoucherDetailExports.Where(x => x.IsHangCha)
+                .Select(x => { x.FDuToan = x.FDuToanOrigin != 0 ? x.FDuToanOrigin : 0; x.FDaQuyetToan = 0; x.FDaQuyetToan = 0; x.FTuChiDeNghi = 0; x.FTuChiPheDuyet = 0; x.FSoNgay = 0; x.FSoNguoi = 0; x.FSoLuot = 0; x.FChuyenNamSauDaCap = 0; x.FDeNghiChuyenNamSau = 0; return x; }).ToList();
+            // Caculate value child
+            foreach (SettlementVoucherDetailModel item in _settlementVoucherDetailExports.Where(x => x.FDuToanOrigin != 0 || (x.IsEditable && (x.FDaQuyetToan != 0 || x.FTuChiPheDuyet != 0 || x.FTuChiDeNghi != 0 || x.FSoLuot != 0 || x.FSoNgay != 0 || x.FSoNguoi != 0 || x.FChuyenNamSauDaCap.GetValueOrDefault() != 0 || x.FChuyenNamSauChuaCap.GetValueOrDefault() != 0 || x.FDeNghiChuyenNamSau != 0))))
+            {
+                CalculateParent(item, item);
+            }
+        }
+
+        private void CalculateParent(SettlementVoucherDetailModel currentItem, SettlementVoucherDetailModel selfItem)
+        {
+            SettlementVoucherDetailModel parentItem = _settlementVoucherDetailExports.Where(x => x.IIdMlns == currentItem.IIdMlnsCha).FirstOrDefault();
+            if (parentItem == null) return;
+            if (selfItem.FDuToanOrigin != 0)
+                parentItem.FDuToan += selfItem.FDuToan;
+            if (parentItem.FDuToan != 0 && currentItem.FDuToan == 0)
+            {
+                currentItem.IsCalculateConLai = false;
+                OnPropertyChanged(nameof(currentItem.FConLai));
+            }
+            parentItem.FDaQuyetToan += selfItem.FDaQuyetToan;
+            parentItem.FTuChiDeNghi += selfItem.FTuChiDeNghi;
+            parentItem.FTuChiPheDuyet += selfItem.FTuChiPheDuyet;
+            parentItem.FSoLuot += selfItem.FSoLuot;
+            parentItem.FDeNghiChuyenNamSau += selfItem.FDeNghiChuyenNamSau;
+            parentItem.FChuyenNamSauDaCap += selfItem.FChuyenNamSauDaCap.GetValueOrDefault();
+            CalculateParent(parentItem, selfItem);
+        }
+
+        /*
+         *  Thêm popup chọn tiêu chí để gửi dữ liệu
+         */
+        private async void OnUploadDialog(bool isSendHTTP)
+        {
+            //if (!SettlementVoucherSummaries.Any(n => n.Selected) || SettlementVoucherSummaries.Where(n => n.Selected).Count() > 1)
+            //{
+            //    StringBuilder messageBuilder = new StringBuilder();
+            //    messageBuilder.AppendFormat("Vui lòng chọn duy nhất 1 bản ghi !");
+            //    MessageBox.Show(messageBuilder.ToString());
+            //    return;
+            //}
+            if (SettlementVoucherSummaries.Any(n => n.Selected))
+            {
+                string referenceQuarter = GetQuarter(SettlementVoucherSummaries.Where(n => n.Selected).FirstOrDefault().IThangQuy);
+                foreach (SettlementVoucherModel item in SettlementVoucherSummaries.Where(n => n.Selected))
+                {
+                    if (GetQuarter(item.IThangQuy) != referenceQuarter)
+                    {
+                        StringBuilder messageBuilder = new StringBuilder();
+                        messageBuilder.AppendFormat("Vui lòng chọn các bản ghi cùng 1 quý!");
+                        MessageBox.Show(messageBuilder.ToString());
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                StringBuilder messageBuilder = new StringBuilder();
+                messageBuilder.AppendFormat("Vui lòng chọn ít nhất 1 bản ghi !");
+                MessageBox.Show(messageBuilder.ToString());
+                return;
+            }
+            IsLoading = true;
+            try
+            {
+                (int, string) info = await _hTTPUploadFileService.GetToken(isSendHTTP);
+                if (info.Item1 != 200)
+                {
+                    IsLoading = false;
+                    new NSMessageBoxViewModel(info.Item2).ShowDialogHost();
+                    return;
+                }
+                else if (string.IsNullOrEmpty(info.Item2))
+                {
+                    IsLoading = false;
+                    new NSMessageBoxViewModel("Cấu hình sai đường dẫn hoặc cổng HTTP").ShowDialogHost();
+                    return;
+                }
+            }
+            catch (ConfigurationErrorsException)
+            {
+                IsLoading = false;
+                new NSMessageBoxViewModel("Cấu hình sai đường dẫn hoặc cổng HTTP").ShowDialogHost();
+                return;
+            }
+            SendDataRegularBudgetViewModel._settlementVoucherSummaries = _settlementVoucherSummaries;
+            SendDataRegularBudgetViewModel._settlementVouchers = _settlementVouchers;
+            SendDataRegularBudgetViewModel.TabIndex = TabIndex;
+            SendDataRegularBudgetViewModel.IsSendHTTP = isSendHTTP;
+            SendDataRegularBudgetViewModel.Init();
+            SendDataRegularBudgetViewModel.ClosePopup += RefreshAfterClosePopupSendData;
+            View.Budget.Settlement.RegularBudget.SendDataRegularBudget.SendDataRegularBudget addView = new View.Budget.Settlement.RegularBudget.SendDataRegularBudget.SendDataRegularBudget() { DataContext = SendDataRegularBudgetViewModel };
+            IsLoading = false;
+            DialogHost.Show(addView, SettlementScreen.ROOT_DIALOG, null, null);
+        }
+
+        private void RefreshAfterClosePopupSendData(object sender, EventArgs e)
+        {
+            DialogHost.CloseDialogCommand.Execute(null, null);
+            OnRefresh();
+        }
+
+        private string GetQuarter(int thang)
+        {
+            if (thang >= 1 && thang <= 3)
+            {
+                return "1,2,3";
+            }
+            else if (thang >= 4 && thang <= 6)
+            {
+                return "4,5,6";
+            }
+            else if (thang >= 7 && thang <= 9)
+            {
+                return "7,8,9";
+            }
+            else if (thang >= 10 && thang <= 12)
+            {
+                return "10,11,12";
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        //private async Task OnUpload()
+        //{
+        //    var departments = _phongBanService.FindByCondition(x => x.INamLamViec == _sessionInfo.YearOfWork).Select(n => n.IIDMaBQuanLy);
+        //    try
+        //    {
+        //        if (!SettlementVoucherSummaries.Any(n => n.Selected) || SettlementVoucherSummaries.Where(n => n.Selected).Count() > 1)
+        //        {
+        //            StringBuilder messageBuilder = new StringBuilder();
+        //            messageBuilder.AppendFormat("Vui lòng chọn duy nhất 1 bản ghi !");
+        //            MessageBox.Show(messageBuilder.ToString());
+        //            return;
+        //        }
+
+        //        string templateFileName = Path.Combine(ExportPrefix.PATH_TL_QUYETTOAN, ExportFileName.RPT_NS_QUYETTOAN_CHUNGTU_TONGHOP);
+        //        string fileNamePrefix;
+        //        string fileNameWithoutExtension;
+
+        //        string donVi1 = _danhMucService.FindDonViQuanLy(_sessionService.Current.YearOfWork).ToUpper();
+        //        string donVi2 = _sessionInfo.TenDonVi;
+        //        var item = _settlementVoucherSummaries.FirstOrDefault(x => x.Selected && IsDonViRoot(x.IIdMaDonVi));
+        //        string token = await _hTTPUploadFileService.GetToken();
+        //        string salt = _cryptographyService.GetSalt();
+        //        string tokenKey = Scramble(token + salt);
+        //        int count = 0;
+
+        //        foreach (var department in departments)
+        //        {
+        //            _settlementVoucherDetailExports = GetSettlementVoucherDetailDepartment(item, department);
+        //            if (!_settlementVoucherDetailExports.Any())
+        //            {
+        //                count++;
+        //                continue;
+        //            }
+        //            CalculateData();
+        //            _settlementVoucherDetailExports = _settlementVoucherDetailExports.Where(x => x.FDuToan != 0 || x.FDaQuyetToan != 0
+        //                                                || x.FTuChiDeNghi != 0 || x.FTuChiPheDuyet != 0
+        //                                                || x.FSoNgay != 0 || x.FSoNguoi != 0 || x.FSoLuot != 0).OrderBy(x => x.SXauNoiMa).ToList();
+        //            _settlementVoucherDetailExports.ForEach(x => x.FTuChiDeNghi = x.FTuChiPheDuyet);
+        //            RptQuyetToanChungTuTongHop ctTongHop = new RptQuyetToanChungTuTongHop
+        //            {
+        //                DonVi1 = donVi1,
+        //                DonVi2 = donVi2,
+        //                TieuDe1 = "Chứng từ tổng hợp",
+        //                TieuDe2 = "Quyết toán ngân sách thường xuyên",
+        //                ThoiGian = string.Format("Ngày chứng từ: {0}", item.DNgayChungTu.ToString("dd/MM/yyyy")),
+        //                Items = _settlementVoucherDetailExports,
+        //                MLNS = _mucLucNganSachService.FindAll(_sessionInfo.YearOfWork).ToList()
+        //            };
+        //            Dictionary<string, object> data = new Dictionary<string, object>();
+        //            foreach (var prop in ctTongHop.GetType().GetProperties())
+        //            {
+        //                data.Add(prop.Name, prop.GetValue(ctTongHop));
+        //            }
+
+        //            fileNamePrefix = item.SSoChungTu;
+        //            fileNameWithoutExtension = StringUtils.CreateExportFileName(fileNamePrefix + "_" + item.STenDonVi);
+        //            var xlsFile = _exportService.Export<SettlementVoucherDetailModel, NsMucLucNganSach>(templateFileName, data);
+        //            var Result = new ExportResult(fileNameWithoutExtension, fileNameWithoutExtension, null, xlsFile);
+
+        //            var sStage = "thang-" + item.IThangQuy;
+        //            var sMaDonVi = $"{item.IIdMaDonVi}-{StringUtils.UCS2Convert(item.STenDonVi)}";
+
+        //            var fileStream = new MemoryStream();
+        //            var outputFileStream = new MemoryStream();
+        //            _exportService.Open(Result, ref fileStream);
+
+        //            await _cryptographyService.EncryptFile(fileStream, ref outputFileStream, tokenKey);
+        //            await _hTTPUploadFileService.UploadFile(new FileUploadStreamModel()
+        //            {
+        //                File = outputFileStream,
+        //                Name = fileNameWithoutExtension + FileExtensionFormats.Security,
+        //                Description = "Chứng từ tổng hợp",
+        //                Module = NSFunctionCode.BUDGET,
+        //                ModuleName = "Ngân sách",
+        //                SubModule = NSFunctionCode.BUDGET_SETTLEMENT_DEFENSE_BUDGET,
+        //                SubModuleName = "Quyết toán ngân sách quốc phòng",
+        //                TokenKey = tokenKey,
+        //                YearOfWork = _sessionInfo.YearOfWork,
+        //                YearOfBudget = _sessionInfo.YearOfBudget,
+        //                SourceOfBudget = _sessionInfo.Budget,
+        //                Department = department,
+        //                Quarter = (item.IThangQuyLoai == (int)QuarterMonth.MONTH) ? item.IThangQuy.ToString() : string.Join(",", CreateThangFromQuy(item.IThangQuy))
+        //            });
+        //        }
+
+        //        if (departments.Count() == count)
+        //        {
+        //            MessageBox.Show(new StringBuilder("Không có dữ liệu gửi").ToString());
+        //            return;
+        //        }
+
+        //        MessageBox.Show(new StringBuilder("Gửi dữ liệu thành công").ToString());
+        //        return;
+
+        //        /*
+        //        string sFolderRoot = ConstantUrlPathPhanHe.UrlQtnsWinformReceive;
+        //        var strUrl = string.Format("{0}/{1}/{2}", sMaDonVi, sFolderRoot, sStage);
+        //        if (!File.Exists(strUrl))
+        //        {
+        //            string strActiveFileName = "";
+        //            string[] splitActiveFiName = xlsFile.ActiveFileName.Split("\\");
+        //            if (strActiveFileName != null && splitActiveFiName.Length != 0)
+        //            {
+        //                strActiveFileName = splitActiveFiName[splitActiveFiName.Length - 1];
+        //            }
+        //            VdtFtpRoot dataRoot = new VdtFtpRoot();
+        //            List<string> configCodes = new List<string>()
+        //            {
+        //                STORAGE_CONFIG.FTP_HOST
+        //            };
+        //            var rs = _danhMucService.FindByCodes(configCodes).ToList();
+        //            var SIpAddress = rs.FirstOrDefault(x => STORAGE_CONFIG.FTP_HOST.Equals(x.IIDMaDanhMuc)).SGiaTri;
+        //            // Lấy ra 1 bản ghi trong bảng VDT_FtpRoot để kiểm tra xem đã tồn tại hay chưa.
+        //            dataRoot = _ftpService.GetVdtFtpRoot(sMaDonVi, SIpAddress, sFolderRoot);
+        //            if (dataRoot == null)
+        //            {
+        //                dataRoot = new VdtFtpRoot()
+        //                {
+        //                    SMaDonVi = sMaDonVi,
+        //                    SIpAddress = SIpAddress, // vd: ftp:\\10.60.108.246
+        //                    SFolderRoot = sFolderRoot,
+        //                    SNguoiTao = _sessionService.Current.Principal,
+        //                    DNgayTao = DateTime.Now
+        //                };
+        //                _ftpService.Add(dataRoot);
+        //            }
+        //            var result = _ftpStorageService.UploadCommand(dataRoot.Id, filePathLocal, strActiveFileName, strUrl);
+        //            if (result != 1)
+        //            {
+        //                StringBuilder messageBuilder = new StringBuilder();
+        //                messageBuilder.AppendFormat("Gửi dữ liệu thất bại");
+        //                MessageBox.Show(messageBuilder.ToString());
+        //                return;
+        //            }
+        //            else
+        //            {
+        //                StringBuilder messageBuilder = new StringBuilder();
+        //                messageBuilder.AppendFormat("Gửi dữ liệu thành công");
+        //                MessageBox.Show(messageBuilder.ToString());
+        //                return;
+        //            }
+
+        //        }
+        //        */
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(new StringBuilder("Gửi dữ liệu thất bại").ToString());
+        //        _logger.Error(ex.Message, ex);
+        //        return;
+        //    }
+        //}
+
+        private IEnumerable<int> CreateThangFromQuy(int quy)
+        {
+            int i = 3;
+            while (i > 0)
+            {
+                yield return quy + 1 - (i--);
+            }
+        }
+        private string Scramble(string s)
+        {
+            return new string(s.ToCharArray().OrderBy(x => Guid.NewGuid()).ToArray());
+        }
+
+
+        private void OnImportJson()
+        {
+            SettlementImportJsonViewModel.Init();
+            SettlementImportJsonViewModel.SLoai = SettlementType.REGULAR_BUDGET;
+            SettlementImportJsonViewModel.SavedAction = obj =>
+            {
+                OnRefresh();
+                _importJsonView.Close();
+            };
+            _importJsonView = new SettlementImportJson { DataContext = SettlementImportJsonViewModel };
+            _importJsonView.Show();
+        }
+
+        private void OnExportJson()
+        {
+            if (!SettlementVouchers.Any(n => n.Selected))
+            {
+                MessageBoxHelper.Error(Resources.MsgRecordEmpty);
+                return;
+            }
+            List<NsQtChungTu> lstData = _chungTuService.GetDataExportJson(SettlementVouchers.Where(n => n.Selected).Select(n => n.Id).ToList());
+            _exportService.OpenJson(lstData);
+        }
+    }
+}

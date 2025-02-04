@@ -1,0 +1,1429 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.SocialInsurance.SocialInsuranceEstimate.DieuChinhDuToanThu.DieuChinhDuToanThuDetail"
+        x:Name="DetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.SocialInsurance.SocialInsuranceEstimate"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+        xmlns:localEnumSystem="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:extensions="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        xmlns:compt="clr-namespace:VTS.QLNS.CTC.App.Component"
+        xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+        xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        xmlns:DieuChinhDuToanThu="clr-namespace:VTS.QLNS.CTC.App.ViewModel.SocialInsurance.SocialInsuranceEstimate.DieuChinhDuToanThu"
+        d:DataContext="{d:DesignInstance Type=DieuChinhDuToanThu:DieuChinhDuToanThuDetailViewModel}"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Style="{StaticResource MaterialDesignWindow}"   
+        Title="Quản lý thu chi bảo hiểm - Điều chỉnh DT thu BHXH, BHYT, BHTN"
+        Height="450"
+        Width="800">
+    <Window.InputBindings>
+        <!--<KeyBinding Key="F4"
+                    Command="{Binding DeleteCommand}"
+                    CommandParameter="{Binding ElementName=DgLapKeHoachChiDetail, Path=.}" />-->
+        <KeyBinding Key="F10"
+                    Command="{Binding SaveCommand}" />
+        <KeyBinding Key="F5"
+                    Command="{Binding RefreshCommand}" />
+    </Window.InputBindings>
+    <materialDesign:DialogHost Identifier="{x:Static localEnumSystem:SystemConstants.DETAIL_DIALOG}"
+                               DialogTheme="Inherit">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0"
+                        Orientation="Vertical">
+                <DockPanel>
+                    <materialDesign:PackIcon Kind="Dollar"
+                                             Style="{StaticResource DialogScreenIconStyle}" />
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="CHI TIẾT"
+                                   FontWeight="Bold" />
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="Năm làm việc: {0} | Số: {1} - Ngày: {2} - Đơn vị: {3}">
+                                    <Binding Path="Model.INamLamViec" />
+                                    <Binding Path="Model.SSoChungTu" />
+                                    <Binding Path="Model.DNgayChungTu"
+                                             Converter="{StaticResource DateTimeToStringConverter}" />
+                                    <Binding Path="Model.STenDonVi" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                </DockPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}" />
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding Model.BIsKhoa, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                        <Button Style="{StaticResource SearchBarBtnStyle}"
+                                IsEnabled="{Binding IsSaveData}"
+                                Command="{Binding SaveCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ContentSave" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Lưu dữ liệu (F10)" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    </StackPanel>
+                    <Button extensions:Permission.Identifier="BUDGET_ESTIMATE_DIVISION_DETAIL_BTN_LOCK"
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding LockUnLockCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="{Binding Model.BIsKhoa, Converter={StaticResource InvertBooleanToLockIconConverter}}" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       x:Name="TblLock"
+                                       Text="{Binding Model.BIsKhoa, Converter={StaticResource InvertBooleanToLockStatusConverter}}" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button Style="{StaticResource SearchBarBtnStyle}"
+                            ToolTip="Refresh"
+                            Command="{Binding RefreshCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Tải lại (F5)" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button x:Name="btnPrint"
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding PrintCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Printer" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">In báo cáo</TextBlock>
+                            <materialDesign:PopupBox Margin="-10,0,0,0"
+                                                     HorizontalAlignment="Right"
+                                                     IsPopupOpen="{Binding IsOpenPrintPopup, Mode=TwoWay}">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel>
+                                    <Button Command="{Binding PrintCommand}"
+                                            CommandParameter="{x:Static localEnum:ReportDtDcDtType.DTDCCT}"
+                                            Content="Báo cáo điều chỉnh dự toán thu BHXH, BHYT, BHTN" />
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding IsVoucherSummary, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <ComboBox materialDesign:HintAssist.Hint="-- Cách hiển thị dữ liệu --"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedValuePath="ValueItem"
+                                  ItemsSource="{Binding TypeShowAgencyBHXH}"
+                                  SelectedItem="{Binding SelectedTypeShowAgencyBHXH, UpdateSourceTrigger=PropertyChanged}"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    </StackPanel>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button x:Name="btnShowCol"
+                            Style="{StaticResource SearchBarBtnStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Ẩn/hiện cột" />
+                            <materialDesign:PopupBox Name="pbDynamicColumn"
+                                                     Margin="-10 0 0 0"
+                                                     HorizontalAlignment="Right"
+                                                     StaysOpen="True">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <ComboBox Name="cbFrozenColumn"
+                              materialDesign:HintAssist.Hint="Cố định cột"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem" />
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding IsShowAgencyFilter, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <ComboBox materialDesign:HintAssist.Hint="-- Đơn vị --"
+                                  materialDesign:TextFieldAssist.HasClearButton="True"
+                                  DisplayMemberPath="DisplayItem"
+                                  SelectedItem="{Binding SelectedAgency}"
+                                  ItemsSource="{Binding Agencies}"
+                                  Style="{StaticResource SearchBarHorizontalComboBoxStyle}" />
+                    </StackPanel>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Visibility="{Binding IsVisibilityGetSettlement, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button x:Name="btnGetSettlementData"
+                            Visibility="{Binding IsVisibilityGetSettlement, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            IsEnabled="{Binding IsIsEnableSettlement}"
+                            Style="{StaticResource SearchBarBtnStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Printer" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lấy số liệu thực hiện đầu năm (đến tháng/quý)</TextBlock>
+                            <materialDesign:PopupBox Margin="-10,0,0,0" HorizontalAlignment="Right" >
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel>
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.Thang1}" Content="Tháng 1" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.Thang2}" Content="Tháng 2" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.Thang3}" Content="Tháng 3" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.Thang4}" Content="Tháng 4" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.Thang5}" Content="Tháng 5" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.Thang6}" Content="Tháng 6" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.Thang7}" Content="Tháng 7" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.Thang8}" Content="Tháng 8" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.Thang9}" Content="Tháng 9" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.Thang10}" Content="Tháng 10" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.Thang11}" Content="Tháng 11" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.Thang12}" Content="Tháng 12" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.QuyI}" Content="Qúy I" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.QuyII}" Content="Qúy II" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.QuyIII}" Content="Qúy III" />
+                                    <Button Command="{Binding GetSettlementDataCommand}" CommandParameter="{x:Static localEnum:BhDttThagQuyValue.QuyIV}" Content="Qúy IV" />
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding ElementName=DetailWindow}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CloseOutline" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Đóng" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}" />
+
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="2">
+                <TextBox materialDesign:TextFieldAssist.HasClearButton="True"
+                         materialDesign:HintAssist.Hint="Nội dung"
+                         Margin="0 0 -15 0"
+                         Style="{StaticResource SearchBarHorizontalTextBoxStyle}"
+                         Text="{Binding SNoiDungSearch, UpdateSourceTrigger=PropertyChanged }"
+                         Width="{Binding ElementName=SNoiDung, Path=ActualWidth}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding SearchCommand}"
+                                    Key="Return" />
+                    </TextBox.InputBindings>
+                </TextBox>
+                <materialDesign:PopupBox Margin="-10 10 0 0"
+                                         Grid.Column="1"
+                                         HorizontalAlignment="Right"
+                                         StaysOpen="True"
+                                         IsPopupOpen="{Binding IsPopupOpen, Mode=TwoWay}">
+                    <materialDesign:PopupBox.ToggleContent>
+                        <materialDesign:PackIcon Kind="MenuDown" />
+                    </materialDesign:PopupBox.ToggleContent>
+                    <Grid Margin="10"
+                          Height="400">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Row="0"
+                                 materialDesign:HintAssist.Hint="Tìm kiếm"
+                                 Text="{Binding PopupSearchText, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGrid Grid.Row="1"
+                                  Margin="-10 10 0 0"
+                                  Name="dgdPopup"
+                                  ItemsSource="{Binding DataPopupSearchItems}"
+                                  AutoGenerateColumns="False"
+                                  CanUserResizeColumns="True"
+                                  BorderThickness="1"
+                                  SelectedItem="{Binding SelectedPopupItem}"
+                                  CanUserAddRows="False"
+                                  RowStyle="{StaticResource DataGridRowDetail}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nội dung"
+                                                    Binding="{Binding SNoiDung}"
+                                                    IsReadOnly="True" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </materialDesign:PopupBox>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                           Margin="0 0 0 0" />
+                <Button Command="{Binding SearchCommand}"
+                        Style="{StaticResource SearchBarBtnStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Search" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">
+                            Tìm kiếm
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource SearchBarBtnStyle}"
+                        Command="{Binding ClearSearchCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FilterRemoveOutline" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <compt:ExpandedDataGrid x:Name="dgDieuChinhDuToanThuBHXH"
+                                            Margin="0 5 0 0"
+                                            VerticalAlignment="Top"
+                                            BorderThickness="1"
+                                            AutoGenerateColumns="False"
+                                            CanUserResizeColumns="True"
+                                            HorizontalScrollBarVisibility="Auto"
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            GridLinesVisibility="All"
+                                            EnableHeaderDataGrid="True"
+                                            ColumnInfo="{Binding Columns}"
+                                            IsSaveDataGridInfo="False"
+                                            Style="{StaticResource MaterialDesignDataGrid}"
+                                            CellStyle="{StaticResource DataGridCellDetail}"
+                                            RowStyle="{StaticResource DataGridRowDetail}"
+                                            ItemsSource="{Binding Items}"
+                                            ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                                            ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                                            ext:DataGridBehavior.LastColumnFill="True"
+                                            SelectedItem="{Binding SelectedItem}"
+                                            ScrollViewer.ScrollChanged="dgdData_ScrollChanged"
+                                            BeginningEdit="dgdDIeuChinhDTT_BeginningEdit"
+                                            ext:DataGridBehavior.DisplayRowNumber="True">
+                        <DataGrid.Resources>
+                            <helper:BindingProxy x:Key="DataContextProxy"
+                                                 Data="{Binding}" />
+
+                            <Style TargetType="{x:Type DataGridColumnHeadersPresenter}">
+                                <Setter Property="Background"
+                                        Value="{DynamicResource PrimaryHueLightBrush}" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type DataGridColumnHeadersPresenter}">
+                                            <Grid Background="{TemplateBinding Background}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition></RowDefinition>
+                                                    <RowDefinition></RowDefinition>
+                                                    <RowDefinition></RowDefinition>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <!--Row 1-->
+                                                <!--Dự toán được giao đầu năm-->
+                                                <Border HorizontalAlignment="Left"
+                                                        Grid.Row="0"
+                                                        Grid.Column="0"
+                                                        Padding="3"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 1 1 0"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="SNoiDung"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               HorizontalAlignment="Center"></TextBlock>
+                                                </Border>
+
+                                                <Border HorizontalAlignment="Left" Grid.Row="0"
+                                                        Visibility="{Binding Data.IsShowColumnUnit, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        Grid.Column="1"
+                                                        Padding="3"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 1 1 0"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="Agency"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               HorizontalAlignment="Center"></TextBlock>
+                                                </Border>
+
+                                                <Border HorizontalAlignment="Left"
+                                                        Grid.Row="0"
+                                                        Grid.Column="2"
+                                                        Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 1 1 1"
+                                                        Grid.ColumnSpan="6">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHXHNLD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHXHNSD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNLD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNSD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNLD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNSD"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Dự toán giao đầu năm</TextBlock>
+                                                </Border>
+
+                                                <!--Thực hiện 6 tháng đầu năm-->
+                                                <Border HorizontalAlignment="Left"
+                                                        Grid.Row="0"
+                                                        Grid.Column="8"
+                                                        Padding="6"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 1 1 1"
+                                                        Grid.ColumnSpan="6">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHXHNLD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHXHNSD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNLD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNSD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNLD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNSD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thực hiện 6 tháng đầu năm</TextBlock>
+                                                </Border>
+
+                                                <!--Ước thực hiện 6 tháng cuối năm-->
+                                                <Border HorizontalAlignment="Left"
+                                                        Grid.Row="0"
+                                                        Grid.Column="15"
+                                                        Padding="6"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 1 0 1"
+                                                        Grid.ColumnSpan="6">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHXHNLD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHXHNSD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNLD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNSD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNLD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNSD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Ước thực hiện 6 tháng cuối năm</TextBlock>
+                                                </Border>
+
+                                                <!--So sánh-->
+                                                <Border HorizontalAlignment="Left"
+                                                        Grid.Row="0"
+                                                        Grid.Column="21"
+                                                        Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="1 1 1 1"
+                                                        Grid.ColumnSpan="12">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="SSThuBHXHNLDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHXHNSDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHXHNLDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHXHNSDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHYTNLDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHYTNSDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHYTNLDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHYTNSDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHTNNLDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHTNNSDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHTNNLDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHTNNSDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">So sánh</TextBlock>
+                                                </Border>
+
+                                                <!--Row 2-->
+                                                <!--Dự toán được giao đầu năm-->
+                                                <Border Padding="3 12 3 3"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 0"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="0"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="SNoiDung"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Nội dung</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="3 12 3 3" BorderBrush="#DDDDDD"
+                                                        Visibility="{Binding Data.IsShowColumnUnit, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        BorderThickness="0 0 1 0"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="1"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="Agency"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Đơn vị</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="3"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHXHNLD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHXHNSD"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHXH</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="5"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHYTNLD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNSD"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHYT</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="7"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHTNNLD"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNSD"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHTN</TextBlock>
+                                                </Border>
+                                                
+                                                <!--Thực hiện 6 tháng đầu năm-->
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="9"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHXHNLD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHXHNSD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHXH</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="11"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHYTNLD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNSD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHYT</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="13"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHTNNLD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNSD6DN"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHTN</TextBlock>
+                                                </Border>
+
+                                                <!--Ước thực hiện 6 tháng cuối năm-->
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="15"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHXHNLD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHXHNSD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHXH</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="17"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHYTNLD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHYTNSD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHYT</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="19"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="FThuBHTNNLD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="FThuBHTNNSD6CN"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHTN</TextBlock>
+                                                </Border>
+
+                                                <!--So sánh-->
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="21"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="SSThuBHXHNLDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHXHNSDTang"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHXH tăng</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="23"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="SSThuBHXHNLDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHXHNSDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHXH giảm</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="25"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="SSThuBHYTNLDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHYTNSDTang"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHYT tăng</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="27"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="SSThuBHYTNLDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHYTNSDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHYT giảm</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="29"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="SSThuBHTNNLDTang"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHTNNSDTang"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHTN tăng</TextBlock>
+                                                </Border>
+
+                                                <Border Padding="7"
+                                                        BorderBrush="#DDDDDD"
+                                                        BorderThickness="0 0 1 1"
+                                                        HorizontalAlignment="Left"
+                                                        Grid.Row="1"
+                                                        Grid.Column="31"
+                                                        Grid.ColumnSpan="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding ElementName="SSThuBHTNNLDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                        <Binding ElementName="SSThuBHTNNSDGiam"
+                                                                                 Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Foreground="White"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center">Thu BHTN giảm</TextBlock>
+                                                </Border>
+
+                                                <DataGridColumnHeader x:Name="PART_FillerColumnHeader"
+                                                                      Grid.Row="2"
+                                                                      Grid.ColumnSpan="32"
+                                                                      IsHitTestVisible="False" />
+                                                <ItemsPresenter Grid.Row="2"
+                                                                Grid.ColumnSpan="32" />
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.Resources>
+
+                        <!--Row 3-->
+                        <DataGrid.Columns>
+                            <!--<DataGridTextColumn x:Name="SLNS" Header="LNS" ElementStyle="{StaticResource DataGridTextColumnDetailStyle}" Binding="{Binding SLNS}" IsReadOnly="True"/>-->
+                            <DataGridTextColumn x:Name="SNoiDung"
+                                                Header=""
+                                                ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                                Binding="{Binding SNoiDung}"
+                                                IsReadOnly="True" />
+                            <DataGridTextColumn Visibility="{Binding Data.IsShowColumnUnit, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                x:Name="Agency"
+                                                Header=""
+                                                Binding="{Binding STenDonVi}"
+                                                IsReadOnly="True"
+                                                ElementStyle="{StaticResource DataGridTextColumnDetailStyle}" />
+
+                            <!--Dự toán được giao đầu năm-->
+
+                            <compt:DataGridTextColumn x:Name="FThuBHXHNLD"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHXHNLD, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="FThuBHXHNSD"
+                                                      Header="NSD lao động đóng"
+                                                      IsReadOnly="True"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHXHNSD, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <compt:DataGridTextColumn x:Name="FThuBHYTNLD"
+                                                      Header="BHYT NLĐ đóng"
+                                                      Width="Auto"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHYTNLD, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="FThuBHYTNSD"
+                                                      Header="NSD lao động đóng"
+                                                      IsReadOnly="True"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHYTNSD, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <compt:DataGridTextColumn x:Name="FThuBHTNNLD"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHTNNLD, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="FThuBHTNNSD"
+                                                      Header="NSD lao động đóng"
+                                                      IsReadOnly="True"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHTNNSD, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <!--Thực hiện 6 tháng đầu năm-->
+
+                            <compt:DataGridTextColumn x:Name="FThuBHXHNLD6DN"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHXHNLDQTDauNam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="FThuBHXHNSD6DN"
+                                                      Header="NSD lao động đóng"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHXHNSDQTDauNam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <compt:DataGridTextColumn x:Name="FThuBHYTNLD6DN"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHYTNLDQTDauNam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="FThuBHYTNSD6DN"
+                                                      Header="NSD lao động đóng"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHYTNSDQTDauNam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <compt:DataGridTextColumn x:Name="FThuBHTNNLD6DN"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHTNNLDQTDauNam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="FThuBHTNNSD6DN"
+                                                      Header="NSD lao động đóng"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHTNNSDQTDauNam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <!--Ước thực hiện 6 tháng cuối năm-->
+
+                            <compt:DataGridTextColumn x:Name="FThuBHXHNLD6CN"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHXHNLDQTCuoiNam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="FThuBHXHNSD6CN"
+                                                      Header="NSD lao động đóng"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHXHNSDQTCuoiNam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <compt:DataGridTextColumn x:Name="FThuBHYTNLD6CN"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHYTNLDQTCuoiNam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="FThuBHYTNSD6CN"
+                                                      Header="NSD lao động đóng"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHYTNSDQTCuoiNam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <compt:DataGridTextColumn x:Name="FThuBHTNNLD6CN"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHTNNLDQTCuoiNam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="FThuBHTNNSD6CN"
+                                                      Header="NSD lao động đóng"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHTNNSDQTCuoiNam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            
+                            <!--So sánh-->
+                            
+                            <compt:DataGridTextColumn x:Name="SSThuBHXHNLDTang"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHXHNLDTang, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="SSThuBHXHNSDTang"
+                                                      Header="NSD lao động đóng"
+                                                      IsReadOnly="True"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHXHNSDTang, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <compt:DataGridTextColumn x:Name="SSThuBHXHNLDGiam"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHXHNLDGiam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="SSThuBHXHNSDGiam"
+                                                      Header="NSD lao động đóng"
+                                                      IsReadOnly="True"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHXHNSDGiam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <compt:DataGridTextColumn x:Name="SSThuBHYTNLDTang"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHYTNLDTang, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="SSThuBHYTNSDTang"
+                                                      Header="NSD lao động đóng"
+                                                      IsReadOnly="True"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHYTNSDTang, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <compt:DataGridTextColumn x:Name="SSThuBHYTNLDGiam"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHYTNLDGiam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="SSThuBHYTNSDGiam"
+                                                      Header="NSD lao động đóng"
+                                                      IsReadOnly="True"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHYTNSDGiam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <compt:DataGridTextColumn x:Name="SSThuBHTNNLDTang"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHTNNLDTang, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="SSThuBHTNNSDTang"
+                                                      Header="NSD lao động đóng"
+                                                      IsReadOnly="True"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHTNNSDTang, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                            <compt:DataGridTextColumn x:Name="SSThuBHTNNLDGiam"
+                                                      Header="NLĐ đóng"
+                                                      Width="Auto"
+                                                      IsReadOnly="True"
+                                                      Binding="{Binding FThuBHTNNLDGiam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                            <compt:DataGridTextColumn x:Name="SSThuBHTNNSDGiam"
+                                                      Header="NSD lao động đóng"
+                                                      IsReadOnly="True"
+                                                      Width="Auto"
+                                                      Binding="{Binding FThuBHTNNSDGiam, Converter={ StaticResource NumberToStringEmptyConverter}, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                                                      ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                      EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+
+                        </DataGrid.Columns>
+                    </compt:ExpandedDataGrid>
+                </Grid>
+                <ScrollViewer Grid.Row="1"
+                              x:Name="scrollFooter"
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollBarVisibility="Hidden">
+                    <StackPanel Orientation="Horizontal">
+                        <Grid Width="{Binding ElementName=SLNS, Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SLNS, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=SNoiDung, Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SNoiDung, Path=Visibility}"></Grid>
+
+                        <Grid Width="{Binding ElementName=FThuBHXHNLD,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHXHNLD, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHXHNLD, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHXHNSD,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHXHNSD, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHXHNSD, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHYTNLD,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHYTNLD, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHYTNLD, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHYTNSD,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHYTNSD, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHYTNSD, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHTNNLD,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHTNNLD, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHTNNLD, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHTNNSD,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHTNNSD, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHTNNSD, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+
+                        <Grid Width="{Binding ElementName=FThuBHXHNLD6DN,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHXHNLD6DN, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHXHNLDQTDauNam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHXHNSD6DN,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHXHNSD6DN, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHXHNSDQTDauNam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHYTNLD6DN,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHYTNLD6DN, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHYTNLDQTDauNam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHYTNSD6DN,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHYTNSD6DN, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHYTNSDQTDauNam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHTNNLD6DN,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHTNNLD6DN, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHTNNLDQTDauNam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHTNNSD6DN,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHTNNSD6DN, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHTNNSDQTDauNam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+
+                        <Grid Width="{Binding ElementName=FThuBHXHNLD6CN,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHXHNLD6CN, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHXHNLDQTCuoiNam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHXHNSD6CN,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHXHNSD6CN, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHXHNSDQTCuoiNam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHYTNLD6CN,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHYTNLD6CN, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHYTNLDQTCuoiNam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHYTNSD6CN,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHYTNSD6CN, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHYTNSDQTCuoiNam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHTNNLD6CN,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHTNNLD6CN, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHTNNLDQTCuoiNam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=FThuBHTNNSD6CN,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=FThuBHTNNSD6CN, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHTNNSDQTCuoiNam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+
+                        <Grid Width="{Binding ElementName=SSThuBHXHNLDTang,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SSThuBHXHNLDTang, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHXHNLDTang, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=SSThuBHXHNSDTang,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SSThuBHXHNSDTang, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHXHNSDTang, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=SSThuBHXHNLDGiam,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SSThuBHXHNLDGiam, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHXHNLDGiam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=SSThuBHXHNSDGiam,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SSThuBHXHNSDGiam, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHXHNSDGiam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=SSThuBHYTNLDTang,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SSThuBHYTNLDTang, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHYTNLDTang, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=SSThuBHYTNSDTang,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SSThuBHYTNSDTang, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHYTNSDTang, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+
+                        <Grid Width="{Binding ElementName=SSThuBHYTNLDGiam,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SSThuBHYTNLDGiam, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHYTNLDGiam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=SSThuBHYTNSDGiam,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SSThuBHYTNSDGiam, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHYTNSDGiam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=SSThuBHTNNLDTang,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SSThuBHTNNLDTang, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHTNNLDTang, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=SSThuBHTNNSDTang,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SSThuBHTNNSDTang, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHTNNSDTang, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=SSThuBHTNNLDGiam,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SSThuBHTNNLDGiam, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHTNNLDGiam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=SSThuBHTNNSDGiam,Path=ActualWidth}"
+                              Visibility="{Binding ElementName=SSThuBHTNNSDGiam, Path=Visibility}">
+                            <TextBox Text="{Binding Model.FThuBHTNNSDGiam, StringFormat={}{0:N0}}"
+                                     Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <!--total Ghi Chu-->
+                        <Grid Width="{Binding ElementName=GhiChu, Path=ActualWidth}"
+                              Visibility="{Binding ElementName=GhiChu, Path=Visibility}"></Grid>
+                    </StackPanel>
+                </ScrollViewer>
+                <compt:ProgressDialog />
+            </Grid>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

@@ -1,0 +1,1 @@
+﻿update TL_DM_PhuCap set Gia_Tri = 0 WHERE Ma_PhuCap='Huong_ThangTNN'

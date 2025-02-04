@@ -1,0 +1,528 @@
+<UserControl x:Class="VTS.QLNS.CTC.App.View.Shared.GenericControlCustom"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Shared"
+             xmlns:extensions="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
+             d:DesignHeight="400"
+             d:DesignWidth="800">
+    <UserControl.InputBindings>
+    </UserControl.InputBindings>
+    <Grid x:Name="pageControlCustom">
+        <Grid.InputBindings>
+            <KeyBinding Gesture="Ctrl+F6"
+                        Command="{Binding DeleteReferCommand }"
+                        CommandParameter="{Binding ElementName=dgdData, Path=.}" />
+            <KeyBinding Key="F5"
+                        Command="{Binding RefreshCommand}"
+                        CommandParameter="{Binding ElementName=dgdData, Path=.}" />
+            <KeyBinding Key="F3"
+                        Command="{Binding AddCommand}"
+                        CommandParameter="{Binding ElementName=dgdData, Path=.}" />
+            <KeyBinding Key="F4"
+                        Command="{Binding DeleteCommand}"
+                        CommandParameter="{Binding ElementName=dgdData, Path=.}" />
+            <KeyBinding Key="F10"
+                        Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding ElementName=dgdData, Path=.}" />
+            <KeyBinding Key="F1"
+                        Command="{Binding OpenFilterPopupCommand}" />
+            <KeyBinding Key="F6"
+                        Command="{Binding OpenReferencePopupCommand}"
+                        CommandParameter="{Binding ElementName=dgdData, Path=.}" />
+            <KeyBinding Key="F7"
+                        Command="{Binding ViewDetailCommand}"
+                        CommandParameter="{Binding ElementName=dgdData, Path=.}" />
+            <KeyBinding Key="LeftAlt"
+                        Command="{Binding SaveReferenceCommand}" />
+            <KeyBinding Gesture="Ctrl+F3"
+                        Command="{Binding AddChildCommand}"
+                        CommandParameter="{Binding ElementName=dgdData, Path=.}" />
+        </Grid.InputBindings>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0">
+            <materialDesign:PackIcon Kind="DriveDocument"
+                                     Height="32"
+                                     Width="32"
+                                     Foreground="{DynamicResource PrimaryHueMidBrush}" />
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold"
+                           Text="{Binding Title}"></TextBlock>
+                <DockPanel>
+                    <TextBlock Text="{Binding Description}"></TextBlock>
+                    <TextBlock Text="{Binding Total}"
+                               HorizontalAlignment="Left"></TextBlock>
+                    <TextBlock Text="{Binding Hint}"
+                               HorizontalAlignment="Right"></TextBlock>
+                    <!--
+                    <TextBlock Text="[F3] Thêm dòng, [F4] Xóa dòng, [F10] Lưu" HorizontalAlignment="Right" FontWeight="Medium"></TextBlock>
+                    -->
+                </DockPanel>
+                <Separator Background="{StaticResource MaterialDesignDivider}"
+                           Margin="0 5 0 0" />
+            </StackPanel>
+        </DockPanel>
+
+        <!--Visibility="{Binding IsMenuBar, Converter={StaticResource BooleanToVisibilityConverter }}"-->
+        <ScrollViewer Visibility="{Binding IsMenuBar, Converter={StaticResource BooleanToVisibilityConverter }}"
+                      Grid.Row="1"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Disabled">
+            <StackPanel Margin="0 5">
+                <StackPanel Margin="0 5"
+                            Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type ComboBox}"
+                               BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <Setter Property="Width"
+                                    Value="150" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Visibility="{Binding IsVisibleAddBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Style="{DynamicResource SearchBarBtnStyle}"
+                            Command="{Binding AddCommand}"
+                            CommandParameter="{Binding ElementName=dgdData, Path=.}"
+                            HorizontalAlignment="Right"
+                            x:Name="btnAdd">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Tạo Mới (F3)" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Visibility="{Binding IsVisibleAddBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <Button Visibility="{Binding IsEnableAddChild, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Style="{DynamicResource SearchBarBtnStyle}"
+                            Command="{Binding AddChildCommand}"
+                            CommandParameter="{Binding ElementName=dgdData, Path=.}"
+                            HorizontalAlignment="Right"
+                            x:Name="btnAddChild">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Tạo Mới Dòng Con (Ctrl+F3)" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Visibility="{Binding IsEnableAddChild, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <Button IsEnabled="{Binding IsEdit}"
+                            Visibility="{Binding IsVisibleDeleteBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Style="{DynamicResource SearchBarBtnStyle}"
+                            Command="{Binding DeleteCommand}"
+                            CommandParameter="{Binding ElementName=dgdData, Path=.}"
+                            HorizontalAlignment="Right"
+                            x:Name="btnDelete">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Delete" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Xóa (F4)" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Visibility="{Binding IsVisibleDeleteBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <Button Visibility="{Binding IsVisibleSaveBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Style="{DynamicResource SearchBarBtnStyle}"
+                            Command="{Binding SaveCommand}"
+                            CommandParameter="{Binding ElementName=dgdData, Path=.}"
+                            HorizontalAlignment="Right"
+                            x:Name="btnSave">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Lưu dữ liệu (F10)" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Visibility="{Binding IsVisibleSaveBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <Button Visibility="{Binding IsVisibleRefreshBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Style="{DynamicResource SearchBarBtnStyle}"
+                            Command="{Binding RefreshCommand}"
+                            CommandParameter="{Binding ElementName=dgdData, Path=.}"
+                            HorizontalAlignment="Right"
+                            x:Name="btnRefesh">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Refesh (F5)" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Visibility="{Binding IsVisibleRefreshBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <Button Visibility="{Binding IsVisibleFormatBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Style="{StaticResource SearchBarBtnStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5 0 0 0"
+                                       Text="Format dữ liệu"
+                                       VerticalAlignment="Center" />
+                            <materialDesign:PopupBox Margin="5 0 0 0"
+                                                     HorizontalAlignment="Right"
+                                                     extensions:PopupBoxLoadedBehavior.Command="{Binding OnLoadedFormatPopupCommand}"
+                                                     StaysOpen="True">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <Separator Visibility="{Binding IsVisibleDeleteBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <Button Visibility="{Binding IsVisibleUpdateCadres, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Style="{DynamicResource SearchBarBtnStyle}"
+                            Command="{Binding UpdateCadresCommand}"
+                            CommandParameter="{Binding ElementName=dgdData, Path=.}"
+                            HorizontalAlignment="Right"
+                            x:Name="btnUpdateCadres">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSaveAll" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Cập nhật đối tượng" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Visibility="{Binding IsVisibleUpdateCadres, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <ComboBox Visibility="{Binding IsVisibleToggleBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Name="cbFrozenColumn"
+                              materialDesign:HintAssist.Hint="Cố định cột"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    <Separator Visibility="{Binding IsVisibleToggleBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button Visibility="{Binding IsVisibleToggleBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            x:Name="btnShowCol"
+                            Style="{StaticResource SearchBarBtnStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Ẩn/hiện cột" />
+                            <materialDesign:PopupBox Margin="-10 0 0 0"
+                                                     Name="pbDynamicColumn"
+                                                     HorizontalAlignment="Right"
+                                                     StaysOpen="True">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <Separator Visibility="{Binding IsVisibleToggleBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <Button Visibility="{Binding ExportBtnVisibility}"
+                            x:Name="btnExcel"
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding OpenPopupExportCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileExcel" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Excel</TextBlock>
+                            <materialDesign:PopupBox Margin="-10 0 0 0"
+                                                     Grid.Column="1"
+                                                     HorizontalAlignment="Right"
+                                                     IsPopupOpen="{Binding IsOpenExcelPopup, Mode=TwoWay}">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel>
+                                    <Button Content="Tải biểu mẫu import"
+                                            Command="{Binding ExportCommand}"
+                                            IsEnabled="{Binding IsEnableExportExcel}" />
+                                    <Button Content="Import excel theo biểu mẫu"
+                                            Command="{Binding ImportExcelCommand}"
+                                            IsEnabled="{Binding IsEnableImportExcel}" />
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <Separator Visibility="{Binding ExportBtnVisibility}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <Button Visibility="{Binding IsVisibleEditBtn}"
+                            Style="{DynamicResource SearchBarBtnStyle}"
+                            Command="{Binding UpdateDmChuKyCommand}"
+                            HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Edit" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Sửa" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Visibility="{Binding IsVisibleEditBtn}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <Button Visibility="{Binding ExportJsonBtnVisibility}"
+                            Style="{DynamicResource SearchBarBtnStyle}"
+                            Command="{Binding ExportJsonCommand}"
+                            HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CodeJson" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Xuất dữ liệu Json" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Visibility="{Binding ExportJsonBtnVisibility}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <Button Visibility="{Binding IsVisibleViewDetailBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Style="{DynamicResource SearchBarBtnStyle}"
+                            Command="{Binding ViewDetailCommand}"
+                            HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Eye" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Xem chi tiết (F7)" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Visibility="{Binding IsVisibleViewDetailBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <ComboBox Visibility="{Binding IsVisibleYearType, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Margin="5 7"
+                              ItemsSource="{Binding FilterByYear}"
+                              SelectedValue="{Binding YearType}"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              materialDesign:HintAssist.Hint="Loại năm làm việc"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                    </ComboBox>
+                    <Separator Visibility="{Binding IsVisibleYearType, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <ComboBox Visibility="{Binding IsVisibleFilterByMlnsMappingType, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Margin="5 7"
+                              ItemsSource="{Binding FilterByMappingMlnsStatus}"
+                              SelectedValue="{Binding MlnsMapping}"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              materialDesign:HintAssist.Hint="Mapping mlns"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                    </ComboBox>
+                    <Separator Visibility="{Binding IsVisibleFilterByMlnsMappingType, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               Margin="5 7" />
+                    <TextBlock VerticalAlignment="Center"
+                               Visibility="{Binding IsVisibleFilterBtn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Text=" Lọc theo cột (F1)" />
+                </StackPanel>
+                <Separator Visibility="{Binding IsShowFilter, Converter={StaticResource BooleanToVisibilityConverter }}"
+                           Background="{StaticResource MaterialDesignDivider}" />
+                <StackPanel HorizontalAlignment="Left"
+                            Visibility="{Binding IsShowFilter, Converter={StaticResource BooleanToVisibilityConverter }}"
+                            Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}"
+                               TargetType="{x:Type ComboBox}">
+                            <Setter Property="Width"
+                                    Value="150" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <ComboBox materialDesign:HintAssist.Hint="Năm"
+                              materialDesign:TextFieldAssist.HasClearButton="False"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              IsEditable="True"
+                              SelectedValue="{Binding YearSelected}"
+                              ItemsSource="{Binding Years}" />
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Left"
+                            Visibility="{Binding IsShowTyLeTangLuong, Converter={StaticResource BooleanToVisibilityConverter }}"
+                            Orientation="Horizontal">
+                    <TextBlock Text="Tỷ lệ (%) nâng lương "
+                               Style="{StaticResource SearchBarBtnTextStyle}"
+                               Margin="10 15 0 0"></TextBlock>
+                    <TextBox materialDesign:HintAssist.Hint="Nhập tỷ lệ tăng lương theo %"
+                             materialDesign:HintAssist.IsFloating="True"
+                             Margin="10 0 0 0"
+                             Width="250"
+                             BorderBrush="CadetBlue"
+                             PreviewTextInput="NumberValidationTextBox"
+                             Text="{Binding TyLeTang, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource SearchBarHorizontalTextBoxStyle}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding SearchCommand}"
+                                        Key="Return" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        
+        <ScrollViewer Visibility="{Binding IsPopup, Converter={StaticResource BooleanToVisibilityConverter }}"
+                      Grid.Row="1"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Disabled">
+            <StackPanel Margin="0 5"
+                        Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type ComboBox}"
+                           BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <Setter Property="Width"
+                                Value="150" />
+                    </Style>
+                </StackPanel.Resources>
+                <ComboBox Visibility="{Binding IsVisibleFilterByMlnsMappingType, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Margin="5 7"
+                          ItemsSource="{Binding FilterByMappingMlnsStatus}"
+                          SelectedValue="{Binding MlnsMapping}"
+                          DisplayMemberPath="DisplayItem"
+                          SelectedValuePath="ValueItem"
+                          materialDesign:HintAssist.Hint="Mapping mlns"
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                </ComboBox>
+            </StackPanel>
+        </ScrollViewer>
+        <ScrollViewer Visibility="{Binding IsShowTyLeTangLuong, Converter={StaticResource BooleanToVisibilityConverter }}"
+                      Grid.Row="1"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Disabled">
+            <StackPanel Margin="0 5">
+
+                <StackPanel HorizontalAlignment="Left"
+                            Visibility="{Binding IsShowTyLeTangLuong, Converter={StaticResource BooleanToVisibilityConverter }}"
+                            Orientation="Horizontal">
+                    <TextBlock Text="Tỷ lệ (%) nâng lương "
+                               Style="{StaticResource SearchBarBtnTextStyle}"
+                               Margin="10 15 0 0"></TextBlock>
+                    <TextBox materialDesign:HintAssist.Hint="Nhập tỷ lệ tăng lương theo %"
+                             materialDesign:HintAssist.IsFloating="True"
+                             Margin="10 0 0 0"
+                             Width="250"
+                             BorderBrush="CadetBlue"
+                             PreviewTextInput="NumberValidationTextBox"
+                             Text="{Binding ITyLeTang, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource SearchBarHorizontalTextBoxStyle}">
+                    </TextBox>
+
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <component:CategoryExpandedDataGrid x:Name="dgdData"
+                                            Grid.Row="2"
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            BorderThickness="1"
+                                            IsReferencePopup="{Binding IsDialog}"
+                                            ModelNameInfo="{Binding ModelName}"
+                                            GridLinesVisibility="All"
+                                            ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                                            ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                                            Style="{StaticResource MaterialDesignDataGrid}"
+                                            CellStyle="{StaticResource GenericDataGridCellDetail}"
+                                            RowStyle="{StaticResource GenericDataGridRowDetail}"
+                                            SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            extensions:GridAutoGeneratingColumnBehaviour.Command="{Binding AutoGeneratingColumnsCommand}"
+                                            BeginningEdit="DataGrid_BeginningEdit"
+                                            extensions:SelectedCellChangedProperty.Command="{Binding SelectedCellChangeCommand}"
+                                            MaxWidth="2560"
+                                            MaxHeight="1600"
+                                            AutoGenerateColumns="True">
+        </component:CategoryExpandedDataGrid>
+        <Grid Visibility="{Binding IsProcessReport, Converter={StaticResource BooleanToVisibilityConverter}}"
+              Grid.Row="2">
+            <StackPanel Width="450"
+                        VerticalAlignment="Center">
+                <materialDesign:ColorZone Mode="PrimaryLight"
+                                          Padding="8">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource MaterialDesignButtonTextBlock}"
+                                   Text="Đang cập nhật thông tin phụ cấp cán bộ, vui lòng đợi..." />
+                    </StackPanel>
+                </materialDesign:ColorZone>
+                <materialDesign:ColorZone Background="AliceBlue"
+                                          BorderThickness="1"
+                                          BorderBrush="DarkGray"
+                                          Padding="8">
+                    <Grid Grid.Row="1"
+                          Margin="8 16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Kind="ProgressClock"
+                                                 Height="35"
+                                                 Width="35"
+                                                 HorizontalAlignment="Center"
+                                                 Margin="0,5,0,0"
+                                                 Grid.RowSpan="2" />
+
+                        <TextBox  Grid.Row="1"
+                                  Grid.Column="1"
+                                  Margin="8 0 0 0"
+                                  TextWrapping="Wrap"
+                                  IsReadOnly="True"
+                                  VerticalAlignment="Center"
+                                  materialDesign:TextFieldAssist.SuffixText="%"
+                                  materialDesign:TextFieldAssist.PrefixText="Đang xử lý "
+                                  Text="{Binding ProgressValue}"></TextBox>
+                        <ProgressBar  Grid.Row="1"
+                                      Grid.Column="2"
+                                      BorderBrush="LightGray"
+                                      BorderThickness="3"
+                                      Minimum="0"
+                                      Maximum="100"
+                                      Value="{Binding ProgressValue}"
+                                      Width="200"
+                                      Height="10"
+                                      Style="{StaticResource MahApps.Styles.ProgressBar}" />
+                    </Grid>
+                </materialDesign:ColorZone>
+            </StackPanel>
+        </Grid>
+        <StackPanel Orientation="Horizontal"
+                    Margin="0 15 15 15"
+                    HorizontalAlignment="Right"
+                    Visibility="{Binding VisibilityDialogBtn}"
+                    Grid.Row="3">
+            <Button IsDefault="True"
+                    Margin="5 0 0 0"
+                    Command="{Binding SaveReferenceCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ContentSave" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Chọn (Alt+Enter)</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Margin="5 0 0 0"
+                    IsCancel="True"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{Binding Path=CloseWindowCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CloseOutline" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

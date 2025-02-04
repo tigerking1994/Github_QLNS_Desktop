@@ -1,0 +1,167 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Shared.Settings.SettingsConfig"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Shared.Settings"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d" 
+        Style="{StaticResource MaterialDesignWindow}"
+        x:Name="SettingWindow"
+        Title="Khởi tạo dữ liệu ban đầu"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
+        d:DesignHeight="450" d:DesignWidth="800">
+    <Window.Resources>
+        <Storyboard x:Key="OpenMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grdSidebar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="48"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="220"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grdSidebar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="220"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="48"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnOpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnCloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource CloseMenu}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid Margin="10">
+        <Grid.InputBindings>
+            <KeyBinding Key="F10" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=SettingWindow, Path=.}"/>
+            <KeyBinding Key="F6" Command="{Binding SaveAndNextPageCommand}" CommandParameter="{Binding ElementName=SettingWindow, Path=.}" />
+            <KeyBinding Key="F7" Command="{Binding SaveAndCloseCommand}" CommandParameter="{Binding ElementName=SettingWindow, Path=.}" />
+            <KeyBinding Key="F8" Command="{Binding SkipCommand}" CommandParameter="{Binding ElementName=SettingWindow, Path=.}" />
+            <KeyBinding Key="F9" Command="{Binding PreviousPageCommand}" CommandParameter="{Binding ElementName=SettingWindow, Path=.}" />
+        </Grid.InputBindings>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.ColumnSpan="2">
+            <materialDesign:PackIcon Kind="{Binding IconKind}" Style="{StaticResource HeaderIconStyle}"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold" Text="{Binding Name}"></TextBlock>
+                <TextBlock Text="{Binding Description}"></TextBlock>
+                <Separator Margin="0 5 0 0" Background="{DynamicResource MaterialDesignDivider}"/>
+            </StackPanel>
+        </DockPanel>
+        <Border Grid.Column="0" Grid.Row="1" BorderThickness="1" BorderBrush="#c3c4c7" Margin="0 10 10 10">
+            <ScrollViewer
+                x:Name="MainScrollViewer"
+                materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
+                HorizontalScrollBarVisibility="{Binding SelectedItem.HorizontalScrollBarVisibilityRequirement, FallbackValue=Disabled}"
+                VerticalScrollBarVisibility="{Binding SelectedItem.VerticalScrollBarVisibilityRequirement, FallbackValue=Disabled}" >
+                <ContentControl
+                    DataContext="{Binding CurrentPage}"
+                    Content="{Binding Content, UpdateSourceTrigger=PropertyChanged, FallbackValue={x:Null}}"
+                    Margin="{Binding MarginRequirement, FallbackValue=16}"/>
+            </ScrollViewer>
+        </Border>
+        <Border Grid.Column="1" Grid.Row="1" Margin="0 10 0 10" BorderThickness="1" BorderBrush="#c3c4c7" x:Name="grdSidebar">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0">
+                    <ListBox ItemsSource="{Binding Documentation}" SelectedItem="{Binding DocumentationSelectedItem}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" ToolTip="{Binding Description}">
+                                    <materialDesign:PackIcon Kind="{Binding IconKind}"></materialDesign:PackIcon>
+                                    <TextBlock Visibility="{Binding Visibility, ElementName=btnCloseMenu}" FontWeight="DemiBold" FontSize="14" Text="{Binding Description}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+                <Border
+                    Grid.Row="1"
+                    BorderThickness="0 1 0 0"
+                    BorderBrush="{DynamicResource MaterialDesignDivider}">
+                    <StackPanel>
+                        <Button
+                            Name="btnOpenMenu"
+                            Height="37"
+                            Style="{DynamicResource MaterialDesignToolForegroundButton}"
+                            HorizontalContentAlignment="Left"
+                            Visibility="Collapsed"
+                            Click="btnOpenMenu_Click"
+                            Panel.ZIndex="0">
+                            <StackPanel Orientation="Horizontal" Margin="6 4 4 4">
+                                <materialDesign:PackIcon Kind="ArrowLeft" Width="20" Height="20"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="btnCloseMenu"
+                            Height="37"
+                            Style="{DynamicResource MaterialDesignToolForegroundButton}"
+                            HorizontalContentAlignment="Right"
+                            Click="btnCloseMenu_Click"
+                            Panel.ZIndex="0">   
+                            <StackPanel Orientation="Horizontal" Margin="6 4 4 4">
+                                <materialDesign:PackIcon Kind="ArrowRight" Width="20" Height="20"/>
+                                <TextBlock Text="Thu gọn" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+        <Separator Grid.Row="2" Margin="0 5 0 0" Background="{DynamicResource MaterialDesignDivider}" Grid.ColumnSpan="2"/>
+        <DockPanel Grid.Row="3" Grid.ColumnSpan="2" Margin="0 10 0 0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                <Button Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding SaveCommand}" HorizontalAlignment="Right"  x:Name="btnSave"  >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu (F10)"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding SaveAndNextPageCommand}" CommandParameter="{Binding ElementName=SettingWindow}" HorizontalAlignment="Right"  x:Name="btnSaveAndContinue"  >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu và tiếp tục (F6)"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding SaveAndCloseCommand}" CommandParameter="{Binding ElementName=SettingWindow}" HorizontalAlignment="Right"  x:Name="btnSaveAndClose"  >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu và đóng (F7)"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding SkipCommand}" CommandParameter="{Binding ElementName=SettingWindow}" HorizontalAlignment="Right"  x:Name="btnSkip"  >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="SkipForward"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Bỏ qua (F8)"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding PreviousPageCommand}" CommandParameter="{Binding ElementName=SettingWindow}" HorizontalAlignment="Right"  x:Name="btnPrevious"  >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ArrowBack"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Quay lại (F9)"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{DynamicResource SearchBarBtnStyle}" IsCancel="True" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=SettingWindow}" HorizontalAlignment="Right"  x:Name="btnClose"  >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="close"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Đóng"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

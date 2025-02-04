@@ -1,0 +1,330 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Investment.MediumTermPlan.ChuTruongDauTu.ChuTruongDauTuIndex"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Investment.MediumTermPlan.ChuTruongDauTu"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:custom="clr-namespace:VTS.QLNS.CTC.Custom;assembly=VTS.QLNS.CTC.Custom"
+             mc:Ignorable="d" 
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:cvt="clr-namespace:VTS.QLNS.CTC.App.Converters"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.InputBindings>
+        <KeyBinding Key="F3" Command="{Binding AddCommand}" />
+        <KeyBinding Key="F4" Command="{Binding DeleteCommand}" />
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}" />
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <materialDesign:PackIcon Kind="DriveDocument" Height="32" Width="32" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold" Text="{Binding Title}"></TextBlock>
+                <TextBlock Text="{Binding Description}"></TextBlock>
+                <Separator Background="{StaticResource MaterialDesignDivider}" Margin="0 5 0 0"/>
+            </StackPanel>
+        </DockPanel>
+        
+        <StackPanel Grid.Row="1" Margin="0 5">
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    ext:Permission.Identifier="INVESTMENT_STANDARD_CHU_TRUONG_DAU_TU_INDEX_ADD"
+                    Style="{DynamicResource SearchBarBtnStyle}"
+                    Command="{Binding AddCommand}" >
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Plus"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tạo Mới (F3)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+                <Button
+                    ext:Permission.Identifier="INVESTMENT_STANDARD_CHU_TRUONG_DAU_TU_INDEX_UPDATE"
+                    Style="{StaticResource SearchBarBtnStyle}"
+                    Command="{Binding UpdateCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="AccountEdit" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Sửa" />
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button
+                    ext:Permission.Identifier="INVESTMENT_STANDARD_CHU_TRUONG_DAU_TU_INDEX_MODIFY"
+                    Style="{StaticResource SearchBarBtnStyle}"
+                    Command="{Binding DieuChinhCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="AccountAdd"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Điều chỉnh" />
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button
+                    ext:Permission.Identifier="INVESTMENT_STANDARD_CHU_TRUONG_DAU_TU_INDEX_DELETE"
+                    Style="{StaticResource SearchBarBtnStyle}" 
+                    Command="{Binding DeleteCommand}"
+                    IsEnabled="{Binding IsEditable}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Delete" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xóa (F4)" />
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button
+                    Style="{StaticResource SearchBarBtnStyle}"
+                    Command="{Binding LockUnLockCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="{Binding IsLock, Converter={StaticResource InvertBooleanToLockIconConverter}}" />
+                        <TextBlock
+                            Style="{StaticResource SearchBarBtnTextStyle}"
+                            Text="{Binding IsLock, Converter={StaticResource InvertBooleanToLockStatusConverter}}" />
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding RefreshCommand}" HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Refresh"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="(F5)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button Style="{StaticResource SearchBarBtnStyle}" Command="{Binding ViewAttachmentCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Paperclip" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tệp đính kèm"/>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button x:Name="btnShowColSelfPay" Style="{StaticResource SearchBarBtnStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Ẩn/hiện cột" />
+                        <materialDesign:PopupBox
+                                Name="pbDynamicColumn"
+                                Margin="-10 0 0 0"
+                                HorizontalAlignment="Right"
+                                StaysOpen="True">
+                            <materialDesign:PopupBox.Resources>
+                                <Style TargetType="ScrollViewer">
+                                    <Setter Property="Height" Value="400" />
+                                </Style>
+                            </materialDesign:PopupBox.Resources>
+                            <materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:PackIcon Kind="MenuDown"/>
+                            </materialDesign:PopupBox.ToggleContent>
+                            <ScrollViewer></ScrollViewer>
+                        </materialDesign:PopupBox>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <ComboBox
+                    Name="cbFrozenColumn"
+                    materialDesign:HintAssist.Hint="Cố định cột"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    DisplayMemberPath="DisplayItem"
+                    SelectedValuePath="ValueItem"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+            </StackPanel>
+            <Separator Background="{StaticResource MaterialDesignDivider}" />
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="200px">
+                    <TextBox Margin="0 0 5 0" materialDesign:HintAssist.Hint="Số quyết định" VerticalAlignment="Bottom" 
+                        Text="{Binding ChuTruongDTFilter.SoQuyetDinh, UpdateSourceTrigger=PropertyChanged}" 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" ext:TextTrimBehavior.IsEnabled ="True">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </Grid>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+                <Grid Width="160px" Margin="0 0 5 0">
+                    <DatePicker  Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
+                        Language="vi-VN"
+                        materialDesign:HintAssist.Hint="Ngày QĐ (từ ngày)"
+                        SelectedDate="{Binding ChuTruongDTFilter.NgayQuyetDinhFrom}"/>
+                </Grid>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+
+                <Grid Width="160px">
+                    <DatePicker Margin="0 0 5 0"  Style="{StaticResource MaterialDesignFloatingHintDatePicker}" 
+                        Language="vi-VN"
+                        materialDesign:HintAssist.Hint="Ngày QĐ (đến ngày)" 
+                        SelectedDate="{Binding ChuTruongDTFilter.NgayQuyetDinhTo}"/>
+                </Grid>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+
+                <Grid Width="200px">
+                    <TextBox Margin="0 0 5 0" materialDesign:HintAssist.Hint="Dự án"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        VerticalAlignment="Bottom" 
+                        Text="{Binding ChuTruongDTFilter.NoiDung, UpdateSourceTrigger=PropertyChanged}" ext:TextTrimBehavior.IsEnabled ="True">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </Grid>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+                
+
+                <!--<Grid Width="150px">
+                    <TextBox Margin="0 0 5 0" materialDesign:HintAssist.Hint="TMĐT từ"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        VerticalAlignment="Bottom" 
+                        Text="{Binding ChuTruongDTFilter.TMDTFrom, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </Grid>
+                <Grid Width="150px">
+                    <TextBox Margin="0 0 5 0" materialDesign:HintAssist.Hint="TMĐT đến" 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        VerticalAlignment="Bottom" 
+                        Text="{Binding ChuTruongDTFilter.TMDTTo, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </Grid>-->
+                <Grid Width="150px">
+                    <TextBox Margin="0 0 5 0" materialDesign:HintAssist.Hint="Giá trị TMĐT" 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        VerticalAlignment="Bottom" 
+                        Text="{Binding ChuTruongDTFilter.TMDTValue, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}" ext:TextTrimBehavior.IsEnabled ="True">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </Grid>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+
+                <Grid Width="200px"  Margin="0 0 5 0">
+                    <custom:AutoCompleteComboBox
+                        materialDesign:HintAssist.Hint="Đơn vị"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        DisplayMemberPath="DisplayItem"
+                        SelectedValuePath="ValueItem"
+                        TextSearch.TextPath="DisplayItem"
+                        SelectedValue="{Binding SelectedDonVi}"
+                        ItemsSource="{Binding ItemsDonVi}"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                    </custom:AutoCompleteComboBox>
+                </Grid>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+
+                <Button  Style="{StaticResource SearchBarBtnStyle}" Command="{Binding SearchCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Search" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Tìm kiếm</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+
+                <Button
+                    Command="{Binding RemoveFilterCommand}"
+                    Style="{StaticResource SearchBarBtnStyle}" 
+                    ToolTip="Filter">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FilterRemoveOutline" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+
+        <component:ExpandedDataGrid
+            Grid.Row="2" 
+            IsReadOnly="True" 
+            x:Name="dgdDataVdtChuTruongDauTuIndex"
+            FrozenColumnCount="2"
+            BorderThickness="1"
+            CanUserResizeColumns="True"
+            AutoGenerateColumns="False"
+            HorizontalScrollBarVisibility="Auto"
+            CanUserAddRows="False"
+            GridLinesVisibility="All"
+            ScrollViewer.CanContentScroll="True"
+            ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+            ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+            RowStyle="{StaticResource DataGridRowIndex}"
+            Style="{StaticResource MaterialDesignDataGrid}"
+            ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            ext:DataGridBehavior.DisplayRowNumber="True">
+            <DataGrid.Resources>
+                <helper:BindingProxy
+                    x:Key="DataContextProxy"
+                    Data="{Binding}" />
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <materialDesign:DataGridTextColumn
+                    Header="STT"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}"
+                    Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}, Path=Header}">
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn   
+                    Header="Số quyết định" 
+                    Binding="{Binding SSoQuyetDinh}">
+                </materialDesign:DataGridTextColumn>
+                
+                <materialDesign:DataGridTextColumn  
+                    Header="Ngày quyết định" 
+                    Binding="{Binding DNgayQuyetDinh, Converter={StaticResource DateTimeToStringConverter}}"
+                    ElementStyle="{StaticResource DataGridTextColumnCenterStyle}" >
+                </materialDesign:DataGridTextColumn>
+                
+                <materialDesign:DataGridTextColumn
+                    Width="*" Header="Dự án" Binding="{Binding STenDuAn}">
+                </materialDesign:DataGridTextColumn>
+                
+                <materialDesign:DataGridTextColumn  
+                    Header="Đơn vị" 
+                    Binding="{Binding TenDonVi}">
+                </materialDesign:DataGridTextColumn>
+                
+                <materialDesign:DataGridTextColumn  
+                    Header="TMĐT dự kiến phê duyệt" 
+                    Binding="{Binding FTmdtduKienPheDuyet, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                    ElementStyle="{StaticResource DataGridTextColumnRightStyle}">
+                </materialDesign:DataGridTextColumn>
+                
+                <materialDesign:DataGridTextColumn
+                    Header="Số lần điều chỉnh"
+                    Binding="{Binding sSoLanDieuChinh, Converter={StaticResource TotalCountDisplayConverter}}"
+                    ElementStyle="{StaticResource DataGridTextColumnCenterStyle}">
+                </materialDesign:DataGridTextColumn>
+                
+                <materialDesign:DataGridTextColumn 
+                    ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}"
+                    Header="Tệp đính kèm"
+                    Binding="{Binding TotalFiles, Converter={StaticResource TotalCountDisplayConverter}}">
+                </materialDesign:DataGridTextColumn>
+
+                <DataGridTemplateColumn Header="Khóa">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentControl x:Name="content"/>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding BKhoa}" Value="True">
+                                    <Setter TargetName="content" Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <materialDesign:PackIcon Kind="Lock"/>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </component:ExpandedDataGrid>
+
+        <component:ProgressDialog Grid.Row="2" />
+    </Grid>
+</UserControl>

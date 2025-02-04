@@ -1,0 +1,2319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApplicationName" xml:space="preserve">
+    <value>PHẦN MỀM QUẢN LÝ TÀI CHÍNH</value>
+  </data>
+  <data name="ConfirmTitle" xml:space="preserve">
+    <value>Xác nhận</value>
+  </data>
+  <data name="ConfirmDeleteUsers" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa bản ghi này?</value>
+  </data>
+  <data name="ConfirmDeleteKhoiTao" xml:space="preserve">
+    <value>Xóa dữ liệu Hợp đồng, Dự án, Quyết định khác liên quan?</value>
+  </data>
+  <data name="ConfirmLockGroups" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn khóa bản ghi này?</value>
+  </data>
+  <data name="ConfirmLockUsers" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn khóa bản ghi này?</value>
+  </data>
+  <data name="ConfirmMsg" xml:space="preserve">
+    <value>Xác nhận</value>
+  </data>
+  <data name="ConfirmUnLockGroups" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn mở khóa bản ghi này?</value>
+  </data>
+  <data name="ConfirmUnlockUsers" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn mở khóa bản ghi này?</value>
+  </data>
+  <data name="DeleteChungTu" xml:space="preserve">
+    <value>Bạn chắc chắn muốn xóa chứng từ số {0}, ngày {1}?</value>
+  </data>
+  <data name="DeleteChungTuSKT" xml:space="preserve">
+    <value>Bạn chắc chắn muốn xóa chứng từ số {0}?</value>
+  </data>
+  <data name="ErrorGroupNameEmpty" xml:space="preserve">
+    <value>Trường tên nhóm không được bỏ trống</value>
+  </data>
+  <data name="ErrorLoginEmptyInfo" xml:space="preserve">
+    <value>Đ/c chưa nhập Tên đăng nhập hoặc Mật khẩu</value>
+  </data>
+  <data name="ErrorLoginInvalidPassword" xml:space="preserve">
+    <value>Tên tài khoản hoặc mật khẩu không chính xác</value>
+  </data>
+  <data name="ErrorLoginUserNotFound" xml:space="preserve">
+    <value>Tên tài khoản không tồn tại</value>
+  </data>
+  <data name="ErrorPasswordEmpty" xml:space="preserve">
+    <value>Trường mật khẩu không được bỏ trống</value>
+  </data>
+  <data name="ErrorPasswordLength" xml:space="preserve">
+    <value>Trường mật khẩu tối thiểu 6 kí tự</value>
+  </data>
+  <data name="ErrorUserLocked" xml:space="preserve">
+    <value>Tài khoản đang bị khóa</value>
+  </data>
+  <data name="ErrorUserNameEmpty" xml:space="preserve">
+    <value>Trường tên tài khoản không được bỏ trống</value>
+  </data>
+  <data name="ErrorUserNameExist" xml:space="preserve">
+    <value>Tên tài khoản đã tồn tại</value>
+  </data>
+  <data name="ErrorUserNameLength" xml:space="preserve">
+    <value>Trường tên tài khoản tối thiểu 5 kí tự</value>
+  </data>
+  <data name="MsgUpdateCT" xml:space="preserve">
+    <value>Số liệu chứng từ đầu kỳ đã được khởi tạo, cập nhật lại dữ liệu sẽ gây ra sai số. Bạn có chắc chắn muốn cập nhật không?</value>
+  </data>
+  <data name="LockChungTu" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn khóa số liệu chứng từ? Sau khi khóa số liệu sẽ không cho phép chỉnh sửa số liệu chi tiết của chứng từ</value>
+  </data>
+  <data name="MsgConfirmEdit" xml:space="preserve">
+    <value>Dữ liệu đang chỉnh sửa, Đ/c có cần Lưu dữ liệu lại không?</value>
+  </data>
+  <data name="MsgConfirmLock" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn khóa số liệu chứng từ? Sau khi khóa số liệu, sẽ không cho phép chỉnh sửa số liệu chi tiết của chứng từ! {0} - Bấm 'Đồng ý' đồng ý khóa. {1} - Bấm 'Không' để hủy.</value>
+  </data>
+  <data name="MsgConfirmUnLock" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn mở khóa số liệu chứng từ? Sau khi mở khóa, sẽ được phép chỉnh sửa số liệu chi tiết của chứng từ! {0} - Bấm 'Đồng ý' đồng ý mở khóa. {1} - Bấm 'Không' để hủy.</value>
+  </data>
+  <data name="MsgDeleteConfirm" xml:space="preserve">
+    <value>Bạn chắc chắn muốn xóa chứng từ số {0}, quyết định {1} ngày {2} ?</value>
+  </data>
+  <data name="MsgLockDone" xml:space="preserve">
+    <value>Khóa số liệu chứng từ thành công, hệ thống không cho phép chỉnh sửa số liệu chi tiết của chứng từ vừa khóa!</value>
+  </data>
+  <data name="MsgSaveDone" xml:space="preserve">
+    <value>Lưu dữ liệu thành công!</value>
+  </data>
+  <data name="MsgUnLockDone" xml:space="preserve">
+    <value>Mở khóa số liệu chứng từ thành công, hệ thống đã cho phép chỉnh sửa số liệu chi tiết của chứng từ vừa mở khóa!</value>
+  </data>
+  <data name="NotifiTitle" xml:space="preserve">
+    <value>Thông báo</value>
+  </data>
+  <data name="UnlockChungTu" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn mở khóa số liệu chứng từ? Sau khi mở khóa, sẽ được phép chỉnh sửa số liệu chi tiết của chứng từ</value>
+  </data>
+  <data name="MsgDeleteLoaiChungTuConfirm" xml:space="preserve">
+    <value>Bạn chắc chắn muốn xóa loại cấp phát {0}?</value>
+  </data>
+  <data name="MsgDeleteAllLineChungTuConfirm" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn xóa tất cả các dòng dự toán phân cấp chi tiết của chứng từ</value>
+  </data>
+  <data name="MsgDonViEmpty" xml:space="preserve">
+    <value>Vui lòng chọn đơn vị!</value>
+  </data>
+  <data name="ConfirmReloadData" xml:space="preserve">
+    <value>Dữ liệu đang chỉnh sửa, Đ/c có cần lưu dữ liệu lại không?</value>
+  </data>
+  <data name="Alert" xml:space="preserve">
+    <value>Cảnh báo</value>
+  </data>
+  <data name="MsgCheckDonVi" xml:space="preserve">
+    <value>Vui lòng chọn đơn vị!</value>
+  </data>
+  <data name="MsgCheckLoaiTaiSan" xml:space="preserve">
+    <value>Vui lòng chọn loại tài sản!</value>
+  </data>
+  <data name="MsgCheckTrangThaiSuDung" xml:space="preserve">
+    <value>Vui lòng chọn trạng thái sử dụng!</value>
+  </data>
+  <data name="MsgCheckMaTaiSan" xml:space="preserve">
+    <value>Vui lòng nhập mã tài sản!</value>
+  </data>
+  <data name="MsgCheckTenTaiSan" xml:space="preserve">
+    <value>Vui lòng nhập tên tài sản!</value>
+  </data>
+  <data name="MsgCheckKeHoachTongThe" xml:space="preserve">
+    <value>Vui lòng chọn kế hoạch tổng thể!</value>
+  </data>
+  <data name="MsgNhiemVuChi" xml:space="preserve">
+    <value>Vui lòng chọn nhiệm vụ chi!</value>
+  </data>
+  <data name="MsgCheckHopDong" xml:space="preserve">
+    <value>Vui lòng chọn hợp đồng!</value>
+  </data>
+  <data name="MsgCheckLoaiDeNghi" xml:space="preserve">
+    <value>Vui lòng chọn loại đề nghị!</value>
+  </data>
+  <data name="MsgCheckNamKeHoach" xml:space="preserve">
+    <value>Vui lòng nhập năm kế hoạch!</value>
+  </data>
+  <data name="MsgConfirmDelete" xml:space="preserve">
+    <value>Chứng từ đã nhập số liệu, bạn đồng ý? </value>
+  </data>
+  <data name="MsgConfirmDeleteCancel" xml:space="preserve">
+    <value>-CANCEL: hủy bỏ.</value>
+  </data>
+  <data name="MsgConfirmDeleteNo" xml:space="preserve">
+    <value>-NO: hệ thống sẽ đánh dấu xóa các dữ liệu liên quan, có thể phục hồi.</value>
+  </data>
+  <data name="MsgConfirmDeleteYes" xml:space="preserve">
+    <value>-YES: hệ thống sẽ xóa toàn bộ dữ liệu liên quan.</value>
+  </data>
+  <data name="MsgCheckDuAn" xml:space="preserve">
+    <value>Vui lòng chọn dự án!</value>
+  </data>
+  <data name="MsgCheckNgayPheDuyet" xml:space="preserve">
+    <value>Vui lòng nhập ngày phê duyệt!</value>
+  </data>
+  <data name="MsgCheckNhomDuAn" xml:space="preserve">
+    <value>Vui lòng chọn nhóm dự án!</value>
+  </data>
+  <data name="MsgCheckSoQD" xml:space="preserve">
+    <value>Vui lòng nhập số quyết định!</value>
+  </data>
+  <data name="MsgCheckThoiGianThucHien" xml:space="preserve">
+    <value>Vui lòng nhập thời gian thực hiện!</value>
+  </data>
+  <data name="MsgCheckThoiGianKhoiCong" xml:space="preserve">
+    <value>Vui lòng nhập thời gian khởi công!</value>
+  </data>
+  <data name="MsgCheckThoiGianHoanThanh" xml:space="preserve">
+    <value>Vui lòng nhập thời gian hoàn thành!</value>
+  </data>
+  <data name="MsgConfirmDeletePhanBoVon" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa phân bổ vốn này ?</value>
+  </data>
+  <data name="MsgErrorRequire" xml:space="preserve">
+    <value>{0} chưa được nhập !</value>
+  </data>
+  <data name="ConfirmAcceptCensorship" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn kiểm duyệt các chứng từ đã chọn?</value>
+  </data>
+  <data name="ConfirmDenyCensorship" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn từ chối kiểm duyệt các chứng từ đã chọn?</value>
+  </data>
+  <data name="ConfirmSendCensorship" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn gửi kiểm duyệt các chứng từ đã chọn?</value>
+  </data>
+  <data name="AlertAcceptCensorship" xml:space="preserve">
+    <value>Vui lòng lựa chọn các chứng từ ở trạng thái chờ kiểm duyệt.</value>
+  </data>
+  <data name="AlertAggregateAgency" xml:space="preserve">
+    <value>Vui lòng lựa chọn các chứng từ cùng đơn vị.</value>
+  </data>
+  <data name="AlertAggregateCensorship" xml:space="preserve">
+    <value>Vui lòng lựa chọn các chứng từ ở trạng thái kiểm duyệt.</value>
+  </data>
+  <data name="AlertAggregateLocked" xml:space="preserve">
+    <value>Vui lòng lựa chọn các chứng từ không bị khóa.</value>
+  </data>
+  <data name="AlertAggregateQuarterMonth" xml:space="preserve">
+    <value>Vui lòng lựa chọn các chứng từ có cùng tháng.</value>
+  </data>
+  <data name="AlertAggregateAdjust" xml:space="preserve">
+    <value>Vui lòng lựa chọn các chứng từ có cùng loại chứng từ (Thường/ Điều chỉnh).</value>
+  </data>
+  <data name="AlertSendCensorship" xml:space="preserve">
+    <value>Vui lòng lựa chọn các chứng từ ở trạng thái mới.</value>
+  </data>
+  <data name="AlertUpdateAggerateVoucher" xml:space="preserve">
+    <value>Không thể sửa thông tin bản ghi tổng hợp.</value>
+  </data>
+  <data name="AlertExistAggregateVoucher" xml:space="preserve">
+    <value>Đã tồn tại chứng từ tổng hợp từ các chứng từ đã chọn. Đ/c có muốn xóa chứng từ tổng hợp cũ và  tạo chứng từ tổng hợp mới không?</value>
+  </data>
+  <data name="ErrorChiPhiNotEqualNguonVon" xml:space="preserve">
+    <value>Tổng chi phí không bằng tổng nguồn vốn!</value>
+  </data>
+  <data name="MsgErrorDataEmpty" xml:space="preserve">
+    <value>Chưa nhập dữ liệu {0}.</value>
+  </data>
+  <data name="MsgSheetErrorDataEmpty" xml:space="preserve">
+    <value>Sheet {0} chưa nhập dữ liệu </value>
+  </data>
+  <data name="MsgErrorFormat" xml:space="preserve">
+    <value>{0} nhập sai định dạng .</value>
+  </data>
+  <data name="MsgErrorDataExist" xml:space="preserve">
+    <value>Dữ liệu đã tồn tại !</value>
+  </data>
+  <data name="AlertDataError" xml:space="preserve">
+    <value>Dữ liệu chưa đúng, vui lòng kiểm tra lại.</value>
+  </data>
+  <data name="ConfirmSaveSettlementVoucherDetail" xml:space="preserve">
+    <value>Có bản ghi chứng từ chi tiết bị lỗi, Đ/c có muốn lưu dữ liệu hợp lệ không?</value>
+  </data>
+  <data name="ErrorAgencyEmpty" xml:space="preserve">
+    <value>Chưa chọn đơn vị.</value>
+  </data>
+  <data name="ErrorFileEmpty" xml:space="preserve">
+    <value>Chưa upload file.</value>
+  </data>
+  <data name="ErrorImport" xml:space="preserve">
+    <value>Import lỗi, vui lòng kiểm tra lại file.</value>
+  </data>
+  <data name="ErrorMonthEmpty" xml:space="preserve">
+    <value>Chưa chọn tháng.</value>
+  </data>
+  <data name="ErrorChungTuEmpty" xml:space="preserve">
+    <value>Vui lòng chọn loại chứng từ</value>
+  </data>
+  <data name="AlertAgencyEmpty" xml:space="preserve">
+    <value>Đ/c chưa chọn đơn vị.</value>
+  </data>
+  <data name="MsgTrungSoQD" xml:space="preserve">
+    <value>Trùng số quyết định!</value>
+  </data>
+  <data name="MsgEmptyLoaiDuToan" xml:space="preserve">
+    <value>Vui lòng chọn loại dự toán!</value>
+  </data>
+  <data name="AlertExistChuTruongDauTu" xml:space="preserve">
+    <value>Bản ghi được sử dụng trong bảng Chủ trương đầu tư. Bạn không thể thực hiện thao tác này.</value>
+  </data>
+  <data name="AlertExistQdDauTu" xml:space="preserve">
+    <value>Bản ghi được sử dụng trong bảng Quyết định đầu tư. Bạn không thể thực hiện thao tác này.</value>
+  </data>
+  <data name="MsgCheckTenDuAn" xml:space="preserve">
+    <value>Vui lòng nhập tên dự án!</value>
+  </data>
+  <data name="MsgCheckSoDeNghi" xml:space="preserve">
+    <value>Vui lòng nhập số đề nghị!</value>
+  </data>
+  <data name="MsgCheckNgayDeNghi" xml:space="preserve">
+    <value>Vui lòng nhập ngày đề nghị!</value>
+  </data>
+  <data name="MsgCheckMaDuAn" xml:space="preserve">
+    <value>Vui lòng nhập mã dự án!</value>
+  </data>
+  <data name="MsgCheckTrungMaDuAn" xml:space="preserve">
+    <value>Mã dự án đã tồn tại !</value>
+  </data>
+  <data name="MsgCheckTrungChiPhiDauTu" xml:space="preserve">
+    <value>Loại chi phí đã nhập ở trên,Vui lòng chọn lại</value>
+  </data>
+  <data name="MsgCheckTrungHangMucDauTu" xml:space="preserve">
+    <value>Tên hạng mục  đã nhập ở trên,Vui lòng nhập lại</value>
+  </data>
+  <data name="MsgCheckTrungNguonVonDauTu" xml:space="preserve">
+    <value>Loại nguồn vốn đã nhập ở trên,Vui lòng chọn lại</value>
+  </data>
+  <data name="MsgCheckChiPhiDauTu" xml:space="preserve">
+    <value>Chưa chọn chi phí</value>
+  </data>
+  <data name="MsgCheckHangMucDauTu" xml:space="preserve">
+    <value>Chưa nhập hạng mục</value>
+  </data>
+  <data name="MsgCheckNguonVonDauTu" xml:space="preserve">
+    <value>Chưa chọn nguồn vốn</value>
+  </data>
+  <data name="MsgTnQtMonth" xml:space="preserve">
+    <value>Bạn chưa quyết toán đủ số tháng, bạn có chắc chắn muốn quyết toán năm không?</value>
+  </data>
+  <data name="MsgTnQtQuater" xml:space="preserve">
+    <value>Bạn chưa quyết toán đủ 4 quý năm {0}, bạn có chắc chắn muốn quyết toán năm không?</value>
+  </data>
+  <data name="ErrorExportReport" xml:space="preserve">
+    <value>Xuất báo cáo lỗi, vui lòng thử lại.</value>
+  </data>
+  <data name="AlertObjectEmpty" xml:space="preserve">
+    <value>Đ/c chưa chọn đối tượng</value>
+  </data>
+  <data name="MsgErrorProjectNotFound" xml:space="preserve">
+    <value>Không tìm thấy dự án !</value>
+  </data>
+  <data name="VoucherIsExists" xml:space="preserve">
+    <value>Chứng từ loại {0} của đơn vị {1} đã tồn tại</value>
+  </data>
+  <data name="MsgDonViCTDuplicate" xml:space="preserve">
+    <value>Đơn vị {0} đã nhận phân bổ năm {1}</value>
+  </data>
+  <data name="MsgDonViDTDuplicate" xml:space="preserve">
+    <value>Đơn vị đã nhận dự toán năm {0}</value>
+  </data>
+  <data name="MsgDonViLTDuplicate" xml:space="preserve">
+    <value>Đơn vị {0} này đã lập dự toán thu đầu năm {1}</value>
+  </data>
+  <data name="MsgDonViTTDuplicate" xml:space="preserve">
+    <value>Đơn vị {0} có số liệu thực thu của  {1} đã được ghi nhận</value>
+  </data>
+  <data name="MsgErrorExitQuyetToanNienDo" xml:space="preserve">
+    <value>{0} đã đề nghị quyết toán năm {1} với nguồn vốn : {2} .</value>
+  </data>
+  <data name="AlertAgreeQuarterMonth" xml:space="preserve">
+    <value>Vui lòng chọn các chứng từ có cùng tháng/quý</value>
+  </data>
+  <data name="MsgImportQuatersMonth" xml:space="preserve">
+    <value>Chưa chọn tháng/quý</value>
+  </data>
+  <data name="AlertEmptyExplainSettlementVoucher" xml:space="preserve">
+    <value>Chưa có chứng từ chi tiết giải thích.</value>
+  </data>
+  <data name="AlertExportSummarySettlement" xml:space="preserve">
+    <value>Xuất chứng từ tổng hợp lỗi, vui lòng thử lại sau.</value>
+  </data>
+  <data name="ErrorVoucherDateEmpty" xml:space="preserve">
+    <value>Chưa nhập ngày chứng từ.</value>
+  </data>
+  <data name="MsgErrorYearPlanExist" xml:space="preserve">
+    <value>Đơn vị quản lý {0} và loại nguồn vốn {1} trong năm kế hoạch {2} đã tồn tại !</value>
+  </data>
+  <data name="MsgCheckNgayLap" xml:space="preserve">
+    <value>Chưa nhập ngày lập</value>
+  </data>
+  <data name="MsgCheckTenGoiThau" xml:space="preserve">
+    <value>Chưa nhập tên gói thầu</value>
+  </data>
+  <data name="UnlockNotValid" xml:space="preserve">
+    <value>Không có quyền mở khóa chứng từ {0}</value>
+  </data>
+  <data name="AlertChangeConnectionString" xml:space="preserve">
+    <value>Thông tin CSDL có thay đổi, vui lòng khởi động lại ứng dụng.</value>
+  </data>
+  <data name="MsgConnectDbFail" xml:space="preserve">
+    <value>Kết nối thất bại! Đ/c vui lòng kiểm tra lại hoặc cấu hình lại thông số kết nối.</value>
+  </data>
+  <data name="MsgConnectDbSuccess" xml:space="preserve">
+    <value>Kết nối thành công!</value>
+  </data>
+  <data name="MsgConfirmDeleteDeNghiThanhToan" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa đề nghị thanh toán này ?</value>
+  </data>
+  <data name="UnlockNotValidSummary" xml:space="preserve">
+    <value>Mở khóa chứng từ tổng hợp trước</value>
+  </data>
+  <data name="AlterThangQuyEmpty" xml:space="preserve">
+    <value>Vui lòng nhập tháng/quý</value>
+  </data>
+  <data name="AlertSelectBackupFolder" xml:space="preserve">
+    <value>Vui lòng lựa chọn thư mục sao lưu</value>
+  </data>
+  <data name="MsgBackupError" xml:space="preserve">
+    <value>Sao lưu dữ liệu thất bại</value>
+  </data>
+  <data name="MsgBackupSuccess" xml:space="preserve">
+    <value>Sao lưu dữ liệu thành công</value>
+  </data>
+  <data name="MsgConfirmDeleteBackupFile" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn xóa file sao lưu đã chọn. Chú ý chọn đúng file dữ liệu không cần thiết để xóa!</value>
+  </data>
+  <data name="MsgConfirmRestoreDatabase" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn phục hồi cơ sở dữ liệu?{0}Thông tin file sao lưu:{1}- CSDL: {2}{3}- Kiểu dữ liệu: {4}{5}- Thời điểm sao lưu: {6}{7}- Đường dẫn: {8}</value>
+  </data>
+  <data name="MsgDeleteBackupFileSuccess" xml:space="preserve">
+    <value>Xóa thành công {0} file sao lưu</value>
+  </data>
+  <data name="MsgRestoreDatabaseError" xml:space="preserve">
+    <value>Phục hồi cơ sở dữ liệu thất bại</value>
+  </data>
+  <data name="MsgRestoreDatabaseSuccess" xml:space="preserve">
+    <value>Phục hồi cơ sở dữ liệu thành công</value>
+  </data>
+  <data name="QsVoucherIsExists" xml:space="preserve">
+    <value>Chứng từ chi tiết {0} của đơn vị {1} đã tồn tại</value>
+  </data>
+  <data name="MsgConfirmDeleteQuyetToanNienDo" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa quyết toán niên độ này?</value>
+  </data>
+  <data name="MsgErrorGiaTriLessThanZero" xml:space="preserve">
+    <value>Giá trị phải lớn hơn 0</value>
+  </data>
+  <data name="MsgExportDataTableError" xml:space="preserve">
+    <value>Xuất file excel lỗi, vui lòng thử lại sau.</value>
+  </data>
+  <data name="MsgExportDataTableSucess" xml:space="preserve">
+    <value>Xuất file thành công. Đ/c có muốn mở thư mục file vừa tạo?</value>
+  </data>
+  <data name="ConfirmAddMLNS" xml:space="preserve">
+    <value>Đ/c có muốn lưu MLNS vừa thêm không?</value>
+  </data>
+  <data name="MsgSaveError" xml:space="preserve">
+    <value>Lưu dữ liệu thất bại</value>
+  </data>
+  <data name="MsgRevDeleteChungTu" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa chứng từ số {0}, số quyết định {1} ngày {2} không?</value>
+  </data>
+  <data name="MsgConfirmDeleteKeHoachVonUng" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa kế hoạch vốn ứng này không ?</value>
+  </data>
+  <data name="ChooseOneVoucher" xml:space="preserve">
+    <value>Chỉ được chọn một chứng từ</value>
+  </data>
+  <data name="MsgErrorConfirmDeleteChungTuChiTiet" xml:space="preserve">
+    <value>Dự án {0} đã có số liệu chi tiết, bạn có chắc chắn muốn xóa không?</value>
+  </data>
+  <data name="MsgTrungSoQDChuTruongDauTu" xml:space="preserve">
+    <value>Số quyết định chủ trương đầu tư đã tồn tại, vui lòng nhập số quyết định khác!</value>
+  </data>
+  <data name="MsgTrungSoQDQuyetDinhDauTu" xml:space="preserve">
+    <value>Số quyết định phê quyệt dự án đã tồn tại, vui lòng nhập số quyết định khác!</value>
+  </data>
+  <data name="ConfirmAddMLSKT" xml:space="preserve">
+    <value>Đ/c có muốn lưu MLSKT vừa thêm không?</value>
+  </data>
+  <data name="MsgDotNhanEmpty" xml:space="preserve">
+    <value>Chưa chọn đợt nhận</value>
+  </data>
+  <data name="ErrorDetailEmpty" xml:space="preserve">
+    <value>Chi tiết tới chưa được chọn</value>
+  </data>
+  <data name="ErrorNgayChungTuEmpty" xml:space="preserve">
+    <value>Ngày chứng từ chưa nhập</value>
+  </data>
+  <data name="ErrorNgayQuyetDinhEmpty" xml:space="preserve">
+    <value>Ngày quyết định chưa nhập</value>
+  </data>
+  <data name="ErrorLoaiCapEmpty" xml:space="preserve">
+    <value>Loại cấp chưa được nhập</value>
+  </data>
+  <data name="MsgErrorDuAnNotHaveNguonvon" xml:space="preserve">
+    <value>Dự án bạn chọn chưa có nguồn vốn !</value>
+  </data>
+  <data name="MsgTrungRow" xml:space="preserve">
+    <value>Trùng bản ghi đã nhập, vui lòng nhập lại!</value>
+  </data>
+  <data name="MsgConfirmDeleteThongTriCapPhat" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa thông tri cấp phát {0} ?</value>
+  </data>
+  <data name="MsgConfirmDeleteThongTriQuyetToan" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa thông tri quyết toán này ?</value>
+  </data>
+  <data name="MsgErrorLoaiEmpty" xml:space="preserve">
+    <value>Chưa nhập dữ liệu loại chi tiết</value>
+  </data>
+  <data name="MsgErrorNoiDungempty" xml:space="preserve">
+    <value>Chưa nhập dữ liệu chi phí hoặc nguồn vốn chi tiết</value>
+  </data>
+  <data name="AlertAggregateUnLocked" xml:space="preserve">
+    <value>Vui lòng chọn các chứng từ đã khóa</value>
+  </data>
+  <data name="MsgConfirmExactMdf" xml:space="preserve">
+    <value>Cơ sở dữ liệu đã tồn tại, Bấm YES để ghi đè, NO để hủy bỏ thao tác</value>
+  </data>
+  <data name="MsgErrorDuplicateSoQuyetDinh" xml:space="preserve">
+    <value>Đơn vị quản lý {0} với số quyết định {1} đã tồn tại !</value>
+  </data>
+  <data name="UnableToAddBQuanly" xml:space="preserve">
+    <value>Không thể thêm B quản lý cho mục lục ngân sách này</value>
+  </data>
+  <data name="MsgCheckLoaiCongTrinh" xml:space="preserve">
+    <value>Vui lòng chọn loại công trình</value>
+  </data>
+  <data name="UnableAddChiTietToi" xml:space="preserve">
+    <value>Không thể cập nhật trường chi tiết tới cho mục lục ngân sách này</value>
+  </data>
+  <data name="MsgErrorDuAnNotSave" xml:space="preserve">
+    <value>Tồn tại dự án chưa được tạo mới hoặc cập nhật, hãy ấn lưu dữ liệu !</value>
+  </data>
+  <data name="MsgErrorDuAnNotHaveLoaiCongTrinh" xml:space="preserve">
+    <value>Dự án chưa chọn loại công trình</value>
+  </data>
+  <data name="MsgErrorDataNotFound" xml:space="preserve">
+    <value>Không tồn tại dữ liệu cần tìm kiếm .</value>
+  </data>
+  <data name="MsgErrorGiaiDoanExisted" xml:space="preserve">
+    <value>Với đơn vị {0} giai đoạn từ năm {1} đến năm {2} đã được lập!</value>
+  </data>
+  <data name="MsgTongNguonVonNotEqualTMDT" xml:space="preserve">
+    <value>Tổng nguồn vốn không bằng tổng mức đầu tư phê duyệt dự kiến.</value>
+  </data>
+  <data name="MsgErrorMucLucNganSachNotExist" xml:space="preserve">
+    <value>Mục lục ngân sách không tồn tại !</value>
+  </data>
+  <data name="MsgCheckCapPheDuyet" xml:space="preserve">
+    <value>Vui lòng chọn cấp phê duyệt</value>
+  </data>
+  <data name="MsgCheckPhanCapPheDuyet" xml:space="preserve">
+    <value>Vui lòng chọn phân cấp phê duyệt</value>
+  </data>
+  <data name="MsgCheckNamKhoiTao" xml:space="preserve">
+    <value>Vui lòng kiểm tra năm khởi tạo</value>
+  </data>
+  <data name="AlertExistSettlementMonthVoucher" xml:space="preserve">
+    <value>Đã tồn tại chứng từ thuộc đơn vị {0}, {1}, LNS: {2}</value>
+  </data>
+  <data name="MsgErrorKeHoachNamDonViExist" xml:space="preserve">
+    <value>Đơn vị quản lý {0} và nguồn vốn {1} trong năm kế hoạch {2} đã tồn tại !</value>
+  </data>
+  <data name="MsgErrorDuAnNotHaveDonViQuanLy" xml:space="preserve">
+    <value>Bạn chưa chọn đơn vị quản lý</value>
+  </data>
+  <data name="MsgCheckNgayQDDauTu" xml:space="preserve">
+    <value>Vui lòng nhập ngày duyệt QĐĐT</value>
+  </data>
+  <data name="MsgCheckSoQDDauTu" xml:space="preserve">
+    <value>Vui lòng nhập Số QĐĐT</value>
+  </data>
+  <data name="MsgErrorItemNotFound" xml:space="preserve">
+    <value>Không tìm thấy {0} !</value>
+  </data>
+  <data name="MsgWarnParentNotExisted" xml:space="preserve">
+    <value>Dữ liệu hàng cha chưa được lưu</value>
+  </data>
+  <data name="MsgVocherLevel" xml:space="preserve">
+    <value>Dự án chọn ko cùng cấp</value>
+  </data>
+  <data name="MsgVocherParent" xml:space="preserve">
+    <value>Không thể xóa hàng cha</value>
+  </data>
+  <data name="MsgKehoachTrungHanExists" xml:space="preserve">
+    <value>Chưa refer kế hoạch trung hạn đề xuất</value>
+  </data>
+  <data name="MsgConfirmDeleteCapPhatThanhToan" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa cấp phát thanh toán này ?</value>
+  </data>
+  <data name="MsgDuAnExisted" xml:space="preserve">
+    <value>Dự án {0} đã tồn tại</value>
+  </data>
+  <data name="ErrorChiPhiNotEqualHangMuc" xml:space="preserve">
+    <value>Tổng tiền hạng mục không được lớn hơn chi phí!</value>
+  </data>
+  <data name="ErrorLoaiCongTrinhEmpty" xml:space="preserve">
+    <value>Chưa chọn loại công trình</value>
+  </data>
+  <data name="ErrorDonViEmpty" xml:space="preserve">
+    <value>Chưa chọn đơn vị quản lý</value>
+  </data>
+  <data name="MsgNguonNganSachEmpty" xml:space="preserve">
+    <value>Chưa chọn nguồn ngân sách</value>
+  </data>
+  <data name="FormulaError" xml:space="preserve">
+    <value>Bạn nhập sai công thức.</value>
+  </data>
+  <data name="FormulaNull" xml:space="preserve">
+    <value>Công thức không được để trống.</value>
+  </data>
+  <data name="IsSurroundedByParens" xml:space="preserve">
+    <value>Công thức nhập thiếu dấu '('; ')'</value>
+  </data>
+  <data name="PayrollNull" xml:space="preserve">
+    <value>Hãy chọn cách tính lương.</value>
+  </data>
+  <data name="TargetExists" xml:space="preserve">
+    <value>Chỉ tiêu đã tồn tại.</value>
+  </data>
+  <data name="TargetNotExists" xml:space="preserve">
+    <value>Không tồn tại chỉ tiêu </value>
+  </data>
+  <data name="TargetNull" xml:space="preserve">
+    <value>Hãy chọn chỉ tiêu.</value>
+  </data>
+  <data name="MsgConfirmDeleteBangLuong" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa bảng lương này?</value>
+  </data>
+  <data name="SalaryTableExist" xml:space="preserve">
+    <value>Bảng lương tháng {0} - năm {1} - {2} đã tồn tại!</value>
+  </data>
+  <data name="SalaryTableNameNull" xml:space="preserve">
+    <value>Tên bảng lương không được để trống.</value>
+  </data>
+  <data name="UnitNull" xml:space="preserve">
+    <value>Hãy chọn đơn vị.</value>
+  </data>
+  <data name="MsgErrDeleteUserGroup" xml:space="preserve">
+    <value>Không thể xóa vì nhóm này đã có người dùng</value>
+  </data>
+  <data name="MsgCTError" xml:space="preserve">
+    <value>Tồn tại lỗi</value>
+  </data>
+  <data name="MsgConfirmDeleteKHLCNT" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa kế hoạch của dự án {0} ?</value>
+  </data>
+  <data name="MsgDonViPhanBoEmpty" xml:space="preserve">
+    <value>Chưa chọn đơn vị phân bổ</value>
+  </data>
+  <data name="FileOutputTypeNull" xml:space="preserve">
+    <value>Hãy chọn loại file để export.</value>
+  </data>
+  <data name="DeleteListVoucher" xml:space="preserve">
+    <value>Đ/c có chắc chắn muốn xóa các chứng từ đã chọn?</value>
+  </data>
+  <data name="MsgErrorThanhToanDuplicate" xml:space="preserve">
+    <value>Dự án {0} đang bị trùng lặp !</value>
+  </data>
+  <data name="MsgErrorParentIsDeleted" xml:space="preserve">
+    <value>{0} cha đã bị xóa, khôi phục hạng mục cha trước !</value>
+  </data>
+  <data name="MsgErrorHangMucNotEqualNguonVon" xml:space="preserve">
+    <value>Tổng hạng mục không bằng tổng nguồn vốn !</value>
+  </data>
+  <data name="ErrorTongDauTuPheDuyetBigger" xml:space="preserve">
+    <value>Tổng mức đầu tư phê duyệt lớn hơn tổng mức đầu tư chủ trương !</value>
+  </data>
+  <data name="CadresAccountNumberNull" xml:space="preserve">
+    <value>Số tài khoản không được để trống.</value>
+  </data>
+  <data name="CadresNameNull" xml:space="preserve">
+    <value>Tên cán bộ không được để trống.</value>
+  </data>
+  <data name="CadresPhoneNull" xml:space="preserve">
+    <value>Số điện thoại không được để trống.</value>
+  </data>
+  <data name="CadresPositionNull" xml:space="preserve">
+    <value>Hãy chọn chức vụ.</value>
+  </data>
+  <data name="CadresRankNull" xml:space="preserve">
+    <value>Hãy chọn cấp bậc.</value>
+  </data>
+  <data name="CadresTaxCodeNull" xml:space="preserve">
+    <value>Mã số thuê TNCN không được để trống.</value>
+  </data>
+  <data name="EnlismentDayNull" xml:space="preserve">
+    <value>Hãy chọn ngày nhập ngũ.</value>
+  </data>
+  <data name="GenderNull" xml:space="preserve">
+    <value>Hãy chọn giới tính.</value>
+  </data>
+  <data name="YearInvalid" xml:space="preserve">
+    <value>Năm không hợp lệ.</value>
+  </data>
+  <data name="ErrorNguonVonNotEqualHangMuc" xml:space="preserve">
+    <value>Tổng tiền nguồn vốn phải bằng tổng hạn mức đầu tư hạng mục</value>
+  </data>
+  <data name="MsgExistDonVi" xml:space="preserve">
+    <value>Chứng từ của đơn vị đã tồn tại!</value>
+  </data>
+  <data name="MsgCheckChuDauTu" xml:space="preserve">
+    <value>Vui lòng chọn chủ đầu tư!</value>
+  </data>
+  <data name="MsgWarnGroup" xml:space="preserve">
+    <value>Bạn có muốn thêm dự án này vào trong nhóm {0}?</value>
+  </data>
+  <data name="MsgErrorGroupDetail" xml:space="preserve">
+    <value>Không thêm mới chi tiết cho nhóm dự án.</value>
+  </data>
+  <data name="msgErrorGoiThauDuToanExistData" xml:space="preserve">
+    <value>Đã có gói thầu đăng kí dữ liệu bằng dự toán {0} .</value>
+  </data>
+  <data name="PlaceNull" xml:space="preserve">
+    <value>Nơi chuyển đến không được đển trống.</value>
+  </data>
+  <data name="DecisionNumberNull" xml:space="preserve">
+    <value>Số quyết định không được để trống.</value>
+  </data>
+  <data name="MsgRoleAdd" xml:space="preserve">
+    <value>Đ/c không có quyền tạo mới chứng từ do không quản lý đơn vị cha.</value>
+  </data>
+  <data name="MsgRoleDelete" xml:space="preserve">
+    <value>Đ/c không có quyền xóa chứng từ do người dùng {0} tạo.</value>
+  </data>
+  <data name="MsgRoleLock" xml:space="preserve">
+    <value>Đ/c không có quyền khóa chứng từ do người dùng {0} tạo.</value>
+  </data>
+  <data name="MsgRoleUnlock" xml:space="preserve">
+    <value>Đồng chí không được mở khóa chứng từ do không có quyền tổng hợp.</value>
+  </data>
+  <data name="MsgRoleUpdate" xml:space="preserve">
+    <value>Đ/c không có quyền sửa chứng từ do người dùng {0} tạo.</value>
+  </data>
+  <data name="MsgRoleAggregate" xml:space="preserve">
+    <value>Không có quyền tổng hợp chứng từ do không quản lý đơn vị cha.</value>
+  </data>
+  <data name="MsgErrorVocherDetails" xml:space="preserve">
+    <value>Không có dự án nào để thêm chi tiết</value>
+  </data>
+  <data name="MsgWarnHangMucExisted" xml:space="preserve">
+    <value>Dự án {0} - nguồn vốn {1} - hạng mục {2} đã tồn tại</value>
+  </data>
+  <data name="ErrorNguonVonNotEqualPheDuyet" xml:space="preserve">
+    <value>Tổng tiền nguồn vốn không được lớn hơn tổng tiền nguồn vốn đã được phê duyệt</value>
+  </data>
+  <data name="FeatureIsUpdating" xml:space="preserve">
+    <value>Tính năng đang cập nhật. Vui lòng thử lại sau.</value>
+  </data>
+  <data name="MsgDaNVHangMucExisted" xml:space="preserve">
+    <value>Chi tiết dự án không được trùng nguồn vốn và loại công trình</value>
+  </data>
+  <data name="MsgErrorHangMucLonHonGTDuocDuyet" xml:space="preserve">
+    <value>Giá trị của hạng mục không được lớn hơn giá trị của hạng mục đã được phê duyệt</value>
+  </data>
+  <data name="MsgErrorImport" xml:space="preserve">
+    <value>Import lỗi, vui lòng kiểm tra lại file.</value>
+  </data>
+  <data name="ErrorDieuChinhLonHonPheDuyet" xml:space="preserve">
+    <value>Giá trị điều chỉnh giảm không được lớn hơn giá trị phê duyệt</value>
+  </data>
+  <data name="MsgConfirmDeleteQSChungTu" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn xóa chứng từ này?.</value>
+  </data>
+  <data name="MsgErrorChiPhiDuToanLonHonGTDuocDuyet" xml:space="preserve">
+    <value>Giá trị của chi phí không được lớn hơn giá trị của chi phí đã được phê duyệt</value>
+  </data>
+  <data name="MsgErrorNguonVonDuToanLonHonGTDuocDuyet" xml:space="preserve">
+    <value>Giá trị của nguồn vốn không được lớn hơn giá trị của nguồn vốn đã được phê duyệt</value>
+  </data>
+  <data name="DemandDeleteSuccess" xml:space="preserve">
+    <value>Xóa chứng từ thành công.</value>
+  </data>
+  <data name="CheckDeleteSuccess" xml:space="preserve">
+    <value>Xóa chứng từ thành công.</value>
+  </data>
+  <data name="MsgConfirmDeleteKeHoachChiQuy" xml:space="preserve">
+    <value>Bạn có muốn xóa kế hoạch chi quý {0} không ?</value>
+  </data>
+  <data name="MsgTrungSoQuyetDinhs" xml:space="preserve">
+    <value>Số quyết định đã tồn tại!</value>
+  </data>
+  <data name="MsgRecordEmpty" xml:space="preserve">
+    <value>Vui lòng chọn bản ghi</value>
+  </data>
+  <data name="LicenseNull" xml:space="preserve">
+    <value>Chứng từ tháng {0}  - năm {1} - {2} chưa tồn tại / chưa khởi tạo dữ liệu </value>
+  </data>
+  <data name="MonthNull" xml:space="preserve">
+    <value>Chưa chọn tháng</value>
+  </data>
+  <data name="FileImportEmpty" xml:space="preserve">
+    <value>Không có dữ liệu</value>
+  </data>
+  <data name="UnlockMultiChungTu" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn mở khóa số liệu các chứng từ đã chọn? Sau khi mở khóa, sẽ được phép chỉnh sửa số liệu chi tiết của chứng từ</value>
+  </data>
+  <data name="LockMultiChungTu" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn khóa số liệu các chứng từ đã chọn? Sau khi khóa số liệu sẽ không cho phép chỉnh sửa số liệu chi tiết của chứng từ</value>
+  </data>
+  <data name="MsgErrorMucLucNganSachNotInKHVN" xml:space="preserve">
+    <value>Mục lục ngân sách không có trong kế hoạch vốn năm được duyệt !</value>
+  </data>
+  <data name="UnableToAddChildMLNS" xml:space="preserve">
+    <value>MLNS đã được sử dụng, không thể thêm mlns con</value>
+  </data>
+  <data name="UnableToDeleteUsedMLNS" xml:space="preserve">
+    <value>MLNS đã được sử dụng, không thể xóa mlns này</value>
+  </data>
+  <data name="ErrorNguonVonNotChange" xml:space="preserve">
+    <value>Tổng tiền nguồn vốn không được thay đổi</value>
+  </data>
+  <data name="MsgErrorNgayQDDieuChinhNhoHon" xml:space="preserve">
+    <value>Ngày quyết định phải lớn hơn hoặc bằng bản ghi điều chỉnh</value>
+  </data>
+  <data name="MsgVoucherModified" xml:space="preserve">
+    <value>Không có dự án nào đã được duyệt, không thể điều chỉnh.</value>
+  </data>
+  <data name="MsgConfirmVoucherModified" xml:space="preserve">
+    <value>Chỉ điều chỉnh được những dự án đã được duyệt, bạn có chắc chắn muốn điều chỉnh không?</value>
+  </data>
+  <data name="MsgNgayChungTuEmpty" xml:space="preserve">
+    <value>Ngày chứng từ không được để trống</value>
+  </data>
+  <data name="MsgErrorPeriodMonth" xml:space="preserve">
+    <value>Tháng bắt đầu phải nhỏ hơn tháng kết thúc</value>
+  </data>
+  <data name="MsgExistLicene" xml:space="preserve">
+    <value>Chứng từ tháng {0}  năm {1} - {2} đã tồn tại</value>
+  </data>
+  <data name="AlertGiaiThichSo" xml:space="preserve">
+    <value>Đ/c chưa nhập giải thích số.</value>
+  </data>
+  <data name="AlertLNSEmpty" xml:space="preserve">
+    <value>Đ/c chưa chọn loại ngân sách.</value>
+  </data>
+  <data name="AlertDeleteAggregatedVoucher" xml:space="preserve">
+    <value>Đ/c không thể xóa chứng từ đã được sử dụng để tổng hợp.</value>
+  </data>
+  <data name="AlertMonthEmpty" xml:space="preserve">
+    <value>Đ/c chưa chọn tháng.</value>
+  </data>
+  <data name="AlertQuarterMonthEmpty" xml:space="preserve">
+    <value>Đ/c chưa chọn tháng, quý.</value>
+  </data>
+  <data name="AlertQuarterYearEmpty" xml:space="preserve">
+    <value>Đ/c chưa chọn quý, năm.</value>
+  </data>
+  <data name="MsgDeleteSuccess" xml:space="preserve">
+    <value>Xóa dữ liệu thành công.</value>
+  </data>
+  <data name="MsgCheckLNS" xml:space="preserve">
+    <value>Vui lòng chọn loại ngân sách!</value>
+  </data>
+  <data name="ErrorChiPhiDieuChinhLonHonPheDuyet" xml:space="preserve">
+    <value>Giá trị điều chỉnh của chi phí không được lớn hơn chi phí đã được phê duyệt</value>
+  </data>
+  <data name="MsgErrorMoneyOutOfRange" xml:space="preserve">
+    <value>Tổng giá trị {0} không được lớn hơn tổng giá trị của kế hoạch vốn.</value>
+  </data>
+  <data name="MsgInputYear" xml:space="preserve">
+    <value>Vui lòng nhập năm báo cáo.</value>
+  </data>
+  <data name="MsgHopDongDaDieuChinh" xml:space="preserve">
+    <value>Hợp đồng này đã được điều chỉnh!</value>
+  </data>
+  <data name="ConnectServerSuccessfully" xml:space="preserve">
+    <value>Kết nối thành công</value>
+  </data>
+  <data name="ConnectServerUnsuccessfully" xml:space="preserve">
+    <value>Kết nối không thành công, vui lòng kiểm tra lại thông tin kết nối</value>
+  </data>
+  <data name="ErrorEmptyFolder" xml:space="preserve">
+    <value>Vui lòng chọn đường dẫn để lưu trữ tệp</value>
+  </data>
+  <data name="ErrorNonExistFolder" xml:space="preserve">
+    <value>Đường dẫn không tồn tại</value>
+  </data>
+  <data name="ErrorUploadFile" xml:space="preserve">
+    <value>Có lỗi xảy ra, không thể tải tệp lên</value>
+  </data>
+  <data name="ErrorViewFile" xml:space="preserve">
+    <value>Có lỗi xảy ra, không thể xem file</value>
+  </data>
+  <data name="MsgDieuChinhQsKeHoach" xml:space="preserve">
+    <value>Dữ liệu tháng {0} - năm {1} - {2} đã tồn tại</value>
+  </data>
+  <data name="VoucherExisted" xml:space="preserve">
+    <value>Chứng từ đã tồn tại, bạn có chắc muốn update?</value>
+  </data>
+  <data name="VoucerLastModified" xml:space="preserve">
+    <value>Dữ liệu import không phải là lần điều chỉnh cuối cùng</value>
+  </data>
+  <data name="VoucherFirstModifed" xml:space="preserve">
+    <value>Chứng từ điều chỉnh lần trước chưa được import</value>
+  </data>
+  <data name="MsgConfirmLockBangLuong" xml:space="preserve">
+    <value>Đồng chí muốn khoá bảng lương không?</value>
+  </data>
+  <data name="MsgConfirmUnLockBangLuong" xml:space="preserve">
+    <value>Đồng chí muốn mở khóa bảng lương không?</value>
+  </data>
+  <data name="MsgNotEditCadre" xml:space="preserve">
+    <value>Cán bộ đã khóa đồng chí không thể thực hiện sửa dữ liệu</value>
+  </data>
+  <data name="MsgEditCadres" xml:space="preserve">
+    <value>Đ/c có muốn sửa cán bộ đến tháng hiện tại không?</value>
+  </data>
+  <data name="MsgCapNhapBangLuong" xml:space="preserve">
+    <value>Đ/c có muốn tính lại lương đến tháng hiện tại?</value>
+  </data>
+  <data name="MsgEditBangLuong" xml:space="preserve">
+    <value>Đã cập nhập bảng lương thành công</value>
+  </data>
+  <data name="AlertNgayChungTuEmpty" xml:space="preserve">
+    <value>Đ/c chưa nhập ngày chứng từ.</value>
+  </data>
+  <data name="AlertNgayQuyetDinhEmpty" xml:space="preserve">
+    <value>Đ/c chưa nhập ngày quyết định.</value>
+  </data>
+  <data name="AlertLoaiDuToanEmpty" xml:space="preserve">
+    <value>Đ/c chưa nhập loại dự toán.</value>
+  </data>
+  <data name="AlertSoQuyetDinhEmpty" xml:space="preserve">
+    <value>Đ/c chưa nhập số quyết định.</value>
+  </data>
+  <data name="AlertSoKeHoachEmpty" xml:space="preserve">
+    <value>Đ/c chưa nhập số kế hoạch</value>
+  </data>
+  <data name="UploadFileSuccessfully" xml:space="preserve">
+    <value>Tải tệp lên thành công</value>
+  </data>
+  <data name="MsgErrorRecallBiggerPayment" xml:space="preserve">
+    <value>Tổng giá trị thu hồi ứng {0} không được lớn hơn tổng giá trị thanh toán {0}.</value>
+  </data>
+  <data name="MsgDuAnThuocDonVi" xml:space="preserve">
+    <value>Dự án {0} không thuộc đơn vị đã chọn!</value>
+  </data>
+  <data name="VoucherImportErrors" xml:space="preserve">
+    <value>Dữ liệu import điều chỉnh không phải là của chứng từ được chọn.</value>
+  </data>
+  <data name="VoucherUnitModified" xml:space="preserve">
+    <value>Đơn vị quản lý không trùng với đơn vị chứng từ điều chỉnh</value>
+  </data>
+  <data name="MsgErrorMucLucNganSachNotInKHVU" xml:space="preserve">
+    <value>Mục lục ngân sách không có trong kế hoạch vốn ứng được duyệt !</value>
+  </data>
+  <data name="VoucherInvestementLimit" xml:space="preserve">
+    <value>Hạn mức đầu tư và tổng số nhu cầu NSQP không bằng nhau</value>
+  </data>
+  <data name="VoucherNumberExists" xml:space="preserve">
+    <value>Số quyết định đã tồn tại, không được nhập trùng số quyết định.</value>
+  </data>
+  <data name="MsgStatusSalary" xml:space="preserve">
+    <value>Bảng lương tháng {0} - năm {1} - {2} đã khóa, không thay đổi trạng thái </value>
+  </data>
+  <data name="MsgKhoaBangLuong" xml:space="preserve">
+    <value>Bảng luong tháng {0} -  năm {1} - {2} đã khóa </value>
+  </data>
+  <data name="MsgCensorship" xml:space="preserve">
+    <value>Bạn có chắc chắc muốn kiểm duyệt?</value>
+  </data>
+  <data name="MsgCheckCostAndFunds" xml:space="preserve">
+    <value>Giá trị của chi phí phải bằng giá trị của nguồn vốn.</value>
+  </data>
+  <data name="MsgCheckFormatFileImport" xml:space="preserve">
+    <value>File import không hợp lệ. Vui lòng chọn lại file import</value>
+  </data>
+  <data name="MsgCheckLengthInput" xml:space="preserve">
+    <value>{0} không được vượt quá {1} ký tự. Vui lòng nhập lại.</value>
+  </data>
+  <data name="MsgDeleteRecord" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa?</value>
+  </data>
+  <data name="MsgDeniedCensorship" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn từ chối kiểm duyệt?</value>
+  </data>
+  <data name="MsgDuplicateName" xml:space="preserve">
+    <value>{0} đã tồn tại. Vui lòng nhập tên khác.</value>
+  </data>
+  <data name="MsgFileImportEmpty" xml:space="preserve">
+    <value>File import không có dữ liệu. Vui lòng chọn lại file import.</value>
+  </data>
+  <data name="MsgFileImportNotExist" xml:space="preserve">
+    <value>File import không tồn tại. Vui lòng chọn lại file import</value>
+  </data>
+  <data name="MsgFundsDuplicate" xml:space="preserve">
+    <value>Nguồn vốn {0} đã chọn ở trên. Vui lòng chọn lại.</value>
+  </data>
+  <data name="MsgSaveErrorCategory" xml:space="preserve">
+    <value>Dự án phải tồn tại ít nhất một hạng mục.</value>
+  </data>
+  <data name="MsgImportSuccess" xml:space="preserve">
+    <value>Import file thành công.</value>
+  </data>
+  <data name="MsgInputDropdownRequire" xml:space="preserve">
+    <value>Vui lòng chọn {0}</value>
+  </data>
+  <data name="MsgInputError" xml:space="preserve">
+    <value>{0} không hợp lệ. Vui lòng nhập lại.</value>
+  </data>
+  <data name="MsgInputRequire" xml:space="preserve">
+    <value>Vui lòng nhập {0}</value>
+  </data>
+  <data name="MsgLock" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn khóa? Sau khi khóa hệ thống sẽ không cho phép chỉnh sửa số liệu chi tiết của chứng từ.</value>
+  </data>
+  <data name="MsgUnLock" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn mở khóa? Sau khi mở khóa hệ thống sẽ cho phép chỉnh sửa số liệu chi tiết của chứng từ.</value>
+  </data>
+  <data name="MsgChooseFileImport" xml:space="preserve">
+    <value>Vui lòng chọn file import.</value>
+  </data>
+  <data name="MsgExistVoucher" xml:space="preserve">
+    <value>Chứng từ cho năm hiện tại đã được tạo.</value>
+  </data>
+  <data name="MsgExistVoucherAgency" xml:space="preserve">
+    <value>Chứng từ cho năm hiện tại của đơn vị đã được tạo.</value>
+  </data>
+  <data name="MsgErrorNotChooseRecordSummary" xml:space="preserve">
+    <value>Không được chọn chứng từ tổng hợp.</value>
+  </data>
+  <data name="MsgErrorRecordNotEqual" xml:space="preserve">
+    <value>Tồn tại chứng từ không trùng {0}.</value>
+  </data>
+  <data name="MsgErrorDaTonTaiThongTri" xml:space="preserve">
+    <value>Số đề nghị ({0}) đã tồn tại thông tri.</value>
+  </data>
+  <data name="MsgCheckNganh" xml:space="preserve">
+    <value>Vui lòng chọn ngành.</value>
+  </data>
+  <data name="MsgCheckCtcVoucher" xml:space="preserve">
+    <value>Chưa tồn tại chứng từ CTC đề nghị.</value>
+  </data>
+  <data name="ErrorFileNotExists" xml:space="preserve">
+    <value>Tệp không tồn tại</value>
+  </data>
+  <data name="ErrorFileSize" xml:space="preserve">
+    <value>Kích cỡ tệp vượt quá {0} mb</value>
+  </data>
+  <data name="MsgCreateVoucherSuccess" xml:space="preserve">
+    <value>Tạo mới chứng từ tổng hợp thành công.</value>
+  </data>
+  <data name="MsgEditCanBo" xml:space="preserve">
+    <value>Cập nhật thành công cán bộ</value>
+  </data>
+  <data name="MsgImportErrorNganh" xml:space="preserve">
+    <value>Loại chứng từ và đơn vị không có quyền đối với ngành import!</value>
+  </data>
+  <data name="MsgLockCadres" xml:space="preserve">
+    <value>Đồng chí có muốn chuyển cán bộ đã chốt đơn vị {0} sang tháng {1} - năm {2} không?</value>
+  </data>
+  <data name="MsgLockCanBo" xml:space="preserve">
+    <value>Đồng chí có muốn khóa danh sách cán bộ tháng {0} - năm {1} đơn vị {2} không?</value>
+  </data>
+  <data name="MsgUnLockcanBo" xml:space="preserve">
+    <value>Đồng chí có muốn mở khóa danh sách cán bộ tháng {0} - năm {1} đơn vị {2} không?</value>
+  </data>
+  <data name="MsgLockCanBoOk" xml:space="preserve">
+    <value>Khóa danh sách cán bộ thành công</value>
+  </data>
+  <data name="MsgUnLockCanBoOk" xml:space="preserve">
+    <value>Mở khóa danh sách cán bộ thành công</value>
+  </data>
+  <data name="DeleteAllChungTuChiTiet" xml:space="preserve">
+    <value>Đ/c có muốn xóa tất cả dữ liệu trên lưới không?</value>
+  </data>
+  <data name="MsgImportErrorProjectCode" xml:space="preserve">
+    <value>Mã dự án không hợp lệ.</value>
+  </data>
+  <data name="MsgImportErrorProjectCodeAgency" xml:space="preserve">
+    <value>Đơn vị đã chọn không có quyền với dự án này.</value>
+  </data>
+  <data name="MsgVoucherHasLock" xml:space="preserve">
+    <value>Chứng từ tổng hợp của đơn vị đang bị khóa.</value>
+  </data>
+  <data name="VoucherProjectDelete" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa cả hạng mục/dự án con không?</value>
+  </data>
+  <data name="MsgNotDelete" xml:space="preserve">
+    <value>Cán bộ này đã khóa đồng chí không thể xóa được </value>
+  </data>
+  <data name="MsgSaveFile" xml:space="preserve">
+    <value>Lưu tệp báo cáo </value>
+  </data>
+  <data name="MsgSaveFolder" xml:space="preserve">
+    <value>Chọn thư mục lưu trữ </value>
+  </data>
+  <data name="MsgQtNotSalary" xml:space="preserve">
+    <value>Chưa có dữ liệu bảng lương của tháng {0} - năm {1} - {2}</value>
+  </data>
+  <data name="MsgDeleteChiPhiHasHangMuc" xml:space="preserve">
+    <value>Không thể xóa chi phí này do có dữ liệu hạng mục.</value>
+  </data>
+  <data name="MsgErrAddChiPhiChild" xml:space="preserve">
+    <value>Chi phí hiện tại đang có dữ liệu hạng mục, không thể thêm dòng con.</value>
+  </data>
+  <data name="VoucherExportEmpty" xml:space="preserve">
+    <value>Vui lòng chọn bản ghi!</value>
+  </data>
+  <data name="MsgSumaryDone" xml:space="preserve">
+    <value>Tạo chứng từ tổng hợp thành công.</value>
+  </data>
+  <data name="MsgCheckLockVoucherSummary" xml:space="preserve">
+    <value>Vui lòng mở khóa chứng từ tổng hợp trước!</value>
+  </data>
+  <data name="UnableToDeleteUsedMLSKT" xml:space="preserve">
+    <value>Mục lục số kiểm tra đã được sử dụng, không thể xóa!</value>
+  </data>
+  <data name="MsgQtQsKhoiTao" xml:space="preserve">
+    <value>{0} chưa có dữ liệu khởi tạo cho mã 100 </value>
+  </data>
+  <data name="MsgNotSelectHangMucParent" xml:space="preserve">
+    <value>Chưa chọn hạng mục cha để thêm hạng mục con.</value>
+  </data>
+  <data name="VoucherBeforeYearLimit" xml:space="preserve">
+    <value>Tổng vốn bố trí không được vượt quá hạn mức đầu tư.</value>
+  </data>
+  <data name="ValidSTen" xml:space="preserve">
+    <value>Tên dự án không nhập quá 255 kí tự.</value>
+  </data>
+  <data name="MsgErrorDuAnExistInTktc" xml:space="preserve">
+    <value>Bản ghi được sử dụng trong bảng thiết kế thi công và tổng dự toán. Bạn không thể thực hiện thao tác này.</value>
+  </data>
+  <data name="MsgErrDeleteChuTruongDT" xml:space="preserve">
+    <value>Bản ghi được sử dụng trong bảng quyết định đầu tư. Bạn không thể thực hiện thao tác này.</value>
+  </data>
+  <data name="MsgHopDongDaDangKiThanhToan" xml:space="preserve">
+    <value>Bản ghi được sử dụng trong bảng đề nghị thanh toán. Bạn không thể thực hiện thao tác này.</value>
+  </data>
+  <data name="MsgErrNotChooseParent" xml:space="preserve">
+    <value>Chưa chọn hạng mục cha.</value>
+  </data>
+  <data name="MsgErrHangMucPhanChiaChuaChon" xml:space="preserve">
+    <value>Chưa chọn hạng mục để phân chia.</value>
+  </data>
+  <data name="MsgErrHangMucPhanChiaChuaNhap" xml:space="preserve">
+    <value>Hạng mục chưa được nhập giá trị phê duyệt TKTC để phân chia.</value>
+  </data>
+  <data name="MsgErrHangMucPhanChiaVuotQuaGTTKTC" xml:space="preserve">
+    <value>Tổng giá trị phân chia không được vượt quá giá trị phê duyệt TKTC.</value>
+  </data>
+  <data name="MsgErrorDuAnExistInKHLCNT" xml:space="preserve">
+    <value>Bản ghi được sử dụng trong bảng kế hoạch lựa chọn nhà thầu . Bạn không thể thực hiện thao tác này.</value>
+  </data>
+  <data name="MsgErrorGoiThauExistHopDong" xml:space="preserve">
+    <value>Bản ghi được sử dụng trong bảng hợp đồng. Bạn không thể thực hiện thao tác này!</value>
+  </data>
+  <data name="AlertUnlockDivisionVoucher" xml:space="preserve">
+    <value>Không thể mở khóa chứng từ do đã được phân bổ.</value>
+  </data>
+  <data name="MsgSaveCanBo" xml:space="preserve">
+    <value>Đ/c đã thêm cán bộ thành công</value>
+  </data>
+  <data name="VoucherLockModified" xml:space="preserve">
+    <value>Chỉ được khóa chứng từ là lần điều chỉnh cuối cùng.</value>
+  </data>
+  <data name="VoucherPeriod" xml:space="preserve">
+    <value>Vui lòng chọn bản ghi có cùng giai đoạn</value>
+  </data>
+  <data name="VoucherProjectType" xml:space="preserve">
+    <value>Vui lòng chọn chứng từ cùng loại dự án.</value>
+  </data>
+  <data name="FileTypeInvalid" xml:space="preserve">
+    <value>File không hợp lệ.</value>
+  </data>
+  <data name="VoucherYear" xml:space="preserve">
+    <value>Vui lòng chọn bản ghi có cùng năm kế hoạch.</value>
+  </data>
+  <data name="MsgRoleSummary" xml:space="preserve">
+    <value>Đ/c không có quyền tổng hợp chứng từ do không quản lý đơn vị cha.</value>
+  </data>
+  <data name="AlertDivisionEstimateAdjusted" xml:space="preserve">
+    <value>Chứng từ đã bị điều chỉnh. Chỉnh sửa chứng từ có thể ảnh hưởng tới số liệu của chứng từ khác.</value>
+  </data>
+  <data name="AlertUpdateDivisionEstimate" xml:space="preserve">
+    <value>Đã tồn tại chứng từ phân bổ sau chứng từ {0}. Chỉnh sửa chứng từ có thể ảnh hưởng tới số liệu của chứng từ khác.</value>
+  </data>
+  <data name="MsgSumaryWarning" xml:space="preserve">
+    <value>Chứng từ {0} đã được tổng hợp!</value>
+  </data>
+  <data name="MsgSummaryWarningLevel" xml:space="preserve">
+    <value>Không thể tổng hợp chứng từ khác chi tiết tới.</value>
+  </data>
+  <data name="VoucherBudget" xml:space="preserve">
+    <value>Vui lòng chọn bản ghi có cùng nguồn vốn.</value>
+  </data>
+  <data name="MsgErrorUnLock" xml:space="preserve">
+    <value>Đơn vị không có quyền mở khóa chứng từ.</value>
+  </data>
+  <data name="MsgConfirmSummary" xml:space="preserve">
+    <value>Chứng từ tổng hợp chỉ tổng hợp từ chứng từ đã khóa, bạn có muốn tiếp tục tổng hợp không?</value>
+  </data>
+  <data name="MsgErrorTongHopQuyetToanNienDo" xml:space="preserve">
+    <value>Chứng từ tổng hợp phải cùng năm kế hoạch, nguồn vốn, loại thanh toán và cơ quan thanh toán !</value>
+  </data>
+  <data name="VoucherAgregatePeriod" xml:space="preserve">
+    <value>Chứng từ tổng hợp giai đoạn {0} - {1} đã tồn tại bạn muốn xóa chứng từ tổng hợp cũ.</value>
+  </data>
+  <data name="VoucherAgregateYearPlan" xml:space="preserve">
+    <value>Chứng từ tổng hợp năm {0} đã tồn tại bạn muốn xóa chứng từ tổng hợp cũ.</value>
+  </data>
+  <data name="ConfirmAggregate" xml:space="preserve">
+    <value>Chứng từ tổng hợp chỉ tổng hợp từ chứng từ đã khóa, bạn có muốn tiếp tục tổng hợp không?.</value>
+  </data>
+  <data name="MsgDuplicateNhaThau" xml:space="preserve">
+    <value>Cùng 1 gói thầu đã tồn tại nhà thầu, vui lòng chọn lại nhà thầu khác.</value>
+  </data>
+  <data name="MsgErrAddGoiThau" xml:space="preserve">
+    <value>Cùng 1 gói thầu không được vượt quá giá trị được duyệt.</value>
+  </data>
+  <data name="MsgErrorKeHoachVonNotExistThanhToan" xml:space="preserve">
+    <value>Vui lòng chọn kế hoạch vốn nằm trong danh sách kế hoạch vốn đã chọn để thanh toán.</value>
+  </data>
+  <data name="MsgErrorDelete" xml:space="preserve">
+    <value>Đ/c không có quyền xóa dữ liệu của đơn vị này!</value>
+  </data>
+  <data name="NgayNhapNgu" xml:space="preserve">
+    <value>Ngày nhập ngũ không được lớn hơn ngày hệ thống</value>
+  </data>
+  <data name="ProjectExisted" xml:space="preserve">
+    <value>- Dự án {0}, loại công trình {1}, nguồn vốn {2} đã được chọn.</value>
+  </data>
+  <data name="MsgEditChungTuQs" xml:space="preserve">
+    <value>Cập nhật dữ diệu thành công</value>
+  </data>
+  <data name="MsgCopyCadres" xml:space="preserve">
+    <value>thời gian sau nhỏ hơn thời gian trước</value>
+  </data>
+  <data name="MsgCopyNull" xml:space="preserve">
+    <value>sao chép đến tháng đang để trống</value>
+  </data>
+  <data name="FileImportStatus" xml:space="preserve">
+    <value>Import file thành công</value>
+  </data>
+  <data name="MsgErrorTongHopKeHoachVonUng" xml:space="preserve">
+    <value>Chứng từ tổng hợp phải cùng năm kế hoạch và nguồn vốn !</value>
+  </data>
+  <data name="MsgNullCadres" xml:space="preserve">
+    <value>Đ/c chưa chọn cán bộ để sao chép</value>
+  </data>
+  <data name="VoucherKhthDelete" xml:space="preserve">
+    <value>Kế hoạch trung hạn đề xuất đã được duyệt.Bạn không thể thực hiện thao tác này.</value>
+  </data>
+  <data name="AlertDuplicateDonViAndSoQuyetDinh" xml:space="preserve">
+    <value>Trùng loại ngân sách với đơn vị và số quyết định. Vui lòng kiểm tra lại.</value>
+  </data>
+  <data name="MsgChocieDelete" xml:space="preserve">
+    <value>Đ/c có muốn xoá cán bộ đã chọn?</value>
+  </data>
+  <data name="MsgCheckSoKeHoach" xml:space="preserve">
+    <value>Vui lòng nhập số kế hoạch!</value>
+  </data>
+  <data name="MsgCheckNgayKeHoach" xml:space="preserve">
+    <value>Vui lòng chọn ngày lập kế hoạch!</value>
+  </data>
+  <data name="MsgCheckMaTienTe" xml:space="preserve">
+    <value>Chưa nhập mã tiền tệ!</value>
+  </data>
+  <data name="MsgCheckTiGia" xml:space="preserve">
+    <value>Chưa nhập tỉ giá hối đoái!</value>
+  </data>
+  <data name="VoucherPeriodInValid" xml:space="preserve">
+    <value>Giai đoạn không hợp lệ</value>
+  </data>
+  <data name="MsgChungTuQsTonTai" xml:space="preserve">
+    <value>Chứng từ quyết toán quân số cho  {0} đã tồn tại</value>
+  </data>
+  <data name="MsgTlChungTuQsTonTai" xml:space="preserve">
+    <value>Chứng từ quyết toán thường xuyên tháng {0} năm {1} cho {2} đã tồn tại</value>
+  </data>
+  <data name="VoucherAgregateExisted" xml:space="preserve">
+    <value>Chứng từ dã được tổng hợp, bạn không thể thực hiện thao tác này.</value>
+  </data>
+  <data name="VoucherDataEmpty" xml:space="preserve">
+    <value>Không có dữ liệu chi tiết.</value>
+  </data>
+  <data name="VoucherModifiedAction" xml:space="preserve">
+    <value>Không thể điều chỉnh chứng từ tổng hợp.</value>
+  </data>
+  <data name="MsgGTDieuChinhLonHonGiaTriPheDuyet" xml:space="preserve">
+    <value>Giá trị phê duyệt điều chỉnh không được lớn hơn giá trị phê duyệt ban đầu.</value>
+  </data>
+  <data name="MsgHMChaDelete" xml:space="preserve">
+    <value>Hạng mục cha đã bị xóa không thể thêm hạng mục con.</value>
+  </data>
+  <data name="AlertDeleteDivisionVoucher" xml:space="preserve">
+    <value>Không thể xóa chứng từ do đã được phân bổ.</value>
+  </data>
+  <data name="MsgTransferChungTuQt" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn lấy dữ liệu quyết toán thường xuyên từ lương?.</value>
+  </data>
+  <data name="MsgLockChungTu" xml:space="preserve">
+    <value>Đ/c có muốn khóa các chừng từ này?</value>
+  </data>
+  <data name="MsgUnLockChungTu" xml:space="preserve">
+    <value>Đ/c có muốn mở khóa các chừng từ này?</value>
+  </data>
+  <data name="MsgTongHopQtQsLock" xml:space="preserve">
+    <value>Vui lòng chọn chứng từ con đã khóa</value>
+  </data>
+  <data name="MsgThQtQsDonViTh" xml:space="preserve">
+    <value>Vui lòng chọn đơn vị tổng hợp</value>
+  </data>
+  <data name="MsgDeleteLock" xml:space="preserve">
+    <value>Chứng từ đã khóa, đ/c không thể xóa được</value>
+  </data>
+  <data name="MsgEditCtLock" xml:space="preserve">
+    <value>Chứng từ đã khóa, đ/c không thể cập nhập lại chứng từ </value>
+  </data>
+  <data name="MsgTransferChungTu" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn chuyển dữ liệu</value>
+  </data>
+  <data name="MsgChuyenDuLieuThanhCong" xml:space="preserve">
+    <value>Đ/c chuyển dữ liệu thành công </value>
+  </data>
+  <data name="MsgConfirmDeletePheDuyetThanhToan" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa phê duyệt thanh toán {0} không ?</value>
+  </data>
+  <data name="AlertEmptyDonViAndSoQuyetDinh" xml:space="preserve">
+    <value>Không được để trống số quyết định và đơn vị. Vui lòng kiểm tra lại.</value>
+  </data>
+  <data name="AlertChonChungTuChuyenSoLieu" xml:space="preserve">
+    <value>Vui lòng chọn chứng từ tổng hợp chuyển sang ngân sách!</value>
+  </data>
+  <data name="ConfirmTransferVoucherToBudget" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn chuyển chứng từ đã chọn sang ngân sách? Sau khi chuyển chứng từ sẽ bị khóa!</value>
+  </data>
+  <data name="AlertChungTuNganSachDaNhanDuLieu" xml:space="preserve">
+    <value>Không được chọn chứng từ ngân sách đã nhận!</value>
+  </data>
+  <data name="MsgChungTuKhacThang" xml:space="preserve">
+    <value>Các chứng từ được chọn đang không cùng tháng </value>
+  </data>
+  <data name="AlertKhongCoChungTuTongHop" xml:space="preserve">
+    <value>Vui lòng tạo chứng từ tổng hợp!</value>
+  </data>
+  <data name="MsgNotTransfer" xml:space="preserve">
+    <value>Chứng từ chọn không phải chứng từ tổng hợp</value>
+  </data>
+  <data name="MsgTransferLock" xml:space="preserve">
+    <value>Chứng từ tổng hợp chưa khóa</value>
+  </data>
+  <data name="UserManagerUnitWarning" xml:space="preserve">
+    <value>Không thể thêm KHTH, user {0} không quản lý đơn vị {1}.</value>
+  </data>
+  <data name="VoucherDeleteKHTHWarning" xml:space="preserve">
+    <value>Bạn không thể xóa KHTH do user {0} tạo.</value>
+  </data>
+  <data name="VoucherUpdateKHTHWarning" xml:space="preserve">
+    <value>Bạn không thể sửa KHTH do user {0} tạo.</value>
+  </data>
+  <data name="UserManagerImportKHTHWarning" xml:space="preserve">
+    <value>Không thể import KHTH, user {0} không quản lý đơn vị {1}</value>
+  </data>
+  <data name="VoucherKHTHExportWarning" xml:space="preserve">
+    <value>Bạn không có quyền export.</value>
+  </data>
+  <data name="VoucherExportTongHop" xml:space="preserve">
+    <value>Chỉ được export những KHTH đã được tổng hợp.</value>
+  </data>
+  <data name="VoucherModifiedKHTHWarning" xml:space="preserve">
+    <value>Bạn không có quyền điều chỉnh KHTH do user {0} tạo ra.</value>
+  </data>
+  <data name="UserManagerKHTHReportWarning" xml:space="preserve">
+    <value>Không thể in báo cáo, user {0} không quản lý các đơn vị {1}.</value>
+  </data>
+  <data name="VoucherKHTHTongHop" xml:space="preserve">
+    <value>Bạn không có quyền tổng hợp.</value>
+  </data>
+  <data name="VoucherUserManagerKHVNWarning" xml:space="preserve">
+    <value>Không thể tạo kế hoạch vốn năm, user {0} không quản lý đơn vị {1}.</value>
+  </data>
+  <data name="SumResourceConfirm" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn nhập Tổng Nguồn vốn nhập lớn hơn Tổng Nhiệm vụ chi?</value>
+  </data>
+  <data name="SumKhttBqpConfirm" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn nhập tổng giá trị của KHTT BQP duyệt theo năm lớn hơn KHTT BQP duyệt theo giai đoạn?</value>
+  </data>
+  <data name="SumResourceDiffSumNguonVonConfirm" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn nhập Tổng chi phí khác Tổng nguồn vốn?</value>
+  </data>
+  <data name="VoucherUpdateKHVNWarning" xml:space="preserve">
+    <value>Ban không thể sửa kế hoạch vốn năm do user {0} tạo.</value>
+  </data>
+  <data name="VoucherDeleteKHVNWarning" xml:space="preserve">
+    <value>Bạn không thể xóa KHVN do user {0} tạo.</value>
+  </data>
+  <data name="VoucherKHVNExportWarning" xml:space="preserve">
+    <value>Bạn không có quyền export KHVN.</value>
+  </data>
+  <data name="VoucherKHVNTongHop" xml:space="preserve">
+    <value>Bạn không có quyền tổng hợp KHVN.</value>
+  </data>
+  <data name="VoucherModifiedKHVNWarning" xml:space="preserve">
+    <value>Bạn không thể điều chỉnh kế hoạch vốn do user {0} tạo.</value>
+  </data>
+  <data name="VoucherDetailPermissionWarning" xml:space="preserve">
+    <value>Bạn không có quyền xem chi tiết do user {0} tạo.</value>
+  </data>
+  <data name="MsgRoleDieuChinh" xml:space="preserve">
+    <value>Đ/c không có quyền điều chỉnh chứng từ do người dùng {0} tạo.</value>
+  </data>
+  <data name="MsgErrorDuAnDaQuyetToan" xml:space="preserve">
+    <value>Dự án đã có quyết định phê duyệt quyết toán hoàn thành, bạn không được điều chỉnh.</value>
+  </data>
+  <data name="ImportError" xml:space="preserve">
+    <value>Đã có lỗi trong quá trình import.</value>
+  </data>
+  <data name="LockAuthotizationWarning" xml:space="preserve">
+    <value>Người dùng không có quyền thực hiện chức năng này, kiểm tra lại đơn vị người dùng quản lý</value>
+  </data>
+  <data name="MsgTransferChungTuQtQS" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn lấy dữ liệu quyết toán quân số từ lương?</value>
+  </data>
+  <data name="MsgDuToanLonHonTongMucDauTu" xml:space="preserve">
+    <value>Dự án hiện tại có tổng dự toán được duyệt đã bằng tổng mức đầu tư. Không thể lập thêm dự toán theo dự án này.</value>
+  </data>
+  <data name="MsgTongDuToanLonHonTongMucDauTu" xml:space="preserve">
+    <value>Tổng dự toán cùng 1 dự án không được lớn hơn giá trị phê duyệt của Quyết định đầu tư.</value>
+  </data>
+  <data name="VoucherAdjustKhvn" xml:space="preserve">
+    <value>Chứng từ không có dự án đã được giao dự toán, không thể điều chỉnh, vui lòng chọn chứng từ hợp lệ.</value>
+  </data>
+  <data name="ConfirmChange" xml:space="preserve">
+    <value>Bạn chắc chắn muốn lưu thay đổi?</value>
+  </data>
+  <data name="ConfirmDeleteCadres" xml:space="preserve">
+    <value>Đồng chí chắc chắn muốn xóa đối tượng này?</value>
+  </data>
+  <data name="ConfirmPermanentDeleteCadres" xml:space="preserve">
+    <value>Đồng chí chắc chắn muốn xóa vĩnh viễn đối tượng này?</value>
+  </data>
+  <data name="ConfirmRestoreCadres" xml:space="preserve">
+    <value>Đồng chí chắc chắn muốn khôi phục đối tượng này?</value>
+  </data>
+  <data name="ConfirmUpdateTangGiam" xml:space="preserve">
+    <value>Đồng chí chắc chắn muốn cập nhật lại mã tăng giảm?</value>
+  </data>
+  <data name="NoneCadresesImport" xml:space="preserve">
+    <value>Không đối tượng nào được import.</value>
+  </data>
+  <data name="MsgCheckLoaiQuyetDinh" xml:space="preserve">
+    <value>Chưa chọn loại quyết định</value>
+  </data>
+  <data name="MsgCheckExistLoaiQuyetDinh" xml:space="preserve">
+    <value>Dự án đã được tạo tổng dự toán, không thể tạo thêm dự toán</value>
+  </data>
+  <data name="MLNS_DT_QT_Err" xml:space="preserve">
+    <value>Giá trị gán cho cột 'Dự toán chi tiết tới' không được chọn chi tiết hơn giá trị của cột 'Quyết toán chi tiết tới'</value>
+  </data>
+  <data name="DateStartNotValid" xml:space="preserve">
+    <value>Phụ cấp {0} có ngày bắt đầu không hợp lệ.</value>
+  </data>
+  <data name="PursuitDayNotValid" xml:space="preserve">
+    <value>Ngày nhận truy lĩnh không hợp lệ.</value>
+  </data>
+  <data name="DateStartAndSoThangHuongInvalid" xml:space="preserve">
+    <value>Phụ cấp {0} có ngày bắt đầu và số tháng đã hưởng không hợp lệ.</value>
+  </data>
+  <data name="SoThangHuongInvalid" xml:space="preserve">
+    <value>Phụ cấp {0} có số tháng đã hưởng không hợp lệ.</value>
+  </data>
+  <data name="MsgAddCanbo" xml:space="preserve">
+    <value>Thêm mới đối tượng thành công.</value>
+  </data>
+  <data name="AlertEmptyReport" xml:space="preserve">
+    <value>Không có dữ liệu với điều kiện đã chọn, vui lòng thử lại.</value>
+  </data>
+  <data name="MsgNotDeleteCadres" xml:space="preserve">
+    <value>Cán bộ đã khóa không thể xóa.</value>
+  </data>
+  <data name="MsgErrorValueBigger" xml:space="preserve">
+    <value>{0} không được lớn hơn {1} .</value>
+  </data>
+  <data name="AlertAggregateLoaiChungTu" xml:space="preserve">
+    <value>Vui lòng chọn các chứng từ cùng loại.</value>
+  </data>
+  <data name="AlertAggregateLoaiDuKienQt" xml:space="preserve">
+    <value>Vui lòng cọn các chứng từ cùng loại dự kiến quyết toán.</value>
+  </data>
+  <data name="UnableToCopyHD" xml:space="preserve">
+    <value>Hợp đồng đã điều chỉnh, không được phép điều chỉnh tiếp</value>
+  </data>
+  <data name="UnableToDeleteHD" xml:space="preserve">
+    <value>Hợp đồng đã điều chỉnh, không được phép xóa</value>
+  </data>
+  <data name="UnableToModifyHD" xml:space="preserve">
+    <value>Hợp đồng đã điều chỉnh, không được phép sửa</value>
+  </data>
+  <data name="MsgTransferQtBangKe" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn lấy dữ liệu bảng kê chứng từ?.</value>
+  </data>
+  <data name="MsgNgayChungTuNotEmpty" xml:space="preserve">
+    <value>Ngày chứng từ không được để trống!</value>
+  </data>
+  <data name="AlertExistAdjustedEstimate" xml:space="preserve">
+    <value>Đã tồn tại chứng từ thuộc đơn vị {0}, dự kiến quyết toán {1}, thuộc {2}, LNS: {3}</value>
+  </data>
+  <data name="MsgConfirmNotHaveHangMucSave" xml:space="preserve">
+    <value>Dự án chưa có hạng mục, bạn có muốn lưu dữ liệu ?</value>
+  </data>
+  <data name="MsgConfirmErrorChiPhiNotEqualNguonVon" xml:space="preserve">
+    <value>Tổng chi phí không bằng tổng nguồn vốn, bạn có chắc chắn muốn lưu dữ liệu?</value>
+  </data>
+  <data name="MsgNoDataAdjustedEstimate" xml:space="preserve">
+    <value>Không có dữ liệu điều chỉnh phù hợp.</value>
+  </data>
+  <data name="AlertNSBDImport" xml:space="preserve">
+    <value>Ngân sách đặc thù của ngành chỉ sử dụng loại 104.</value>
+  </data>
+  <data name="VoucherImportKhvnWrn" xml:space="preserve">
+    <value>Đơn vị {0} và nguồn vốn {1} trong năm kế hoạch {2} đã tồn tại.</value>
+  </data>
+  <data name="MsgConfirmLockWarn" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn khóa số liệu chứng từ? Sau khi khóa số liệu, sẽ không cho phép chỉnh sửa số liệu chi tiết của chứng từ! {0} - Bấm 'Yes' đồng ý khóa. {1} - Bấm 'No' để hủy.</value>
+  </data>
+  <data name="MsgConfirmUnLockWarn" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn mở khóa số liệu chứng từ? Sau khi mở khóa, sẽ được phép chỉnh sửa số liệu chi tiết của chứng từ! {0} - Bấm 'Yes' đồng ý mở khóa. {1} - Bấm 'No' để hủy.</value>
+  </data>
+  <data name="MsgErrorNotSplitParentCategory" xml:space="preserve">
+    <value>Hạng mục đã có hạng mục con, vui lòng sử dụng hạng mục con để phân chia.</value>
+  </data>
+  <data name="MsgTransferThamDinh" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn lấy dữ liệu ngành thẩm định?.</value>
+  </data>
+  <data name="MsgOnDeleteGoiThau" xml:space="preserve">
+    <value>Đ/c muốn xóa bản ghi này không?</value>
+  </data>
+  <data name="MsgLockGoiThau" xml:space="preserve">
+    <value>Đ/c muốn khóa bản ghi này không?</value>
+  </data>
+  <data name="MsgUnLockGoiThau" xml:space="preserve">
+    <value>Đ/c muốn mở khóa bản ghi này không?</value>
+  </data>
+  <data name="MsgErrorDetailInitialProcessDuplicate" xml:space="preserve">
+    <value>Khởi tạo dữ liệu chi tiết không được trùng cả dự án , nguồn vốn và cơ quan thanh toán !</value>
+  </data>
+  <data name="AlertKhacLoaiCapPhat" xml:space="preserve">
+    <value>Vui lòng chọn các chứng từ cùng loại cấp.</value>
+  </data>
+  <data name="MsgErrorTongVonTrungHanKhongQuaHanMucDauTu" xml:space="preserve">
+    <value>Tổng vốn bố trí giai đoạn trung hạn không được phép vượt quá hạn mức đầu tư dự án.</value>
+  </data>
+  <data name="AlertUnlockAggregatedVoucher" xml:space="preserve">
+    <value>Đồng chí không được mở khóa chứng từ do đã gửi lên tổng hợp.</value>
+  </data>
+  <data name="AlertRoleAddAllocation" xml:space="preserve">
+    <value>Đồng chí không có quyền thực hiện cấp phát.</value>
+  </data>
+  <data name="AlertRoleEditDetail" xml:space="preserve">
+    <value>Đồng chí chỉ được xem và không có quyền chỉnh sửa dữ liệu chứng từ do {0} tạo.</value>
+  </data>
+  <data name="AlertRoleImportAllocation" xml:space="preserve">
+    <value>Đồng chí không có quyền nhập dữ liệu từ file excel.</value>
+  </data>
+  <data name="AlertRolePrintReportAllocation" xml:space="preserve">
+    <value>Đồng chí không có quyền xem báo cáo.</value>
+  </data>
+  <data name="MsgErrorChungTuEmpty" xml:space="preserve">
+    <value>Vui lòng chọn chứng từ !</value>
+  </data>
+  <data name="MsgErrorGiaTriGoiThauLessThanZero" xml:space="preserve">
+    <value>Giá gói thầu phải lớn hơn 0.</value>
+  </data>
+  <data name="MsgCheckMaNgoaiTeNgoaiHoi" xml:space="preserve">
+    <value>Vui lòng chọn mã ngoại tệ!</value>
+  </data>
+  <data name="MsgCheckTiGiaNgoaiHoi" xml:space="preserve">
+    <value>Vui lòng chọn tỉ giá!</value>
+  </data>
+  <data name="AlertEmptySettlementVoucher" xml:space="preserve">
+    <value>Không có chứng từ được chọn. Vui lòng tạo mới chứng từ.</value>
+  </data>
+  <data name="MsgWarningThanhToanKyNayHonChuaThanhToan" xml:space="preserve">
+    <value>Bạn có chắc muốn nhập Đề nghị thanh toán kỳ này lớn hơn Số tiền chưa thanh toán của Hợp đồng?</value>
+  </data>
+  <data name="MsgConfirmSoTraDonViThuHuongAm" xml:space="preserve">
+    <value>Bạn có chắc muốn nhập Số trả đơn vị thụ hưởng nhỏ hơn 0?</value>
+  </data>
+  <data name="MsgWarningChapNhanKyNayHonDeNghiKyNay" xml:space="preserve">
+    <value>Bạn có chắc muốn nhập Chấp nhận thanh toán kỳ này lớn hơn Đề nghị thanh toán kỳ này? </value>
+  </data>
+  <data name="MsgValidateValueNvcKhttBQP" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn nhập Giá trị của KHTT BQP theo năm lớn hơn theo giai đoạn?</value>
+  </data>
+  <data name="MsgValidateValueTotalNvcKhttBQP" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn nhập Tổng giá trị của KHTT BQP theo năm lớn hơn theo giai đoạn?</value>
+  </data>
+  <data name="MsgValidateMlnsDntt" xml:space="preserve">
+    <value>Vui lòng chọn mục lục ngân sách chi tiết thông tin thanh toán!</value>
+  </data>
+  <data name="MsgErrorNotChooseRecordAnnounce" xml:space="preserve">
+    <value>Chưa chọn chứng từ để lập thông tri !</value>
+  </data>
+  <data name="ConfirmThayTheChungTuTongHop" xml:space="preserve">
+    <value>Năm {0} đã có chứng từ tổng hợp, Bạn có muốn thay thế chứng từ đã tổng hợp không ?</value>
+  </data>
+  <data name="MsgErrorCannotCheckParent" xml:space="preserve">
+    <value>Không thể check hạng mục cha này vì có hạng mục con đã được chọn ở gói thầu khác</value>
+  </data>
+  <data name="MsgErrorExistChuyenQuyetToan" xml:space="preserve">
+    <value>Đã tồn tại chuyển quyết toán với khoảng thời gian đã chọn!</value>
+  </data>
+  <data name="AlertNotContainsMaChiTieu" xml:space="preserve">
+    <value>Công thức tính không được bao gồm mã chỉ tiêu</value>
+  </data>
+  <data name="MsgErrorMonthImportNotHavePeople" xml:space="preserve">
+    <value>Tháng import không có cán bộ !</value>
+  </data>
+  <data name="MsgCheckChuongTrinh" xml:space="preserve">
+    <value>Vui lòng chọn chương trình!</value>
+  </data>
+  <data name="MsgCheckNam" xml:space="preserve">
+    <value>Vui lòng chọn năm!</value>
+  </data>
+  <data name="MsgCheckThanhToanTheo" xml:space="preserve">
+    <value />
+  </data>
+  <data name="EmptyAgency" xml:space="preserve">
+    <value>Không có đơn vị phù hợp</value>
+  </data>
+  <data name="MsgErrorItemNotEqualSystem" xml:space="preserve">
+    <value>{0} không khớp với hệ thống .</value>
+  </data>
+  <data name="MsgDuplicateQTND" xml:space="preserve">
+    <value>Quyết toán niên độ năm {0} đã tồn tại. Vui lòng nhập lại năm kế hoạch!</value>
+  </data>
+  <data name="MsgEditChungTuQsError" xml:space="preserve">
+    <value>Cập nhật chứng từ thất bại</value>
+  </data>
+  <data name="ErrorInputPasswordExceedLimit" xml:space="preserve">
+    <value>Thông tin tài khoản nhập sai quá nhiều lần</value>
+  </data>
+  <data name="ErrorNoUserDatabase" xml:space="preserve">
+    <value>Không có tài khoản nào đang hoạt động</value>
+  </data>
+  <data name="DivisionEstimateHasDataLNS" xml:space="preserve">
+    <value>Đã có dữ liệu phân bổ dự toán LNS {0}. Nếu bỏ chọn, dữ liệu chi tiết theo mục lục ngân sách sẽ bị xóa. Bạn có chắc chắn muốn bỏ chọn không?</value>
+  </data>
+  <data name="DivisionEstimateHasDataUnit" xml:space="preserve">
+    <value>Đã có dữ liệu phân bổ dự toán đơn vị {0}. Nếu bỏ chọn, dữ liệu chi tiết theo đơn vị sẽ bị xóa. Bạn có chắc chắn muốn bỏ chọn không?</value>
+  </data>
+  <data name="DivisionHasDataLNS" xml:space="preserve">
+    <value>Đã có dữ liệu nhận dự toán LNS {0}. Nếu bỏ chọn, dữ liệu chi tiết của nhận và phân bổ dự toán theo mục lục ngân sách sẽ bị xóa. Bạn có chắc chắn muốn bỏ chọn không?</value>
+  </data>
+	<data name="PlanBudgetBeginYearHasDataLNS" xml:space="preserve">
+    <value>Mục lục ngân sách {0} đã có số liệu chi tiết, nếu bỏ chọn dữ liệu chi tiết theo mục lục ngân sách sẽ bị xóa. Bạn có chắc muốn xóa?</value>
+  </data>	
+  <data name="VoucherValidateSoQuyetDinhNgayQuyetDinh" xml:space="preserve">
+    <value>Chứng từ cùng số quyết định phải cùng ngày quyết định. Vui lòng nhập lại ngày quyết định, do tồn tại chứng từ có quyết định {0} ngày {1}.</value>
+  </data>
+  <data name="ValidateDivisionEstimateDate" xml:space="preserve">
+    <value>Ngày quyết định nhận dự toán phải xảy ra trước ngày quyết định phân bổ dự toán cuối {0}. Vui lòng kiểm tra lại thông tin ngày quyết định</value>
+  </data>
+  <data name="DivisionEstimateHasDataReceive" xml:space="preserve">
+    <value>Đã có dữ liệu phân bổ thuộc đợt dự toán {0}, khi bỏ chọn chứng từ {1} dữ liệu phân bổ sẽ bị xóa. Bạn có chắc chắn muốn bỏ chọn chứng từ {2}?</value>
+  </data>
+  <data name="UnlockSettelementApprove" xml:space="preserve">
+    <value>Đồng chí có chắc muốn mở khóa chứng từ ngân sách đã lấy ? Việc này có thể ảnh hưởng tới số liệu QT đã chuyển !</value>
+  </data>
+  <data name="MsgCheckTongDuToan" xml:space="preserve">
+    <value>Dự án đã được tạo Tổng dự toán, không thể tạo thêm Tổng dự toán/dự toán !</value>
+  </data>
+  <data name="MsgCheckThoiGianBatDauKetThuc" xml:space="preserve">
+    <value>Thời gian {0} không được lớn hơn thời gian {1}.</value>
+  </data>
+  <data name="MsgConfirmDeleteDetail" xml:space="preserve">
+    <value>Bạn có đồng ý xóa dữ liệu chi tiết đã chọn không?</value>
+  </data>
+  <data name="MsgChooseItem" xml:space="preserve">
+    <value>Vui lòng chọn bản ghi!</value>
+  </data>
+  <data name="MsgTrungSoKeHoach" xml:space="preserve">
+    <value>Số kế hoạch đã tồn tại.</value>
+  </data>
+  <data name="MsgBangLuongRequireCheck" xml:space="preserve">
+    <value>Vui lòng chọn bảng lương.</value>
+  </data>
+  <data name="YearPlanSumaryHasNoData" xml:space="preserve">
+    <value>Không có chứng từ tổng hợp đầu năm hoặc chứng từ tổng hợp đầu năm chưa được khóa. Vui lòng kiểm tra lại</value>
+  </data>
+  <data name="MsgDateThongTinHopDong" xml:space="preserve">
+    <value>Thời gian kết thúc không được nhỏ hơn Thời gian bắt đầu</value>
+  </data>
+  <data name="MsgDeleteDuToanDuocGiao" xml:space="preserve">
+    <value>Dự toán đã được sử dụng cho đề nghị thanh toán, người dùng không được phép xóa</value>
+  </data>
+  <data name="MsgErrorNotAddMlnsInParent" xml:space="preserve">
+    <value>Không thể thêm mục lục ngân sách vào hàng cha !</value>
+  </data>
+  <data name="MsgDeleteDone" xml:space="preserve">
+    <value>Xóa dữ liệu thành công!</value>
+  </data>
+  <data name="MsgDeleteError" xml:space="preserve">
+    <value>Xóa dữ liệu thất bại!</value>
+  </data>
+  <data name="AlertVoucherEmpty" xml:space="preserve">
+    <value>Vui lòng chọn chứng từ để xóa</value>
+  </data>
+  <data name="SettlementHasDataLNS" xml:space="preserve">
+    <value>LNS {0} đã có số liệu chi tiết, nếu bỏ chọn dữ liệu chi tiết theo LNS sẽ bị xóa. Bạn có chắc muốn xóa?</value>
+  </data>
+  <data name="MsgCheckUniqueYearAndUnit" xml:space="preserve">
+    <value>Năm khởi tạo và đơn vị này đã tồn tại!</value>
+  </data>
+  <data name="MsgCheckProjectOrContract" xml:space="preserve">
+    <value>Vui lòng chọn dự án hoặc hợp đồng!</value>
+  </data>
+  <data name="MsgDateTimeFromInValid" xml:space="preserve">
+    <value>Thời gian thực hiện từ sai định dạng!</value>
+  </data>
+  <data name="MsgDateTimeToInValid" xml:space="preserve">
+    <value>Thời gian thực hiện đến sai định dạng!</value>
+  </data>
+  <data name="MsgDateTimeFromToInValid" xml:space="preserve">
+    <value>Thời gian thực hiện từ và thời gian thực hiện đến phải cùng một kiểu định dạng!</value>
+  </data>
+  <data name="MsgDateTimeFromSmall" xml:space="preserve">
+    <value>Thời gian thực hiện từ phải nhỏ hơn thời gian thực hiện đến!</value>
+  </data>
+  <data name="MsgNguonVon" xml:space="preserve">
+    <value>Vui lòng tạo thông tin nguồn vốn!</value>
+  </data>
+  <data name="MsgCheckNgayDeNghiNhoHon" xml:space="preserve">
+    <value>Ngày đề nghị không được nhỏ hơn ngày hiện tại!</value>
+  </data>
+  <data name="MsgCheckNgayDeNghiLonHon" xml:space="preserve">
+    <value>Ngày đề nghị không được lớn hơn ngày hiện tại!</value>
+  </data>
+  <data name="MsgCheckNgayQDLonHon" xml:space="preserve">
+    <value>Ngày quyết định không được lớn hơn ngày hiện tại!</value>
+  </data>
+  <data name="MsgCheckSoKHTongThe" xml:space="preserve">
+    <value>Chọn số kế hoạch tổng thể!</value>
+  </data>
+  <data name="MsgCheckLoaiSoCu" xml:space="preserve">
+    <value>Vui lòng chọn loại sở cứ!</value>
+  </data>
+  <data name="MsgCheckSoCuTrucTiep" xml:space="preserve">
+    <value>Vui lòng chọn sở cứ trực tiếp!</value>
+  </data>
+  <data name="MsgCheckQDSoCu" xml:space="preserve">
+    <value>Vui lòng chọn quyết định sở cứ!</value>
+  </data>
+  <data name="MsgCheckPhuongThucChonNhaThau" xml:space="preserve">
+    <value>Vui lòng chọn phương thức chọn nhà thầu!</value>
+  </data>
+  <data name="MsgCheckHinhThucChonNhaThau" xml:space="preserve">
+    <value>Vui lòng chọn hình thức chọn nhà thầu!</value>
+  </data>
+  <data name="MsgCheckGiaTriDuocDuyet" xml:space="preserve">
+    <value>Vui lòng nhập giá trị được duyệt!</value>
+  </data>
+  <data name="MsgCheckPhuongAnNhapKhau" xml:space="preserve">
+    <value>Vui lòng chọn phương án nhập khẩu!</value>
+  </data>
+  <data name="MsgCheckKeHoachDatHang" xml:space="preserve">
+    <value>Vui lòng chọn kế hoạch đặt hàng!</value>
+  </data>
+  <data name="MsgCheckSoHopDong" xml:space="preserve">
+    <value>Vui lòng nhập số hợp đồng!</value>
+  </data>
+  <data name="MsgCheckNgayKyHopDong" xml:space="preserve">
+    <value>Vui lòng nhập ngày ký hợp đồng!</value>
+  </data>
+  <data name="MsgCheckLoaiHopDong" xml:space="preserve">
+    <value>Vui lòng chọn loại hợp đồng!</value>
+  </data>
+  <data name="MsgCheckTiGiaTheoVND" xml:space="preserve">
+    <value>Vui lòng chọn tỉ giá theo VND!</value>
+  </data>
+  <data name="MsgCheckLuaChonTiGia" xml:space="preserve">
+    <value>Lựa chọn tỉ giá không chính xác!</value>
+  </data>
+  <data name="MsgCheck2CapTiGia" xml:space="preserve">
+    <value>Chỉ được chọn 2 cặp tỉ giá:\n USD - VND \n USD - EUR!</value>
+  </data>
+  <data name="MsgCheck3CapTiGia" xml:space="preserve">
+    <value>Chỉ được chọn 3 cặp tỉ giá: \n USD - VND \n USD - EUR \n USD - Ngoại tệ khác!</value>
+  </data>
+  <data name="MsgCheckThemHopDong" xml:space="preserve">
+    <value>Chưa thêm hợp đồng!</value>
+  </data>
+  <data name="MsgCheckThieuNhiemVuChi" xml:space="preserve">
+    <value>Tồn tại hợp đồng thiếu nhiệm vụ chi!</value>
+  </data>
+  <data name="MsgCheckKHTongTheTheoGiaiDoan" xml:space="preserve">
+    <value>Chưa chọn kế hoạch tổng thể theo giai đoạn!</value>
+  </data>
+  <data name="MsgCheckNamKeHoachHopLe" xml:space="preserve">
+    <value>Năm kế hoạch không hợp lệ!</value>
+  </data>
+  <data name="MsgCheckSoKeHoachBQP" xml:space="preserve">
+    <value>Vui lòng nhập số kế hoạch Bộ quốc phòng!</value>
+  </data>
+  <data name="MsgCheckNgayBanHanhKH" xml:space="preserve">
+    <value>Vui lòng ngày ban hành kế hoạch!</value>
+  </data>
+  <data name="MsgCheckNgayBanHanhKHLonHon" xml:space="preserve">
+    <value>Ngày ban hành kế hoạch không được lớn hơn ngày hiện tại!</value>
+  </data>
+  <data name="MsgCheckNvChiHopLe" xml:space="preserve">
+    <value>Nhiệm vụ chi không hợp lệ!</value>
+  </data>
+  <data name="MsgCheckNamKeHoachTonTai" xml:space="preserve">
+    <value>Năm kế hoạch đã tồn tại!</value>
+  </data>
+  <data name="MsgCheckGiaiDoan1" xml:space="preserve">
+    <value>Giai đoạn từ TTCP phải nhập nhỏ hơn hoặc bằng Giai đoạn đến TTCP!</value>
+  </data>
+  <data name="MsgCheckGiaiDoan2" xml:space="preserve">
+    <value>Giai đoạn từ BQP phải nhập nhỏ hơn hoặc bằng Giai đoạn đến BQP!</value>
+  </data>
+  <data name="MsgCheckGiaiDoan3" xml:space="preserve">
+    <value>Giai đoạn từ BQP phải nhập trong khoảng Giai đoạn từ và đến của TTCP!</value>
+  </data>
+  <data name="MsgCheckGiaiDoan4" xml:space="preserve">
+    <value>Giai đoạn đến BQP phải nhập trong khoảng Giai đoạn từ và đến của TTCP!</value>
+  </data>
+  <data name="MsgCheckThongTinChuongTrinh" xml:space="preserve">
+    <value>Thông tin chương trình phải có ít nhất 1 bản ghi!</value>
+  </data>
+  <data name="MsgCheckSoDeNghiTonTai" xml:space="preserve">
+    <value>Số đề nghị đã tồn tại!</value>
+  </data>
+  <data name="MsgCheckNamBaoCaoNhoHon" xml:space="preserve">
+    <value>Vui lòng chọn năm báo cáo từ nhỏ hơn năm báo cáo đến!</value>
+  </data>
+  <data name="MsgCheckLengthSoPheDuyet" xml:space="preserve">
+    <value>Số phê duyệt không lớn hơn 100 ký tự!</value>
+  </data>
+  <data name="MsgErrorPeriodDate" xml:space="preserve">
+    <value>Ngày bắt đầu phải nhỏ hơn hoặc bằng Ngày kết thúc. Vui lòng nhập lại!.</value>
+  </data>
+  <data name="MsgCheckTenHD" xml:space="preserve">
+    <value>Nhập tên hợp đồng</value>
+  </data>
+  <data name="MsgContractDateTime" xml:space="preserve">
+    <value>Thời gian bắt đầu thực hiện hợp đồng phải nhỏ hơn thời gian kết thúc thực hiện hợp đồng !</value>
+  </data>
+  <data name="MsgCheckChonKhoiTao" xml:space="preserve">
+    <value>Vui lòng chọn bản ghi để export !</value>
+  </data>
+  <data name="MsgCheckExistSoHopDong" xml:space="preserve">
+    <value>Số hợp đồng đã tồn tại. Vui lòng chọn nhập lại!</value>
+  </data>
+  <data name="MsgCheckTenHopDong" xml:space="preserve">
+    <value>Vui lòng nhập tên hợp đồng!.</value>
+  </data>
+  <data name="MsgExistSoHopDong" xml:space="preserve">
+    <value>Số hợp đồng đã tồn tại!.</value>
+  </data>
+  <data name="MsgNotExistMaKeHoachDatHang" xml:space="preserve">
+    <value>Mã kế hoạch đặt hàng không tồn tại!.</value>
+  </data>
+  <data name="MsgNotExistMaLoaiHopDong" xml:space="preserve">
+    <value>Mã loại hợp đồng không tồn tại!.</value>
+  </data>
+  <data name="MsgNotExistData" xml:space="preserve">
+    <value>Dữ liệu không tồn tại!.</value>
+  </data>
+  <data name="MsgNotDataCorrectly" xml:space="preserve">
+    <value>Không có dữ liệu đúng để import.</value>
+  </data>
+  <data name="MsgCheckFileImport" xml:space="preserve">
+    <value>Vui lòng chọn file để import !</value>
+  </data>
+  <data name="MsgDuplicateData" xml:space="preserve">
+    <value>Dữ liệu đã bị trùng!.</value>
+  </data>
+  <data name="MsgNhaThauDaiDien" xml:space="preserve">
+    <value>Vui lòng chọn nhà thầu!</value>
+  </data>
+  <data name="MSGoiThauKhongHangMuc" xml:space="preserve">
+    <value>Gói thầu hiện tại không có hạng mục !</value>
+  </data>
+  <data name="MsgBeforeRestore" xml:space="preserve">
+    <value>Đồng chí hãy sao lưu dữ liệu trước khi phục hồi. Nếu đã thực hiện sao lưu, vui lòng bỏ qua thông báo này.</value>
+  </data>
+  <data name="MsgKhoiTaoChungTuQuanSo" xml:space="preserve">
+    <value>Dữ liệu đã được khởi tạo thành công vào tháng {0}/{1}</value>
+  </data>
+  <data name="MsgMaxLengthInvalid" xml:space="preserve">
+    <value>Tên đơn vị ban hành {0} không được vượt quá 100 ký tự.</value>
+  </data>
+  <data name="BackupConfirm" xml:space="preserve">
+    <value>Đồng chí có muốn sao lưu dữ liệu trước khi đóng ứng dụng không?</value>
+  </data>
+  <data name="MsgRoleEdit" xml:space="preserve">
+    <value>Không có quyền sửa chứng từ do không quản lý đơn vị cha.</value>
+  </data>
+  <data name="AlertVoucherSummaryEmptySelected" xml:space="preserve">
+    <value>Chưa có chứng từ tổng hợp. Vui lòng tạo chứng từ tổng hợp</value>
+  </data>
+  <data name="MsgDieuChinhPhuCapLuongKeHoachError" xml:space="preserve">
+    <value>Lưu dữ liệu thất bại.</value>
+  </data>
+  <data name="MsgDieuChinhPhuCapLuongKeHoachSuccess" xml:space="preserve">
+    <value>Lưu dữ liệu thành công.</value>
+  </data>
+  <data name="WrongReportFormat" xml:space="preserve">
+    <value>Mẫu báo cáo xuất ra không đúng định dạng từ phần mềm!</value>
+  </data>
+  <data name="VoucherBudgetAllocationHasNoData" xml:space="preserve">
+    <value>Ngày quyết định từ đợt {0} không được lớn hơn đến đợt {1}. Vui lòng kiểm tra lại</value>
+  </data>
+  <data name="MsgSavePropertyChange" xml:space="preserve">
+    <value>Loại công trình chưa được nhập</value>
+  </data>
+  <data name="ConfirmCopyData" xml:space="preserve">
+    <value>Việc sao chép sẽ xóa dữ liệu hiện tại, bạn có chắc chắn muốn sao chép dữ liệu?</value>
+  </data>
+  <data name="MesCheckValidateNguonVon" xml:space="preserve">
+    <value>Tên nguồn vốn chưa được chọn</value>
+  </data>
+  <data name="MesCheckValidateGiaTriPheDuyet" xml:space="preserve">
+    <value>Giá trị phê duyệt chưa được nhập</value>
+  </data>
+  <data name="SuccessClearDataRedundancy" xml:space="preserve">
+    <value>Tính toán lại dữ liệu thành công</value>
+  </data>
+  <data name="IsCheckbox" xml:space="preserve">
+    <value>Chọn ít nhất 1 bản ghi!</value>
+  </data>
+  <data name="MesInvalidData" xml:space="preserve">
+    <value>Dữ liệu không hợp lệ. </value>
+  </data>
+  <data name="DeleteChungTuKhtBHXH" xml:space="preserve">
+    <value>Bạn chắc chắn muốn xóa chứng từ số {0}?</value>
+  </data>
+  <data name="AlertNamChungTuEmpty" xml:space="preserve">
+    <value>Đ/c chưa nhập năm chứng từ</value>
+  </data>
+  <data name="AlertSoChungTuEmpty" xml:space="preserve">
+    <value>Đ/c chưa nhập số chứng từ</value>
+  </data>
+  <data name="MesDownloadSuccess" xml:space="preserve">
+    <value>Đã tải về thành công!</value>
+  </data>
+  <data name="MesConfirmSaveAggregateDemand" xml:space="preserve">
+    <value>Đã tồn tại bản ghi chứng từ tổng hợp, bạn có muốn thay thế không?</value>
+  </data>
+  <data name="MsgErrorDataType" xml:space="preserve">
+    <value>Kiểu dữ liệu chưa đúng {0}.</value>
+  </data>
+  <data name="MsgXauNoiMaKhongTonTai" xml:space="preserve">
+    <value>Xâu nối mã không tồn tại.</value>
+  </data>
+  <data name="WarningCopyBeforeClose" xml:space="preserve">
+    <value>Tồn tại dữ liệu cập nhật, hãy nhấn lưu dữ liệu</value>
+  </data>
+  <data name="MesNguonVonChuaNhap" xml:space="preserve">
+    <value>Nguồn vốn chưa nhập</value>
+  </data>
+  <data name="MesLoaiCongTrinhChuaNhap" xml:space="preserve">
+    <value>Loại công trình chưa nhập</value>
+  </data>
+  <data name="MesInvalidNameProject" xml:space="preserve">
+    <value>Tên dự án chưa được nhập</value>
+  </data>
+  <data name="ExhangeRateInValid" xml:space="preserve">
+    <value>Tỷ giá VND chưa được nhập</value>
+  </data>
+  <data name="InvalidMonthExchangeRate" xml:space="preserve">
+    <value>Tháng {0} đã có tỉ giá. Vui lòng kiểm tra lại!</value>
+  </data>
+  <data name="MsgCheckLoaiKeHoachChi" xml:space="preserve">
+    <value>Vui lòng chọn loại kế hoạch chi!</value>
+  </data>
+  <data name="MsgErrorTongHopLoaiKeHoachChi" xml:space="preserve">
+    <value>Chứng từ tổng hợp phải cùng loại kế hoạch chi!</value>
+  </data>
+  <data name="MsgWarningNotChoseDonViCha" xml:space="preserve">
+    <value>Không được chọn đơn vị cha là chính nó!</value>
+  </data>
+  <data name="MsgCheckNullNgayNhanPhanBoBHXH" xml:space="preserve">
+    <value>Ngày chứng từ không được để trống.</value>
+  </data>
+  <data name="SuccessConfigBudgetCategory" xml:space="preserve">
+    <value>Thiết lập lại cha con MLNS thành công.</value>
+  </data>
+  <data name="ErrorManipulation" xml:space="preserve">
+    <value>Có lỗi xảy ra. Vui lòng thử lại</value>
+  </data>
+  <data name="MessInvalidDateDemobilization" xml:space="preserve">
+    <value>Ngày nhập ngũ, ngày xuất ngũ, ngày tái ngũ không chính xác! Đề nghị kiểm tra lại.</value>
+  </data>
+  <data name="MsgErrorTongHopLoaiDuToanPhanBo" xml:space="preserve">
+    <value>Chứng từ tổng hợp phải cùng loại dự toán phân bổ</value>
+  </data>
+  <data name="MsgLockDeny" xml:space="preserve">
+    <value>Đồng chí không có quyền khóa chứng từ {0} do không phải người tạo</value>
+  </data>
+  <data name="SuccessCopyDoiTuong" xml:space="preserve">
+    <value>Sao chép đối tượng thành công</value>
+  </data>
+  <data name="AlertExistSettlementQuarterVoucher" xml:space="preserve">
+    <value>Đã tồn tại chứng từ thuộc đơn vị {0}, quý {1}, LNS: {2}</value>
+  </data>
+  <data name="InValidProjectConTract" xml:space="preserve">
+    <value>không có dự án, hợp đồng. Vui lòng chọn!</value>
+  </data>
+  <data name="AlertQuartyEmpty" xml:space="preserve">
+    <value>Đ/c chưa chọn Quý.</value>
+  </data>
+  <data name="AlertCSYTEmpty" xml:space="preserve">
+    <value>Đ/c chưa chọn Cơ sở Y tế.</value>
+  </data>
+  <data name="ErrorCSYT" xml:space="preserve">
+    <value>Mã cơ sở Y tế không tồn tại.</value>
+  </data>
+  <data name="ErrorFormatCSYT" xml:space="preserve">
+    <value>Tên cơ sở Y tế không đúng định dạng. Vui lòng cập nhật lại theo định dạng [Mã cơ sở Y tế] - [Tên cơ sở Y tế].</value>
+  </data>
+  <data name="MsgCheckLuaChonLaiLoaiKP" xml:space="preserve">
+    <value>Vui lòng chọn lại loại chi! Hiện tại dữ liệu loại chi chưa đồng bộ với dữ liệu.</value>
+  </data>
+  <data name="MsgErrorPeriodDiff" xml:space="preserve">
+    <value>Không cùng kiểu thời gian</value>
+  </data>
+  <data name="MsgErrorPeriodQuarter" xml:space="preserve">
+    <value>Quý bắt đầu phải nhỏ hơn quý kết thúc</value>
+  </data>
+  <data name="MsgConfirmDeleteAllDetail" xml:space="preserve">
+    <value>Bạn có đồng ý xóa tất cả dữ liệu chi tiết?</value>
+  </data>
+  <data name="AlertAggregateQuarterYear" xml:space="preserve">
+    <value>Vui lòng lựa chọn các chứng từ có cùng tháng, quý hoặc năm.</value>
+  </data>
+  <data name="AlertNonExistSettlementMonthVoucher" xml:space="preserve">
+    <value>Chưa tồn tại chứng từ quyết toán {0}, LNS: {1}</value>
+  </data>
+  <data name="ErrorQuarterEmpty" xml:space="preserve">
+    <value>Chưa chọn quý/năm.</value>
+  </data>
+  <data name="MessageConfirm" xml:space="preserve">
+    <value>Đ/c có muốn lấy số liệu từ file excel?</value>
+  </data>
+  <data name="AdjustAll" xml:space="preserve">
+    <value>Đ/c có muốn điều chỉnh toàn bộ mục lục Số kiểm tra không?</value>
+  </data>
+  <data name="AlertExpenseTypeEmpty" xml:space="preserve">
+    <value>Đ/c chưa chọn Loại kinh phí.</value>
+  </data>
+  <data name="AlertMaCheDoExist" xml:space="preserve">
+    <value>Mã chế độ {0} đã tồn tại.</value>
+  </data>
+  <data name="AlertMaCheDoEmpty" xml:space="preserve">
+    <value>Vui lòng nhập Mã chế độ.</value>
+  </data>
+  <data name="AlertExistSettlementVoucher" xml:space="preserve">
+    <value>Đã tồn tại chứng từ thuộc đơn vị {0}, năm {1}, loại chi: {2}</value>
+  </data>
+  <data name="AlertTypeOfExpenditurePlan" xml:space="preserve">
+    <value>Đ/c chưa nhập loại kế hoạch chi</value>
+  </data>
+  <data name="HolidayCodeRequired" xml:space="preserve">
+    <value>Đ/c chưa nhập mã ngày nghỉ.</value>
+  </data>
+  <data name="HolidayNameRequired" xml:space="preserve">
+    <value>Đ/c chưa nhập tên ngày nghỉ.</value>
+  </data>
+  <data name="StartDateRequired" xml:space="preserve">
+    <value>Đ/c chưa nhập ngày bắt đầu.</value>
+  </data>
+  <data name="EndDateRequired" xml:space="preserve">
+    <value>Đ/c chưa nhập ngày kết thúc.</value>
+  </data>
+  <data name="MsgLNSEmpty" xml:space="preserve">
+    <value>Vui lòng chọn LNS!</value>
+  </data>
+  <data name="ConfirmThayTheChungTuHienTai" xml:space="preserve">
+    <value>Bạn có muốn thay thế chứng từ {0} ?</value>
+  </data>
+  <data name="AlertEmptyData" xml:space="preserve">
+    <value>Chưa có dữ liệu quyết toán năm.</value>
+  </data>
+  <data name="ConfirmImportQTCQ" xml:space="preserve">
+    <value>Đã tồn tại dữ liệu chi tiết QTC quý. Đ/c muốn tiếp tục không?</value>
+  </data>
+  <data name="QTCQuyImportEmpty" xml:space="preserve">
+    <value>File import không có dữ liệu QTC quý BHXH. Vui lòng chọn lại file import.</value>
+  </data>
+  <data name="CanBoCheDoImportEmpty" xml:space="preserve">
+    <value>File import không có dữ cán bộ chế độ BHXH. Vui lòng chọn lại file import.</value>
+  </data>
+  <data name="MsgQLThuNopRequireCheck" xml:space="preserve">
+    <value>Đồng chí vui lòng chọn chứng từ được khóa.</value>
+  </data>
+  <data name="FeeCollectionBhxhExist" xml:space="preserve">
+    <value>Chứng từ thu nộp BHXH tháng {0} năm {1} - {2} đã tồn tại!</value>
+  </data>
+  <data name="ValidateDayOfApplied" xml:space="preserve">
+    <value>{0} - Số ngày hưởng BHXH không được vượt quá 24 ngày.</value>
+  </data>
+  <data name="MsgPlanData" xml:space="preserve">
+    <value>Chưa có dữ liệu kế hoạch tổng hợp.</value>
+  </data>
+  <data name="MsgCheck4Quy" xml:space="preserve">
+    <value>Chưa tạo đủ dữ liệu 04 quý.</value>
+  </data>
+  <data name="MessageErrorSaveKcbDetail" xml:space="preserve">
+    <value>Tổng số kế hoạch chi KCB quân y đơn vị không được vượt quá {0}% kế hoạch thu BHYT quân nhân.</value>
+  </data>
+  <data name="MsgCheckLuaChonLoaChi" xml:space="preserve">
+    <value>Đ/c chưa chọn loại chi. Vui lòng chọn lại loại chi.</value>
+  </data>
+  <data name="MsgExistDonViCuaLoaiChiVaDotPB" xml:space="preserve">
+    <value>Đã tồn tại đơn vị {0} loại chi {1} và đợt phân bổ  {2}.</value>
+  </data>
+  <data name="ConfirmReplaceAggregateVoucherBHXH" xml:space="preserve">
+    <value>{0} đã có chứng từ tổng hợp, Bạn có muốn thay thế chứng từ đã tổng hợp không ?</value>
+  </data>
+  <data name="AlertExistVoucher" xml:space="preserve">
+    <value>Đã tồn tại chứng từ thuộc đơn vị {0}, năm {1}</value>
+  </data>
+  <data name="MsgBaseSalaryData" xml:space="preserve">
+    <value>Chưa có dữ liệu quỹ lương căn cứ.</value>
+  </data>
+  <data name="ValidateImportLoaiKinhPhi" xml:space="preserve">
+    <value>Loại kinh phí đã chọn chưa đúng với dữ liệu file excel, vui lòng chọn lại.</value>
+  </data>
+  <data name="MessageErrorSaveDTDCKcbDetail" xml:space="preserve">
+    <value>Số điều chỉnh kinh phí KCB tại Quân y đơn vị không được vượt quá 10% số điều chỉnh dự toán thu BHYT quân nhân</value>
+  </data>
+  <data name="MessageErrorSaveDTNPBKcbDetail" xml:space="preserve">
+    <value>Số nhận dự toán chi KCB tại quân y đơn vị không được vượt quá 10% số điều chỉnh dự toán thu BHYT quân nhân của đơn vị tổng hợp.</value>
+  </data>
+  <data name="AlertDeleteSocialInsuranceVoucher" xml:space="preserve">
+    <value>Không thế xóa chứng từ do đã được phân bổ.</value>
+  </data>
+  <data name="ConfirmCloseData" xml:space="preserve">
+    <value>Dữ liệu đang chỉnh sửa, Đ/c có muốn lưu lại dữ liệu?</value>
+  </data>
+  <data name="MsgSalarySumaryDone" xml:space="preserve">
+    <value>Tạo bảng lương BHXH tổng hợp thành công.</value>
+  </data>
+  <data name="MsgStartDateAndEndDate" xml:space="preserve">
+    <value>Ngày bắt đầu phải nhỏ hơn ngày kết thúc.</value>
+  </data>
+  <data name="MsgExistHolidayCode" xml:space="preserve">
+    <value>Đã tồn tại mã ngày nghỉ: {0}.</value>
+  </data>
+  <data name="MessageNoAdjustData" xml:space="preserve">
+    <value>Chưa có dữ liệu điều chỉnh tổng hợp</value>
+  </data>
+  <data name="FileImportWrongExtensionExcel" xml:space="preserve">
+    <value>File import chưa đúng định dạng excel, vui lòng kiểm tra lại.</value>
+  </data>
+  <data name="FileImportWrongTemplate" xml:space="preserve">
+    <value>File import chưa đúng template, vui lòng kiểm tra lại.</value>
+  </data>
+  <data name="MsgValidRemainingFee" xml:space="preserve">
+    <value>Số tiền BHXH còn phải nộp tiếp không được vượt quá {0}.</value>
+  </data>
+  <data name="ConfirmUpdateCadres" xml:space="preserve">
+    <value>Bạn chắc chắn muốn cập nhật toàn bộ đối tượng tháng hiện tại?</value>
+  </data>
+  <data name="MsgCadresAdjust" xml:space="preserve">
+    <value>Vui lòng chọn cán bộ cần điều chỉnh.</value>
+  </data>
+  <data name="AlertEmptyMaHieuCanBo" xml:space="preserve">
+    <value>Đ/c chưa nhập mã hiệu cán bộ!</value>
+  </data>
+  <data name="AlertMaHieuCanBoExist" xml:space="preserve">
+    <value>Mã hiệu cán bộ {0} đã tồn tại trong chứng từ {1}. Vui lòng kiểm tra lại.</value>
+  </data>
+  <data name="MsgWarningChuKyDuplicate" xml:space="preserve">
+    <value>Mã chữ ký không được để trống hoặc đặt trùng nhau</value>
+  </data>
+  <data name="ValueNotLessThanZero" xml:space="preserve">
+    <value>{0} không được nhỏ hơn 0. Vui lòng kiểm tra lại.</value>
+  </data>
+  <data name="MsgWarningLoaiTruyLinhDuplicate" xml:space="preserve">
+    <value>Loại truy lĩnh {0} đã được sử dụng. Vui lòng chọn loại truy lĩnh khác!</value>
+  </data>
+  <data name="MsgWarningInvalidSalaryData" xml:space="preserve">
+    <value>Không có dữ liệu từ lương!.</value>
+  </data>
+  <data name="MsgErrorOver50" xml:space="preserve">
+    <value>Mã số đơn vị QHNS hoặc mã số KBNN không được vượt quá 50 ký tự</value>
+  </data>
+  <data name="MsgWarningNotSummaryVoucher" xml:space="preserve">
+    <value>Chưa tạo chứng từ tổng hợp</value>
+  </data>
+  <data name="MsgConfirmCleanSalaryData" xml:space="preserve">
+    <value>Dọn dẹp dữ liệu sẽ mất một khoảng thời gian. Đ/c chắc chắn muốn tiếp tục?</value>
+  </data>
+  <data name="MsgCleanSalaryDone" xml:space="preserve">
+    <value>Dọn dẹp dữ liệu hoàn tất!</value>
+  </data>
+  <data name="MsgCheckBackupData" xml:space="preserve">
+    <value>Đồng chí hãy sao lưu dữ liệu trước khi dọn dẹp. Nếu đã thực hiện sao lưu, vui lòng bỏ qua thông báo này.</value>
+  </data>
+  <data name="MsgConfirmBackupCleanSalaryData" xml:space="preserve">
+    <value>Sao lưu và dọn dẹp dữ liệu sẽ mất một khoảng thời gian. Đ/c chắc chắn muốn tiếp tục?</value>
+  </data>
+  <data name="AlertImportAdjustedEstimate" xml:space="preserve">
+    <value>Dữ liệu trong file excel không đúng với cấu hình mục lục ngân sách cột Dự toán chi tiết tới.</value>
+  </data>
+  <data name="MsgTransferAdjEstimte" xml:space="preserve">
+    <value>Đ/c chắc chắn muốn lấy dữ liệu điều chỉnh dự toán tổng hợp?</value>
+  </data>
+  <data name="AlertDeleteAggregatedVoucher2" xml:space="preserve">
+    <value>Dữ liệu tăng/giảm đã được lấy sang chứng từ nhận phân bổ. Nếu xóa, đ/c cần thực hiện lấy lại số liệu điều chỉnh sang phần nhận và phân bổ. Đ/c muốn tiếp tục xóa?</value>
+  </data>
+  <data name="MsgTransferDataDone" xml:space="preserve">
+    <value>Lấy dữ liệu thành công!</value>
+  </data>
+  <data name="MsgAdjDataEmpty" xml:space="preserve">
+    <value>Không có dữ liệu điều chỉnh dự toán.</value>
+  </data>
+  <data name="SuccessRestoreMLSKT" xml:space="preserve">
+    <value>Phục hồi mục lục SKT năm {0} thành công</value>
+  </data>
+  <data name="MsgRejectDeleteVoucher" xml:space="preserve">
+    <value>Không thể xóa chứng từ do đã được phân bổ (phải xóa chứng từ phân bổ mới được xóa chứng từ nhận)</value>
+  </data>
+  <data name="RevenueExpenditureDivisionHasDataUnit" xml:space="preserve">
+    <value>Đơn vị đã có dữ liệu phân bổ dự toán, nếu bỏ chọn đơn vị hệ thống sẽ xóa số liệu đã thực hiện phân bổ trước đó. Đ/c có muốn tiếp tục chỉnh sửa?</value>
+  </data>
+	<data name="MsgPublicCategoryEmpty" xml:space="preserve">
+    <value>Vui lòng chọn danh mục công khai!</value>
+  </data>
+	<data name="MsgPeriodEmpty" xml:space="preserve">
+    <value>Vui lòng chọn từ đợt và đến đợt!</value>
+  </data>
+	<data name="MsgValidPeriod" xml:space="preserve">
+    <value>Vui lòng chọn ngày từ đợt nhỏ hơn (hoặc bằng) ngày đến đợt!</value>
+  </data>
+	<data name="MsgSettlementData" xml:space="preserve">
+    <value>Chưa có số liệu quyết toán đến {0}.</value>
+  </data>
+</root>

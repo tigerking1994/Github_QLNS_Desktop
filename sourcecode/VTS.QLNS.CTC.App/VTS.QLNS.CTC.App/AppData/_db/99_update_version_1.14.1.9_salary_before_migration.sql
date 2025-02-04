@@ -1,0 +1,1 @@
+DELETE FROM [dbo].[TL_DM_CapBac_Luong_NQ104]

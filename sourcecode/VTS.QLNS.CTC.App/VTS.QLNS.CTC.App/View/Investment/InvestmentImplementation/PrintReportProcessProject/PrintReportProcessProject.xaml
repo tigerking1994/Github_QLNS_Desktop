@@ -1,0 +1,234 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Investment.InvestmentImplementation.PrintReportProcessProject.PrintReportProcessProject"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Investment.InvestmentImplementation.PrintReportProcessProject"
+             xmlns:converters="clr-namespace:VTS.QLNS.CTC.App.Converters"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             mc:Ignorable="d" 
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="myHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Visibility" Value="Collapsed" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <materialDesign:PackIcon Kind="DriveDocument" Height="32" Width="32" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold" Text="{Binding Title}"></TextBlock>
+                <TextBlock Text="{Binding Description}"></TextBlock>
+                <Separator Background="{StaticResource MaterialDesignDivider}" Margin="0 5 0 0"/>
+            </StackPanel>
+        </DockPanel>
+        <StackPanel Grid.Row="1" Margin="0 5 0 0">
+            <StackPanel Orientation="Horizontal" Margin="0 0 5 10">
+                <ComboBox
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                    materialDesign:HintAssist.Hint="Đơn vị"
+                    Width="300px"
+                    HorizontalContentAlignment="Stretch"
+                    DisplayMemberPath="DisplayItem"
+                    SelectedItem="{Binding SelectedDonViQuanLy}"
+                    ItemsSource="{Binding DataDonViQuanLy}">
+                </ComboBox>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+                <ComboBox
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                    materialDesign:HintAssist.Hint="Dự án"
+                    Width="300px"
+                    HorizontalContentAlignment="Stretch"
+                    DisplayMemberPath="DisplayItem"
+                    SelectedItem="{Binding SelectedDuAn}"
+                    ItemsSource="{Binding DataDuAn}">
+                </ComboBox>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+                <DatePicker
+                    Language="vi-VN"
+                    Width="250"
+                    Margin="0 2 10 2"
+                    materialDesign:HintAssist.Hint="Thời gian báo cáo"
+                    SelectedDate="{Binding ThoiGianBaoCao}"
+                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}"/>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+                <Button Style="{StaticResource SearchBarBtnStyle}" Command="{Binding SearchCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Search" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tìm kiếm"/>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+                <Button Style="{StaticResource SearchBarBtnStyle}" Command="{Binding ExportCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FileExcel" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xuất dữ liệu"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+        <Grid Margin="0 10 0 0" Grid.Row="2">
+            <TextBlock FontWeight="SemiBold">THÔNG TIN DỰ ÁN</TextBlock>
+            <StackPanel Margin="0 20 10 0" Orientation="Horizontal">
+                <Grid MinWidth="300">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition MinWidth="200"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="0 5 0 0">Tên dự án:</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Margin="0 5 0 0" Text="{Binding TenDuAn}"></TextBlock>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="0 5 0 0">Số QĐĐT: </TextBlock>
+                    <TextBlock  Grid.Row="1" Grid.Column="1" Margin="0 5 0 0" Text="{Binding SoQuyetDinh}"></TextBlock>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="0 5 0 0">Ngày, tháng, năm: </TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Margin="0 5 0 0" Text="{Binding NgayThangNam}"></TextBlock>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="0 5 0 0">Tổng mức đầu tư: </TextBlock>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Margin="0 5 0 0" Text="{Binding TongMucDauTu, StringFormat={}{0:N0}}"></TextBlock>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="0 5 0 0">Thời gian thực hiện: </TextBlock>
+                    <TextBlock Grid.Row="4" Grid.Column="1" Margin="0 5 0 0" Text="{Binding ThoiGianThucHien}"></TextBlock>
+
+                    <ListView Grid.Row="5" Grid.ColumnSpan="2" Margin="0 10 0 0" Height="auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding DataNganSachInfo}">
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}">
+                                <GridViewColumn Header="Ten" Width="auto" DisplayMemberBinding="{Binding Ten}" />
+                                <GridViewColumn Header="SoTien" Width="200" DisplayMemberBinding="{Binding SoTien, StringFormat='{}{0:N0}', Converter={StaticResource NumberDecimalToStringEmptyConverter}}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </StackPanel>
+        </Grid>
+        <Grid Margin="0 10 0 0" Grid.Row="3">
+            <TextBlock FontWeight="SemiBold">CHỈ TIÊU NGÂN SÁCH THEO CÁC NGUỒN</TextBlock>
+            <StackPanel Margin="0 20 10 0" Orientation="Horizontal">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Width="auto" Margin="0 0 10 0">Lũy kế vốn đã bố trí:</TextBlock>
+                    <TextBlock  Grid.Column="1" Grid.Row="0" Width="100" Text="{Binding LuyKeVonDaBoTri, StringFormat='{}{0:N0}', Converter={StaticResource NumberDecimalToStringEmptyConverter}}"/>
+                    
+                    <TextBlock Grid.Column="2" Grid.Row="0" Width="auto" Margin="0 0 10 0">Ngân sách Quốc Phòng: </TextBlock>
+                    <TextBlock  Grid.Column="3" Grid.Row="0" Width="100" Text="{Binding LuyKeVonNSQP, StringFormat='{}{0:N0}', Converter={StaticResource NumberDecimalToStringEmptyConverter}}"/>
+
+                    <TextBlock Grid.Column="4" Grid.Row="0" Width="auto" Margin="0 0 10 0">Lũy kế thanh toán qua kho bạc:</TextBlock>
+                    <TextBlock  Grid.Column="5" Grid.Row="0" Width="100" Text="{Binding LuyKeThanhToanQuaKhoBac, StringFormat='{}{0:N0}', Converter={StaticResource NumberDecimalToStringEmptyConverter}}"></TextBlock>
+                </Grid>
+            </StackPanel>
+        </Grid>
+        <Grid Margin="0 10 0 10" Grid.Row="4">
+            <TextBlock FontWeight="SemiBold">ỨNG NGOÀI CHI TIÊU</TextBlock>
+            <StackPanel Margin="0 20 10 0" Orientation="Horizontal">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Width="auto" Margin="0 0 10 0">Kế hoạch ứng:</TextBlock>
+                    <TextBlock  Grid.Column="1" Grid.Row="0" Width="100" Text="{Binding KeHoachUng, StringFormat={}{0:N0}}"></TextBlock>
+                </Grid>
+            </StackPanel>
+        </Grid>
+        <Grid Margin="0 10 0 10" Grid.Row="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" FontWeight="SemiBold">NỘI DUNG CHI TIẾT CẤP QUA BQP:</TextBlock>
+            
+            <component:ExpandedDataGrid
+                x:Name="dgdDataDeNghiQuyetToanIndex"
+                Grid.Row="1"
+                IsReadOnly="True"
+                FrozenColumnCount="3"
+                BorderThickness="1"
+                CanUserResizeColumns="True"
+                HorizontalScrollBarVisibility="Auto"
+                CanUserAddRows="False"
+                IsSynchronizedWithCurrentItem="True"
+                GridLinesVisibility="All"
+                ColumnInfo="{Binding Columns}"
+                ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                RowStyle="{StaticResource DataGridRowIndex}"
+                Style="{StaticResource MaterialDesignDataGrid}"
+                ItemsSource="{Binding DataReport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                AutoGenerateColumns="False">
+                <DataGrid.Resources>
+                    <helper:BindingProxy
+                    x:Key="DataContextProxy"
+                    Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Tên nhà thầu" Binding="{Binding TenNhaThau}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Số hợp đồng" Binding="{Binding SoHopDong}"></DataGridTextColumn>
+                    <!--<DataGridTextColumn Header="Số đề nghị" Binding="{Binding SoDeNghi}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="MLNS" Binding="{Binding Mlns}"></DataGridTextColumn>-->
+                    <DataGridTextColumn Header="Thời gian thực hiện(ngày)" Binding="{Binding ThoiGianThucHien}" ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Giá trị hợp đồng" 
+                    Binding="{Binding TienHopDong, StringFormat={}{0:N0}}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                    <DataGridTextColumn Header="Ngày thanh toán" Binding="{Binding NgayThanhToan, Converter={StaticResource DateTimeToStringConverter}}" ElementStyle="{StaticResource DataGridTextColumnCenterStyle}"/>
+                    <DataGridTextColumn Header="Số thanh toán" 
+                    Binding="{Binding SoThanhToan, StringFormat={}{0:N0}}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                    <DataGridTextColumn Header="Số tạm ứng" Binding="{Binding SoTamUng, StringFormat={}{0:N0}}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                    <DataGridTextColumn Header="Số thu hồi tạm ứng" Binding="{Binding SoThuHoiTamUng, StringFormat={}{0:N0}}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                    <DataGridTextColumn Header="Tổng cộng giải ngân" Binding="{Binding TongCongGiaiNgan, StringFormat={}{0:N0}}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                    <DataGridTextColumn Header="Ngày cấp ứng" Binding="{Binding NgayCapUng}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Số đã cấp ứng" Binding="{Binding SoDaCapUng, StringFormat={}{0:N0}}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                </DataGrid.Columns>
+            </component:ExpandedDataGrid>
+        </Grid>
+    </Grid>
+</UserControl>

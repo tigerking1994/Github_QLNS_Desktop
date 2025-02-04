@@ -1,0 +1,509 @@
+﻿using AutoMapper;
+using MaterialDesignThemes.Wpf;
+using log4net;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Data;
+using System.Windows.Forms;
+using VTS.QLNS.CTC.App.Command;
+using VTS.QLNS.CTC.App.Helper;
+using VTS.QLNS.CTC.App.Model;
+using VTS.QLNS.CTC.App.Model.Control;
+using VTS.QLNS.CTC.App.Properties;
+using VTS.QLNS.CTC.App.Service;
+using VTS.QLNS.CTC.Core.Domain;
+using VTS.QLNS.CTC.Core.Service;
+using VTS.QLNS.CTC.Utility;
+using VTS.QLNS.CTC.Utility.Enum;
+
+namespace VTS.QLNS.CTC.App.ViewModel.Forex.ForexMuaSam.MuaSamNgoaiThuong.MSNTKeHoachLuaChonNhaThau
+{
+    public class MSNTKeHoachLuaChonNhaThauIndexViewModel : GridViewModelBase<NhDaKhlcNhaThauModel>
+    {
+        #region Private
+        private readonly INhDaKhlcNhaThauService _service;
+        private readonly INsDonViService _dvService;
+        private readonly INhDaDuAnService _duanService;
+        private readonly ISessionService _sessionService;
+        private readonly IMapper _mapper;
+        private readonly ILog _logger;
+        private ICollectionView _luaChonNhaThauView;
+        private readonly INhDmNhiemVuChiService _nhDmNhiemVuChiService;
+        #endregion
+
+        #region Public
+        public override string Name => "Kế hoạch đặt hàng/ lựa chọn nhà thầu";
+        public override string Title => "Quản lý kế hoạch đặt hàng/ lựa chọn nhà thầu";
+        public override string Description => "Danh sách kế hoạch đặt hàng/ lựa chọn nhà thầu";
+        public override Type ContentType => typeof(View.Forex.ForexMuaSam.MuaSamNgoaiThuong.MSNTKeHoachLuaChonNhaThau.MSNTKeHoachLuaChonNhaThauIndex);
+        public bool IsEdit => SelectedItem != null && SelectedItem.BIsActive;
+        public bool IsEnableLock => SelectedItem != null;
+        public bool IsLock => SelectedItem != null && SelectedItem.BIsKhoa;
+        public int IThuocMenu { get; set; }
+        public int ILoai { get; set; }
+        public bool IsShowDuAn { get; set; }
+        public bool IsEditable => SelectedItem != null && SelectedItem.BIsActive && !SelectedItem.BIsKhoa;
+        #endregion
+
+        #region Items
+        private string _sSoQuyetDinh;
+        public string SSoQuyetDinh
+        {
+            get => _sSoQuyetDinh;
+            set => SetProperty(ref _sSoQuyetDinh, value);
+        }
+        private string _sTenChuongTrinh;
+        public string STenChuongTrinh
+        {
+            get => _sTenChuongTrinh;
+            set => SetProperty(ref _sTenChuongTrinh, value);
+        }
+
+        private DateTime? _dNgayQuyetDinhTu;
+        public DateTime? DNgayQuyetDinhTu
+        {
+            get => _dNgayQuyetDinhTu;
+            set => SetProperty(ref _dNgayQuyetDinhTu, value);
+        }
+
+        private DateTime? _dNgayQuyetDinhDen;
+        public DateTime? DNgayQuyetDinhDen
+        {
+            get => _dNgayQuyetDinhDen;
+            set => SetProperty(ref _dNgayQuyetDinhDen, value);
+        }
+        private NhDaKhlcNhaThauModel _itemsFilter;
+        public NhDaKhlcNhaThauModel ItemsFilter
+        {
+            get => _itemsFilter;
+            set => SetProperty(ref _itemsFilter, value);
+        }
+
+        private DateTime? _dNgayQuyetDinh;
+        public DateTime? DNgayQuyetDinh
+        {
+            get => _dNgayQuyetDinh;
+            set => SetProperty(ref _dNgayQuyetDinh, value);
+        }
+
+        private string _sMoTa;
+        public string SMoTa
+        {
+            get => _sMoTa;
+            set => SetProperty(ref _sMoTa, value);
+        }
+
+        private ObservableCollection<ComboboxItem> _itemsDonVi;
+        public ObservableCollection<ComboboxItem> ItemsDonVi
+        {
+            get => _itemsDonVi;
+            set => SetProperty(ref _itemsDonVi, value);
+        }
+
+        private ComboboxItem _selectedDonVi;
+        public ComboboxItem SelectedDonVi
+        {
+            get => _selectedDonVi;
+            set => SetProperty(ref _selectedDonVi, value);
+        }
+
+        private ObservableCollection<ComboboxItem> _itemsDuAn;
+        public ObservableCollection<ComboboxItem> ItemsDuAn
+        {
+            get => _itemsDuAn;
+            set => SetProperty(ref _itemsDuAn, value);
+        }
+
+        private ComboboxItem _selectedDuAn;
+        public ComboboxItem SelectedDuAn
+        {
+            get => _selectedDuAn;
+            set => SetProperty(ref _selectedDuAn, value);
+        }
+
+        private ObservableCollection<ComboboxItem> _itemsChuongTrinh;
+        public ObservableCollection<ComboboxItem> ItemsChuongTrinh
+        {
+            get => _itemsChuongTrinh;
+            set => SetProperty(ref _itemsChuongTrinh, value);
+        }
+
+        private ComboboxItem _selectedChuongTrinh;
+        public ComboboxItem SelectedChuongTrinh
+        {
+            get => _selectedChuongTrinh;
+            set => SetProperty(ref _selectedChuongTrinh, value);
+        }
+        #endregion
+
+        #region declare RelayCommand
+        public RelayCommand SearchCommand { get; }
+        public RelayCommand ResetFilterCommand { get; }
+        public RelayCommand DieuChinhCommand { get; }
+        public RelayCommand ViewAttachmentCommand { get; }
+        #endregion
+
+        public MSNTKeHoachLuaChonNhaThauDialogViewModel NHKeHoachLuaChonNhaThauDialogViewModel { get; }
+
+        public MSNTKeHoachLuaChonNhaThauIndexViewModel(
+            MSNTKeHoachLuaChonNhaThauDialogViewModel nHKeHoachLuaChonNhaThauDialogViewModel,
+            INhDaKhlcNhaThauService service,
+            INhDaDuAnService duanService,
+            INsDonViService dvService,
+            ISessionService sessionService,
+            IMapper mapper,
+            ILog logger,
+            INhDmNhiemVuChiService nhDmNhiemVuChiService)
+        {
+            NHKeHoachLuaChonNhaThauDialogViewModel = nHKeHoachLuaChonNhaThauDialogViewModel;
+            NHKeHoachLuaChonNhaThauDialogViewModel.ParentPage = this;
+
+            _service = service;
+            _duanService = duanService;
+            _dvService = dvService;
+            _sessionService = sessionService;
+            _mapper = mapper;
+            _logger = logger;
+            _nhDmNhiemVuChiService = nhDmNhiemVuChiService;
+
+            SearchCommand = new RelayCommand(obj => OnSearch());
+            ResetFilterCommand = new RelayCommand(obj => onResetFilter());
+
+            UpdateCommand = new RelayCommand(o => OnUpdate(), obj => IsEditable);
+            DieuChinhCommand = new RelayCommand(o => OnDieuChinh(), obj => IsEditable);
+            DeleteCommand = new RelayCommand(o => OnDelete(), obj => IsEditable);
+        }
+
+        #region Event
+        public override void Init()
+        {
+            ItemsFilter = new NhDaKhlcNhaThauModel();
+            MarginRequirement = new Thickness(10);
+            LoadDonViQuanLy();
+            LoadChuongTrinh();
+            LoadData();
+        }
+
+        public override void LoadData(params object[] args)
+        {
+            try
+            {
+                BackgroundWorkerHelper.Run((s, e) =>
+                {
+                    IsLoading = true;
+
+                    // Main process
+                    Items = new ObservableCollection<NhDaKhlcNhaThauModel>();
+                    if (IsShowDuAn)
+                    {
+                        e.Result = _service.GetAllKhlcntIndex(IThuocMenu);
+                    }
+                    else
+                    {
+                        e.Result = _service.GetAllKhlcntMuaSam().Where(a => a.IThuocMenu == IThuocMenu);
+                    }
+                }, (s, e) =>
+                {
+                    if (e.Error == null)
+                    {
+                        Items = _mapper.Map<ObservableCollection<NhDaKhlcNhaThauModel>>(e.Result);
+                        // Process when run completed. e.Result
+                        if (Items != null && Items.Count > 0)
+                        {
+                            SelectedItem = Items.FirstOrDefault();
+                        }
+                        _luaChonNhaThauView = CollectionViewSource.GetDefaultView(Items);
+                        _luaChonNhaThauView.Filter = OnFilter;
+                    }
+                    else
+                    {
+                        _logger.Error(e.Error.Message);
+                    }
+                    IsLoading = false;
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+            }
+        }
+
+        protected override void OnAdd()
+        {
+            //NHKeHoachLuaChonNhaThauDialogViewModel.IsDieuChinh = false;
+            //OpenDialog(new NhDaKhlcNhaThauModel());
+
+            NHKeHoachLuaChonNhaThauDialogViewModel.Model = new NhDaKhlcNhaThauModel();
+            NHKeHoachLuaChonNhaThauDialogViewModel.BIsReadOnly = false;
+            NHKeHoachLuaChonNhaThauDialogViewModel.IsDieuChinh = false;
+            NHKeHoachLuaChonNhaThauDialogViewModel.ILoai = ILoai;
+            NHKeHoachLuaChonNhaThauDialogViewModel.IThuocMenu = IThuocMenu;
+            NHKeHoachLuaChonNhaThauDialogViewModel.Init();
+            NHKeHoachLuaChonNhaThauDialogViewModel.SavedAction = obj => OnRefresh();
+            NHKeHoachLuaChonNhaThauDialogViewModel.ShowDialog();
+        }
+
+        protected override void OnUpdate()
+        {
+            //NHKeHoachLuaChonNhaThauDialogViewModel.IsDieuChinh = false;
+            //OpenDialog(SelectedItem);
+
+            NHKeHoachLuaChonNhaThauDialogViewModel.Model = SelectedItem;
+            NHKeHoachLuaChonNhaThauDialogViewModel.BIsReadOnly = false;
+            NHKeHoachLuaChonNhaThauDialogViewModel.IsDieuChinh = false;
+            NHKeHoachLuaChonNhaThauDialogViewModel.ILoai = ILoai;
+            NHKeHoachLuaChonNhaThauDialogViewModel.IThuocMenu = IThuocMenu;
+            NHKeHoachLuaChonNhaThauDialogViewModel.Init();
+            NHKeHoachLuaChonNhaThauDialogViewModel.SavedAction = obj => OnRefresh();
+            NHKeHoachLuaChonNhaThauDialogViewModel.ShowDialog();
+        }
+        protected override void OnDieuChinh()
+        {
+            //NHKeHoachLuaChonNhaThauDialogViewModel.IsDieuChinh = true;
+            //OpenDialog(SelectedItem);
+
+            NHKeHoachLuaChonNhaThauDialogViewModel.Model = SelectedItem;
+            NHKeHoachLuaChonNhaThauDialogViewModel.BIsReadOnly = false;
+            NHKeHoachLuaChonNhaThauDialogViewModel.IsDieuChinh = true;
+            NHKeHoachLuaChonNhaThauDialogViewModel.ILoai = ILoai;
+            NHKeHoachLuaChonNhaThauDialogViewModel.IThuocMenu = IThuocMenu;
+            NHKeHoachLuaChonNhaThauDialogViewModel.Init();
+            NHKeHoachLuaChonNhaThauDialogViewModel.SavedAction = obj => OnRefresh();
+            NHKeHoachLuaChonNhaThauDialogViewModel.ShowDialog();
+        }
+
+        protected override void OnSelectionDoubleClick(object obj)
+        {
+            //OpenDialog((NhDaKhlcNhaThauModel)obj);
+
+            NHKeHoachLuaChonNhaThauDialogViewModel.Model = SelectedItem;
+            NHKeHoachLuaChonNhaThauDialogViewModel.BIsReadOnly = true;
+            NHKeHoachLuaChonNhaThauDialogViewModel.IsDieuChinh = false;
+            NHKeHoachLuaChonNhaThauDialogViewModel.ILoai = ILoai;
+            NHKeHoachLuaChonNhaThauDialogViewModel.IThuocMenu = IThuocMenu;
+            NHKeHoachLuaChonNhaThauDialogViewModel.Init();
+            NHKeHoachLuaChonNhaThauDialogViewModel.SavedAction = obj => OnRefresh();
+            NHKeHoachLuaChonNhaThauDialogViewModel.ShowDialog();
+        }
+        protected override void OnDelete()
+        {
+            //base.OnDelete();
+            //if (!SelectedItem.BIsKhoa)
+            //{
+            //    return;
+            //}
+            //if (!CheckCanSuaXoa())
+            //{
+            //    MessageBoxHelper.Error(string.Format(Resources.MsgRoleDelete, SelectedItem.SNguoiTao));
+            //    return;
+            //}
+
+            //StringBuilder messageBuilder = new StringBuilder();
+            //messageBuilder.AppendFormat(string.Format(Resources.MsgConfirmDeleteKHLCNT, SelectedItem.STenDuAn));
+            //var messageBox = new NSMessageBoxViewModel(messageBuilder.ToString(), "Xác nhận", NSMessageBoxButtons.YesNo, DeleteEventHandler);
+            //DialogHost.Show(messageBox.Content, "RootDialog");
+
+            string msgConfirm = string.Format(Resources.ConfirmDeleteUsers);
+            if (MessageBoxHelper.Confirm(msgConfirm) == MessageBoxResult.Yes)
+            {
+                _service.Delete(SelectedItem.Id);
+                OnRefresh();
+            }
+        }
+
+        protected override void OnLockUnLock()
+        {
+            //
+            string message = IsLock ? "Bạn có chắc chắn muốn mở khóa bản ghi này?" : "Bạn có chắc chắn muốn khóa bản ghi này?";
+            MessageBoxResult result = MessageBoxHelper.Confirm(message);
+            if (result == MessageBoxResult.Yes)
+            {
+                _service.LockOrUnlock(SelectedItem.Id, !SelectedItem.BIsKhoa);
+                SelectedItem.BIsKhoa = !SelectedItem.BIsKhoa;
+                LoadData();
+                OnPropertyChanged(nameof(IsLock));
+            }
+            //
+
+
+            //if (IsLock)
+            //{
+            //    List<DonVi> userAgency = _dvService.FindByUser(_sessionService.Current.Principal, _sessionService.Current.YearOfWork, LoaiDonVi.ROOT);
+            //    if (!userAgency.Any(x => x.Loai == LoaiDonVi.ROOT))
+            //    {
+            //        MessageBoxHelper.Error(Resources.MsgRoleUnlock);
+            //        return;
+            //    }
+            //}
+            //else
+            //{
+            //    if (SelectedItem.SNguoiTao != _sessionService.Current.Principal)
+            //    {
+            //        MessageBoxHelper.Error(string.Format(Resources.MsgRoleLock, SelectedItem.SNguoiTao));
+            //        return;
+            //    }
+            //}
+
+            //string message = IsLock ? Resources.UnlockChungTu : Resources.LockChungTu;
+            //var result = MessageBoxHelper.Confirm(message);
+            //if (result == MessageBoxResult.Yes)
+            //    LockConfirmEventHandler();
+        }
+
+        protected override void OnRefresh()
+        {
+            base.OnRefresh();
+            LoadData();
+        }
+
+        public void OnSearch()
+        {
+            _luaChonNhaThauView.Refresh();
+        }
+
+        private void onResetFilter()
+        {
+            SSoQuyetDinh = null;
+            DNgayQuyetDinhTu = null;
+            DNgayQuyetDinhDen = null;
+            SMoTa = null;
+            SelectedDonVi = null;
+            SelectedChuongTrinh = null;
+            STenChuongTrinh = null;
+            OnPropertyChanged(nameof(SSoQuyetDinh));
+            OnPropertyChanged(nameof(DNgayQuyetDinhTu));
+            OnPropertyChanged(nameof(DNgayQuyetDinhDen));
+            OnPropertyChanged(nameof(SelectedDonVi));
+            OnPropertyChanged(nameof(SelectedChuongTrinh));
+            OnSearch();
+        }
+
+        protected override void OnSelectedItemChanged()
+        {
+            base.OnSelectedItemChanged();
+            OnPropertyChanged(nameof(IsEnableLock));
+            OnPropertyChanged(nameof(IsEdit));
+            OnPropertyChanged(nameof(IsLock));
+        }
+        #endregion
+
+        #region Helper
+        private void OpenDialog(NhDaKhlcNhaThauModel selectedItem)
+        {
+            NHKeHoachLuaChonNhaThauDialogViewModel.Model = selectedItem;
+            NHKeHoachLuaChonNhaThauDialogViewModel.Init();
+            NHKeHoachLuaChonNhaThauDialogViewModel.SavedAction = obj => OnRefresh();
+            NHKeHoachLuaChonNhaThauDialogViewModel.ILoai = ILoai;
+            NHKeHoachLuaChonNhaThauDialogViewModel.IThuocMenu = IThuocMenu;
+            NHKeHoachLuaChonNhaThauDialogViewModel.IsShowDuAn = IsShowDuAn;
+            NHKeHoachLuaChonNhaThauDialogViewModel.ShowDialog();
+            LoadData();
+        }
+
+        private bool OnFilter(object obj)
+        {
+            if (!(obj is NhDaKhlcNhaThauModel item)) return true;
+            var bCondition = true;
+            if (!string.IsNullOrEmpty(SSoQuyetDinh))
+            {
+                if (!string.IsNullOrEmpty(item.SSoQuyetDinh))
+                {
+                    bCondition &= item.SSoQuyetDinh.Contains(SSoQuyetDinh, StringComparison.OrdinalIgnoreCase);
+                }
+                else bCondition = false;
+            }
+            if (SelectedDonVi != null)
+            {
+                bCondition &= item.IIdDonViQuanLyId == SelectedDonVi.Id;
+            }
+            if (SelectedChuongTrinh != null)
+            {
+                bCondition &= item.IIdKHTTNhiemVuChiId == SelectedChuongTrinh.Id;
+            }
+            if (DNgayQuyetDinhTu != null)
+            {
+                bCondition &= DNgayQuyetDinhTu <= item.DNgayQuyetDinh;
+            }
+            if (DNgayQuyetDinhDen != null)
+            {
+                bCondition &= DNgayQuyetDinhDen >= item.DNgayQuyetDinh;
+            }
+            return bCondition;
+        }
+
+        private void LockConfirmEventHandler()
+        {
+            _service.Log(SelectedItem.Id, _sessionService.Current.Principal);
+            SelectedItem.BIsKhoa = !SelectedItem.BIsKhoa;
+            OnPropertyChanged(nameof(IsLock));
+            OnPropertyChanged(nameof(IsEdit));
+        }
+
+        private void DeleteEventHandler(NSDialogResult result)
+        {
+            try
+            {
+                if (result != NSDialogResult.Yes) return;
+                _service.Delete(SelectedItem.Id);
+                LoadData();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+            }
+        }
+
+        private bool CheckCanSuaXoa()
+        {
+            var user = _sessionService.Current.Principal;
+
+            if (user == SelectedItem.SNguoiTao)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void LoadDonViQuanLy()
+        {
+            try
+            {
+                var lstDonVi = _dvService.FindByNamLamViec(_sessionService.Current.YearOfWork);
+                if (lstDonVi == null) return;
+                ItemsDonVi = new ObservableCollection<ComboboxItem>(lstDonVi.Select(n => new ComboboxItem() { ValueItem = n.IIDMaDonVi, Id = n.Id, DisplayItem = n.TenDonVi }));
+                OnPropertyChanged(nameof(ItemsDonVi));
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+            }
+        }
+
+        private void LoadChuongTrinh()
+        {
+            try
+            {
+                var lstChuongTrinh = _nhDmNhiemVuChiService.FindAllFillter(SelectedDonVi != null ? SelectedDonVi.Id : Guid.Empty);
+                if (lstChuongTrinh == null) return;
+                ItemsChuongTrinh = new ObservableCollection<ComboboxItem>(lstChuongTrinh.Select(n => new ComboboxItem() { ValueItem = n.Id.ToString(), Id = n.IIdKHTTNhiemVuChiId != null ? n.IIdKHTTNhiemVuChiId.Value : Guid.Empty, DisplayItem = n.STenNhiemVuChi }));
+
+                OnPropertyChanged(nameof(ItemsChuongTrinh));
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
+            }
+        }
+
+        #endregion
+    }
+}

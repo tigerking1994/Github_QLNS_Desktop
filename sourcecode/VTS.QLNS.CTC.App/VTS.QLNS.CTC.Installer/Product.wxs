@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  
+  <!-- Give product a unique ID per platform -->
+  <?if $(var.Platform)=x64 ?>
+  <?define ProductCode = "{446CD97E-F21A-4AEE-B350-968A8BC4F283}" ?>
+  <?else?>
+  <?define ProductCode = "{5BB1E6B4-0671-4EBF-8BB7-047FA3386797}" ?>
+  <?endif?>
+
+  <!-- Fixed upgrade Id -->
+  <?define UpgradeCode = "{59450F8D-0C01-4F06-BCC1-FED21C028C43}" ?>
+  
+  <?define BuildVersion = 1.0.0.0 ?>
+  
+  <!-- Define main product -->
+	<Product 
+    Id="$(var.ProductCode)" 
+    Name="!(loc.ProductName_$(var.Platform))" 
+    Language="!(loc.Language)" 
+    Version="$(var.BuildVersion)" 
+    Manufacturer="!(loc.Company)" 
+    UpgradeCode="$(var.UpgradeCode)">
+    
+    <!-- Provide package details -->
+		<Package 
+      InstallerVersion="200" 
+      Compressed="yes" 
+      InstallScope="perMachine" 
+      Platform="$(var.Platform)"
+      Manufacturer="!(loc.Company)"
+      Description="!(loc.Description)"
+      Keywords="!(loc.Keywords)"
+      Comments="!(loc.Comments)"
+      Languages="!(loc.Language)" />
+
+    <!-- Dowgrade error message -->
+		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)" />
+    
+    <!-- Include .cab file into .msi file -->
+		<MediaTemplate 
+      EmbedCab="yes"/>
+
+    <!-- Define main app icon -->
+    <Icon Id="icon.ico" SourceFile="$(var.VTS.QLNS.CTC.App.ProjectDir)\favicon.ico"/>
+
+    <!-- Use the icon.ico icon for this installer (Show up in add/remove program)-->
+    <Property Id="APPPRODUCTION">
+      icon.ico
+    </Property>
+
+    <!-- Create a basic UI for the installer -->
+    <!--<UIRef Id="WixUI_Minimal"/>-->
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <UIRef Id="WixUI_InstallDir" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\Assets\License.rtf"/>
+		
+	<Binary Id="SetupDatabaseBinary" SourceFile="$(var.VTS.QLNS.CTC.Installer.Config.TargetDir)$(var.VTS.QLNS.CTC.Installer.Config.TargetName).CA.dll"/>
+	
+    <!--<InstallExecuteSequence>
+      <Custom Action='SetupDatabaseCustomAction' Before='InstallFinalize'>NOT Installed</Custom>
+    </InstallExecuteSequence>-->
+    <CustomAction Id="SetupDatabaseCustomAction" BinaryKey="SetupDatabaseBinary" DllEntry="SetupDatabase" Execute="immediate" Return="check"/>
+	<CustomAction Id="SetupSDK" BinaryKey="SetupDatabaseBinary" DllEntry="SetupSDK" Execute="immediate" Return="check"/>
+	<CustomAction Id="SelectDBType" BinaryKey="SetupDatabaseBinary" DllEntry="SelectDBType" Execute="immediate" Return="check"/>
+	<CustomAction Id="SelectYearOfWork" BinaryKey="SetupDatabaseBinary" DllEntry="SelectYearOfWork" Execute="immediate" Return="check"/>
+    <UI>
+		
+      <Publish Dialog="ExitDialog"
+            Control="Finish"
+            Event="DoAction"
+            Value="SetupSDK">NOT Installed</Publish>
+			
+    </UI>
+    
+    <!-- Define components, shortcuts, files, ... for installer -->
+		<Feature Id="ProductFeature" Title="QLNSSetup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+            <ComponentGroupRef Id="PublishedComponents" />
+		</Feature>
+		
+	    
+	    <InstallExecuteSequence>
+			<Custom Action="SelectDBType" After="InstallFinalize">NOT Installed</Custom>
+            <Custom Action="SetupDatabaseCustomAction" After="SelectDBType">NOT Installed</Custom>
+			<Custom Action="SelectYearOfWork" After="SetupDatabaseCustomAction">NOT Installed</Custom>
+        </InstallExecuteSequence>
+	</Product>
+</Wix>

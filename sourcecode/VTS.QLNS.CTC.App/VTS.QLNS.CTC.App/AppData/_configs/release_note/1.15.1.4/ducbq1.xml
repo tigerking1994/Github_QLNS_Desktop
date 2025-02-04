@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReleaseNoteModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReleaseDate>2024-11-11T18:00:07.701445+07:00</ReleaseDate>
+	<NoteDetails>
+		<ReleaseNoteDetailModel>
+			<Module>Ngân sách</Module>
+			<Features>
+				<string>Bổ sung Báo cáo tình hình nhận và quyết toán kinh phí (menu và mẫu báo cáo)</string>
+			</Features>
+			<BugFixes>
+				<string>Sửa lại phần Mục lục quyết toán năm bị lấy sai map không đúng năm làm việc</string>
+				<string>Sửa lại một số chức năng xóa, cập nhật bản ghi màn chi tiết SNC - SKT</string>
+				<string>Sửa lại phần làm tròn số bị sai đối với số lớn</string>
+				<string>Chặn chỉnh sửa cột chi tiết màn Lập dự toán đầu năm với chứng từ tổng hợp từ chứng từ con</string>
+			</BugFixes>
+			<Improvements />
+		</ReleaseNoteDetailModel>
+	</NoteDetails>
+</ReleaseNoteModel>

@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.Component.NSMessageBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d">
+    <StackPanel Width="450">
+        <materialDesign:ColorZone Mode="Standard"
+                                  Padding="8">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource MaterialDesignButtonTextBlock}"
+                           Text="{Binding Caption}" />
+            </StackPanel>
+        </materialDesign:ColorZone>
+        <Grid Grid.Row="1"
+              Margin="8 16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <materialDesign:PackIcon Grid.Column="0"
+                                     Kind="{Binding ActionIcon}"
+                                     Height="35"
+                                     Width="35" />
+            <TextBlock Grid.Column="1"
+                       Margin="8 0 0 0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Center"
+                       Text="{Binding MessageContent}"></TextBlock>
+        </Grid>
+        <Separator Background="{DynamicResource MaterialDesignDivider}" />
+        <StackPanel Grid.Row="2"
+                    Margin="8 5 8 8"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Visibility="{Binding YesVisibility}"
+                    Margin="0 0 5 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    IsCancel="True"
+                    Command="{Binding YesCommand}"
+                    HorizontalAlignment="Center"
+                    Content="Đồng ý">
+            </Button>
+            <Button Visibility="{Binding NoVisibility}"
+                    Margin="0 0 5 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding NoCommand}"
+                    HorizontalAlignment="Center"
+                    Content="Không">
+            </Button>
+            <Button Visibility="{Binding OKVisibility}"
+                    Margin="0 0 5 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding OKCommand}"
+                    HorizontalAlignment="Center"
+                    Content="OK">
+            </Button>
+            <Button Visibility="{Binding CancelVisibility}"
+                    Margin="0 0 5 0"
+                    Command="{Binding CancelCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    HorizontalAlignment="Center"
+                    Content="Hủy bỏ">
+            </Button>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

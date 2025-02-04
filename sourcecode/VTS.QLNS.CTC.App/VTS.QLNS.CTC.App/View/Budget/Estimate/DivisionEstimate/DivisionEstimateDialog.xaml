@@ -1,0 +1,446 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Budget.Estimate.DivisionEstimateDialog"
+             x:Name="DivisionEstimateDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Budget.Estimate"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:utility="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             mc:Ignorable="d" 
+             Padding="0"
+             HorizontalAlignment="Center"
+             xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <!--Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type materialDesign:DialogHost}, Mode=FindAncestor}}"-->
+    <UserControl.Width>
+        <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+            <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType={x:Type materialDesign:DialogHost}, Mode=FindAncestor}"></Binding>
+            <Binding Source="-300"></Binding>
+        </MultiBinding>
+    </UserControl.Width>
+    <Grid Margin="20 10" Height="{Binding ElementName=DivisionEstimateDialogView, Path=ActualHeight}" VerticalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" Margin="0 15 0 0">
+            <materialDesign:PackIcon Kind="PlaylistPlus" Style="{StaticResource DialogScreenIconStyle}"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                <TextBlock  Text="{Binding Name}" FontWeight="Bold"></TextBlock>
+                <TextBlock Text="{Binding Description}"></TextBlock>
+            </StackPanel>
+        </DockPanel>
+        <Separator Grid.Row="1" Background="{DynamicResource MaterialDesignDivider}"/>
+        <Grid Grid.Row="2" Grid.IsSharedSizeScope="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                        <Style TargetType="DatePicker" BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Margin" Value="10 0 0 0"/>
+                        </Style>
+                        <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                            <Setter Property="Margin" Value="10 1 10 1" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox 
+                            Grid.Column="0"
+                            HorizontalAlignment="Stretch" 
+                            materialDesign:HintAssist.Hint="Số chứng từ" 
+                            IsReadOnly="True" 
+                            Text="{Binding Model.SSoChungTu}" />
+                        <DatePicker 
+                            Grid.Column="1"
+                            Language="vi-VN"
+                            HorizontalAlignment="Stretch"
+                            materialDesign:HintAssist.Hint="Ngày"
+                            SelectedDate="{Binding Model.DNgayChungTu, UpdateSourceTrigger=PropertyChanged}" />
+                        <ComboBox
+                            Grid.Column="2"
+                            IsEnabled="{Binding IsEnabled}"
+                            IsEditable="False"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            materialDesign:HintAssist.Hint="Loại dự toán"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            SelectedItem="{Binding CbxBudgetTypeSelected, UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding CbxBudgetType}">
+                        </ComboBox>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox 
+                            Grid.Column="0"
+                            HorizontalAlignment="Stretch"
+                            materialDesign:HintAssist.Hint="Số quyết định"
+                            VerticalAlignment="Center" 
+                            Text="{Binding Model.SSoQuyetDinh}"/>
+                        <DatePicker 
+                            Grid.Column="1"
+                            HorizontalAlignment="Stretch"
+                            Language="vi-VN"
+                            materialDesign:HintAssist.Hint="Ngày"
+                            SelectedDate="{Binding Model.DNgayQuyetDinh, UpdateSourceTrigger=PropertyChanged}" />
+                        <ComboBox
+                            Grid.Column="2"
+                            IsEnabled="{Binding IsEnabled}"
+                            IsEditable="False"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            materialDesign:HintAssist.Hint="Loại chứng từ"
+                            materialDesign:TextFieldAssist.HasClearButton="false"
+                            SelectedItem="{Binding CbxVoucherTypeSelected, UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding CbxVoucherType}">
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="0">
+                    <TextBox
+                        Margin="0 10 0 20"
+                        Height="80"
+                        materialDesign:HintAssist.IsFloating="True"
+                        materialDesign:HintAssist.Hint="Mô tả chi tiết"
+                        Text="{Binding Model.SMoTa}"
+                        TextWrapping="Wrap"
+                        VerticalAlignment="Stretch"
+                        VerticalScrollBarVisibility="Auto"/>
+                </StackPanel>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Border
+                Grid.Column="0"
+                BorderThickness="1"
+                Margin="0 0 0 0"
+                Name="LNS"
+                BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <RadioButton
+                                    x:Name="RbDemandVoucherIndex"
+                                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                                    GroupName="TabIndex"
+                                    IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static utility:ImportTabIndex.Data}}"
+                                    Content="Đã có dữ liệu nhận" />
+                                <RadioButton
+                                    x:Name="RbDemandSummaryVoucherIndex"
+                                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                                    GroupName="TabIndex"
+                                    IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static utility:ImportTabIndex.MLNS}}"
+                                    Content="Lấy tất cả LNS" />
+                            </StackPanel>
+                            <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0 0 0 1" />
+                            <materialDesign:ColorZone
+                        Grid.Row="1"   
+                        Mode="PrimaryLight">
+                                <DockPanel HorizontalAlignment="Stretch" Margin="8">
+                                    <CheckBox Background="White" IsChecked="{Binding SelectAllLNS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBlock Text="{Binding SelectedCountLNS}"></TextBlock>
+                                    </CheckBox>
+                                    <Border
+                                Margin="8 0 0 0"
+                                Background="White"
+                                MaxHeight="30"
+                                CornerRadius="3"
+                                HorizontalAlignment="Right"
+                                ToolTip="Enter to search, ignore case">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button
+                                        x:Name="SearchButton1"
+                                        Style="{DynamicResource MaterialDesignToolButton}"
+                                        Height="24"
+                                        Width="24">
+                                                <materialDesign:PackIcon Margin="0" Kind="Magnify" Opacity=".56"/>
+                                            </Button>
+                                            <TextBox
+                                        Grid.Column="1"
+                                        Margin="5 0 0 0"
+                                        materialDesign:HintAssist.Hint="Tìm kiếm"
+                                        materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                        BorderThickness="0"
+                                        MinWidth="150"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding SearchLNS, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                        </Grid>
+                                    </Border>
+                                </DockPanel>
+                            </materialDesign:ColorZone>
+                            <ListView Grid.Row="2" ItemsSource="{Binding DataLNS}">
+                                <ListView.Resources>
+                                    <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}"/>
+                                </ListView.Resources>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <!--<CheckBox Content="{Binding LNSDisplay}" IsHitTestVisible="{Binding Path=IsHitTestVisible}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
+                                        <CheckBox Content="{Binding LNSDisplay}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </Border>
+                    <Border 
+                    Margin="10 0 0 0"
+                    BorderThickness="1"
+                    Grid.Column="1"
+                    BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <materialDesign:ColorZone 
+                            Grid.Row="0"
+                            Mode="PrimaryLight">
+                                <DockPanel HorizontalAlignment="Stretch" Margin="8">
+                                    <TextBlock Text="{Binding SelectedCountDot}"></TextBlock>
+                                    <Border
+                                    Margin="8 0 0 0"
+                                    Background="White"
+                                    MaxHeight="30"
+                                    CornerRadius="3"
+                                    HorizontalAlignment="Right"
+                                    ToolTip="Enter to search, ignore case">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button
+                                            Style="{DynamicResource MaterialDesignToolButton}"
+                                            Height="24"
+                                            Width="24">
+                                                <materialDesign:PackIcon Margin="0" Kind="Magnify" Opacity=".56"/>
+                                            </Button>
+                                            <TextBox
+                                            Grid.Column="1"
+                                            Margin="5 0 0 0"
+                                            materialDesign:HintAssist.Hint="Tìm kiếm"
+                                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                            BorderThickness="0"
+                                            MinWidth="150"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding SearchDotPhanBo, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                        </Grid>
+                                    </Border>
+                                </DockPanel>
+                            </materialDesign:ColorZone>
+                            <DataGrid
+                            Grid.Row="1"
+                            ItemsSource="{Binding DataDot}"
+                            GridLinesVisibility="All"
+                            CanUserResizeColumns="True"
+                            MinColumnWidth="50"
+                            AutoGenerateColumns="False"
+                            BorderThickness="0 1 0 0"
+                            CanUserAddRows="False"
+                            Style="{StaticResource MaterialDesignDataGrid}">
+                                <DataGrid.Resources>
+                                    <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridCheckBoxColumn
+                                    Binding="{Binding IsChecked,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                                    EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                                        <DataGridCheckBoxColumn.Header>
+                                            <Border Background="Transparent">
+                                                <CheckBox Visibility="{Binding Data.IsEnabled, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                                      IsChecked="{Binding Data.SelectAllDot, Source={StaticResource DataContextProxy}}" />
+                                            </Border>
+                                        </DataGridCheckBoxColumn.Header>
+                                        <DataGridCheckBoxColumn.HeaderStyle>
+                                            <Style
+                                            TargetType="{x:Type DataGridColumnHeader}"
+                                            BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGridCheckBoxColumn.HeaderStyle>
+                                        <DataGridCheckBoxColumn.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                        <Setter Property="IsEnabled" Value="False" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+
+                                            </Style>
+                                        </DataGridCheckBoxColumn.CellStyle>
+                                    </DataGridCheckBoxColumn>
+                                    <DataGridTextColumn
+                                    Header="Số chứng từ"
+                                    Binding="{Binding SSoChungTu}"
+                                    IsReadOnly="True"/>
+                                    <DataGridTextColumn
+                                    Header="Ngày chứng từ"
+                                    Binding="{Binding DNgayChungTu, Converter={StaticResource DateTimeToStringConverter}}"
+                                    IsReadOnly="True"/>
+                                    <DataGridTextColumn
+                                    Header="Số quyết định"
+                                        Width="*"
+                                    Binding="{Binding SSoQuyetDinh}"
+                                    IsReadOnly="True"/>
+                                    <DataGridTextColumn
+                                    Header="Ngày quyết định"
+                                    Binding="{Binding DNgayQuyetDinh, Converter={StaticResource DateTimeToStringConverter}}"
+                                    IsReadOnly="True"/>
+                                    <DataGridTextColumn
+                                    Header="Số phân bổ"
+                                    Visibility="{Binding Data.IsAdjusted, Converter={StaticResource InvertBooleanToVisibilityConverter}, Source={StaticResource DataContextProxy}}"
+                                    Binding="{Binding SoPhanBo, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                    IsReadOnly="True"/>
+                                    <DataGridTextColumn
+                                    Header="Số chưa phân bổ"
+                                    Visibility="{Binding Data.IsAdjusted, Converter={StaticResource InvertBooleanToVisibilityConverter}, Source={StaticResource DataContextProxy}}"
+                                    Binding="{Binding SoChuaPhanBo, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                    IsReadOnly="True"/>
+                                    <DataGridTextColumn
+                                    Header="Số phân bổ"
+                                    Visibility="{Binding Data.IsAdjusted, Converter={StaticResource BooleanToVisibilityConverter}, Source={StaticResource DataContextProxy}}"
+                                    Binding="{Binding FTongDuToan, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                    ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                    IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+            </Grid>
+            <Border
+                Grid.Column="1"
+                BorderThickness="1"
+                Margin="10 0 0 0"
+                Visibility="{Binding IsAdjusted, Converter={StaticResource InverseBoolToVisConverter}}"
+                Width="{Binding ElementName=LNS, Path=ActualWidth}"
+                BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <materialDesign:ColorZone 
+                        Grid.Row="0"
+                        Mode="PrimaryLight">
+                        <DockPanel HorizontalAlignment="Stretch" Margin="8">
+                            <CheckBox Background="White" IsChecked="{Binding SelectAllUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <TextBlock Text="{Binding SelectedCountUnit}"></TextBlock>
+                            </CheckBox>
+                            <Border
+                                Margin="8 0 0 0"
+                                Background="White"
+                                MaxHeight="30"
+                                CornerRadius="3"
+                                HorizontalAlignment="Right"
+                                ToolTip="Enter to search, ignore case">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button
+                                        Style="{DynamicResource MaterialDesignToolButton}"
+                                        Height="24"
+                                        Width="24">
+                                        <materialDesign:PackIcon Margin="0" Kind="Magnify" Opacity=".56"/>
+                                    </Button>
+                                    <TextBox
+                                        Grid.Column="1"
+                                        Margin="5 0 0 0"
+                                        materialDesign:HintAssist.Hint="Tìm kiếm"
+                                        materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                        BorderThickness="0"
+                                        MinWidth="150"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding SearchUnit, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </Border>
+                        </DockPanel>
+                    </materialDesign:ColorZone>
+                    <ListView Grid.Row="1" ItemsSource="{Binding DataUnit}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <!--<CheckBox Content="{Binding DisplayItem}" IsHitTestVisible="{Binding Path=IsHitTestVisible}" IsChecked="{Binding Path=IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
+                                <CheckBox Content="{Binding DisplayItem}" IsChecked="{Binding Path=IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Border>
+        </Grid>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 15 0 15" HorizontalAlignment="Right">
+            <Button 
+                IsEnabled="{Binding IsSaveData}"
+                IsDefault="True"
+                Margin="5 0 0 0"
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                Command="{Binding SaveCommand}"
+                CommandParameter="{Binding EstimationDialog}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ContentSave" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lưu dữ liệu</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button
+                IsCancel="True"
+                Margin="5 0 0 0"
+                Style="{StaticResource MaterialDesignOutlinedButton}"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CloseOutline" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                </StackPanel>
+                <Button.CommandParameter>
+                    <system:Boolean>False</system:Boolean>
+                </Button.CommandParameter>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

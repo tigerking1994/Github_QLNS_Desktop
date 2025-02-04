@@ -1,0 +1,851 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Investment.MediumTermPlan.PlanSuggestions.PlanSuggestionsDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:dc="clr-namespace:VTS.QLNS.CTC.App.ViewModel.Investment.MediumTermPlan.PlanSuggestions"
+        xmlns:extensions="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+        xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+        xmlns:custom="clr-namespace:VTS.QLNS.CTC.Custom;assembly=VTS.QLNS.CTC.Custom"
+        x:Name="PlanSuggestionDetailWindow"
+        mc:Ignorable="d"
+        WindowState="Maximized"
+        d:DataContext="{d:DesignInstance dc:PlanSuggestionsDetailViewModel, IsDesignTimeCreatable=True}"
+        ext:CloseWindowBehaviour.Command="{Binding CloseCommand}"
+        Style="{StaticResource MaterialDesignWindow}"
+        Title="{Binding Title}"
+        Height="450"
+        Width="800">
+
+    <Window.InputBindings>
+        <KeyBinding Key="F6"
+                    Command="{Binding OpenReferencePopupCommand}"
+                    CommandParameter="{Binding ElementName=dgdDataPlanManagerDetailDeXuat, Path=.}" />
+        <KeyBinding Key="F3"
+                    Command="{Binding AddCommand}"
+                    CommandParameter="{x:Static localEnum:MediumTermModifyType.NEW}" />
+        <KeyBinding Key="F3"
+                    Modifiers="Ctrl"
+                    Command="{Binding AddCommand}"
+                    CommandParameter="{x:Static localEnum:MediumTermModifyType.CHILD}" />
+        <KeyBinding Key="D"
+                    Modifiers="Ctrl"
+                    Command="{Binding AddCommand}"
+                    CommandParameter="{x:Static localEnum:MediumTermModifyType.CLONE}" />
+        <KeyBinding Key="F10"
+                    Command="{Binding SaveCommand}" />
+        <KeyBinding Key="F4"
+                    Command="{Binding DeleteCommand}" />
+        <KeyBinding Key="F5"
+                    Command="{Binding RefreshCommand}" />
+    </Window.InputBindings>
+
+    <materialDesign:DialogHost Identifier="PlanManagerDetailDexuat"
+                               DialogTheme="Inherit">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0"
+                        Orientation="Vertical">
+                <DockPanel>
+                    <materialDesign:PackIcon Kind="Dollar"
+                                             Style="{StaticResource DialogScreenIconStyle}" />
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Name}"
+                                   FontWeight="Bold" />
+                        <TextBlock Text="{Binding Description}" />
+                    </StackPanel>
+                </DockPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}" />
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel ext:Permission.Identifier="INVESTMENT_MEDIUM_TERM_PLAN_PLAN_SUGGESTION_DETAIL_ADD"
+                                Orientation="Horizontal"
+                                Visibility="{Binding IsDuAnChuyenTiep, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                        <Button Style="{StaticResource SearchBarBtnStyle}"
+                                IsEnabled="{Binding IsActive1}"
+                                Command="{Binding AddCommand}"
+                                CommandParameter="{x:Static localEnum:MediumTermModifyType.NEW}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ContentSave" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Thêm nhóm dự án (F3)" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button Style="{StaticResource SearchBarBtnStyle}"
+                                IsEnabled="{Binding IsActive1}"
+                                Command="{Binding AddCommand}"
+                                CommandParameter="{x:Static localEnum:MediumTermModifyType.CHILD}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ContentSave" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Thêm dự án (Ctrl + F3)" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                        <Button Style="{StaticResource SearchBarBtnStyle}"
+                                IsEnabled="{Binding IsActive1}"
+                                Command="{Binding AddCommand}"
+                                CommandParameter="{x:Static localEnum:MediumTermModifyType.CLONE}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ContentSave" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Thêm chi tiết dự án (Ctrl + D)" />
+                            </StackPanel>
+                        </Button>
+                        <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    </StackPanel>
+                    <StackPanel ext:Permission.Identifier="INVESTMENT_MEDIUM_TERM_PLAN_PLAN_SUGGESTION_DETAIL_SAVE"
+                                Margin="0 3 0 0">
+                        <Button IsEnabled="{Binding IsActive}"
+                                Style="{StaticResource SearchBarBtnStyle}"
+                                Command="{Binding SaveCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ContentSave" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Lưu dữ liệu (F10)" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               ext:Permission.Identifier="INVESTMENT_MEDIUM_TERM_PLAN_PLAN_SUGGESTION_DETAIL_SAVE" />
+                    <StackPanel ext:Permission.Identifier="INVESTMENT_MEDIUM_TERM_PLAN_PLAN_SUGGESTION_DETAIL_DELETE"
+                                Margin="0 3 0 0">
+                        <Button IsEnabled="{Binding IsActive}"
+                                Style="{StaticResource SearchBarBtnStyle}"
+                                Command="{Binding DeleteCommand}"
+                                CommandParameter="{Binding ElementName=dgdDataPlanManagerApprovedDetail, Path=.}"
+                                ToolTip="Xóa dữ liệu">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Delete" />
+                                <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                           Text="Xóa (F4)" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"
+                               ext:Permission.Identifier="INVESTMENT_MEDIUM_TERM_PLAN_PLAN_SUGGESTION_DETAIL_DELETE" />
+                    <Button Style="{StaticResource SearchBarBtnStyle}"
+                            ToolTip="Refresh"
+                            Command="{Binding RefreshCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh"
+                                                     VerticalAlignment="Center" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Tải lại (F5)" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button x:Name="btnShowColSelfPay"
+                            Style="{StaticResource SearchBarBtnStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Ẩn/hiện cột" />
+                            <materialDesign:PopupBox Name="pbDynamicColumn"
+                                                     Margin="-10 0 0 0"
+                                                     HorizontalAlignment="Right"
+                                                     StaysOpen="True">
+                                <materialDesign:PopupBox.Resources>
+                                    <Style TargetType="ScrollViewer">
+                                        <Setter Property="Height"
+                                                Value="400" />
+                                    </Style>
+                                </materialDesign:PopupBox.Resources>
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <ScrollViewer></ScrollViewer>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <ComboBox Name="cbFrozenColumn"
+                              materialDesign:HintAssist.Hint="Cố định cột"
+                              materialDesign:TextFieldAssist.HasClearButton="True"
+                              DisplayMemberPath="DisplayItem"
+                              SelectedValuePath="ValueItem"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding ElementName=PlanSuggestionDetailWindow}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Close"
+                                                     VerticalAlignment="Center" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Đóng" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}" />
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBox"
+                               BasedOn="{StaticResource MaterialDesignTextBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating"
+                                    Value="True" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <Grid>
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Width">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                            <Binding ElementName="tenDuAn"
+                                                     Path="ActualWidth" />
+                                            <Binding ElementName="stt"
+                                                     Path="ActualWidth" />
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Grid.Style>
+                        <TextBox Margin="5 0 0 0"
+                                 Text="{Binding TxtTenDuAn, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:HintAssist.Hint="Tên dự án">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding SearchCommand}"
+                                            Key="Return" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                    </Grid>
+                    <Grid Width="{Binding ElementName=tenDonViQuanLy, Path=ActualWidth}">
+                        <custom:AutoCompleteComboBox Margin="5 0 0 0"
+                                                     IsEditable="True"
+                                                     TextSearch.TextPath="DisplayItem"
+                                                     DisplayMemberPath="DisplayItem"
+                                                     SelectedValuePath="ValueItem"
+                                                     materialDesign:HintAssist.Hint="Đơn vị"
+                                                     materialDesign:TextFieldAssist.HasClearButton="True"
+                                                     SelectedItem="{Binding SelectedDonVi, UpdateSourceTrigger=PropertyChanged}"
+                                                     ItemsSource="{Binding ItemsDonVi}"
+                                                     Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=diaDiemThucHien, Path=ActualWidth}">
+                        <TextBox Margin="5 0 0 0"
+                                 Text="{Binding TxtDiaDiemThucHien, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:HintAssist.Hint="Địa điểm thực hiện">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding SearchCommand}"
+                                            Key="Return" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                    </Grid>
+                    <Grid Width="{Binding ElementName=thoiGianThucHienTu, Path=ActualWidth}">
+                        <TextBox Margin="5 0 0 0"
+                                 Text="{Binding TxtThoiGianTu, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:HintAssist.Hint="Thời gian khởi công">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding SearchCommand}"
+                                            Key="Return" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                    </Grid>
+                    <Grid Width="{Binding ElementName=thoiGianThucHienDen, Path=ActualWidth}">
+                        <TextBox Margin="5 0 0 0"
+                                 Text="{Binding TxtThoiGianDen, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:HintAssist.Hint="Thời gian hoàn thành">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding SearchCommand}"
+                                            Key="Return" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                    </Grid>
+                    <Grid Width="{Binding ElementName=loaiCongTrinh, Path=ActualWidth}">
+                        <custom:AutoCompleteComboBox Margin="5 0 0 0"
+                                                     IsEditable="True"
+                                                     TextSearch.TextPath="DisplayItem"
+                                                     DisplayMemberPath="DisplayItem"
+                                                     SelectedValuePath="ValueItem"
+                                                     materialDesign:HintAssist.Hint="Loại công trình"
+                                                     materialDesign:TextFieldAssist.HasClearButton="True"
+                                                     SelectedItem="{Binding SelectedLoaiCongTrinh, UpdateSourceTrigger=PropertyChanged}"
+                                                     ItemsSource="{Binding ItemsLoaiCongTrinh}"
+                                                     Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    </Grid>
+                    <Grid Width="{Binding ElementName=nguonVon, Path=ActualWidth}">
+                        <custom:AutoCompleteComboBox Margin="5 0 0 0"
+                                                     IsEditable="True"
+                                                     DisplayMemberPath="DisplayItem"
+                                                     SelectedValuePath="ValueItem"
+                                                     TextSearch.TextPath="DisplayItem"
+                                                     materialDesign:HintAssist.Hint="Nguồn vốn"
+                                                     materialDesign:TextFieldAssist.HasClearButton="True"
+                                                     SelectedItem="{Binding SelectedNguonVon, UpdateSourceTrigger=PropertyChanged}"
+                                                     ItemsSource="{Binding ItemsNguonVon}"
+                                                     Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    </Grid>
+                    <Button Margin="5 0 0 0"
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            Command="{Binding SearchCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Search" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}"
+                                       Text="Tìm kiếm" />
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="5 0 0 0"
+                            Style="{StaticResource SearchBarBtnStyle}"
+                            ToolTip="Filter"
+                            Command="{Binding ResetFilterCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FilterRemoveOutline" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            <component:ExpandedDataGrid x:Name="dgdDataPlanManagerDetailDeXuat"
+                                        Grid.Row="2"
+                                        Margin="0 5 0 0"
+                                        VerticalAlignment="Stretch"
+                                        AutoGenerateColumns="False"
+                                        CanUserResizeColumns="True"
+                                        FrozenColumnCount="1"
+                                        CanUserAddRows="False"
+                                        GridLinesVisibility="All"
+                                        BorderThickness="1"
+                                        HorizontalScrollBarVisibility="Auto"
+                                        EnableFooterDataGrid="True"
+                                        EnableHeaderDataGrid="False"
+                                        ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                                        ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                                        RowStyle="{StaticResource DataGridRowDetail}"
+                                        CellStyle="{StaticResource DataGridCellDetail}"
+                                        Style="{StaticResource MultilHeaderDataGrid}"
+                                        ScrollViewer.ScrollChanged="dgdDataPlanManagerDetailDeXuat_ScrollChanged"
+                                        extensions:SelectedCellChangedProperty.Command="{Binding SelectedCellChangeCommand}"
+                                        extensions:GridAutoGeneratingColumnBehaviour.Command="{Binding AutoGeneratingColumnsCommand}"
+                                        SelectedItem="{Binding SelectedItem}"
+                                        ItemsSource="{Binding Items}"
+                                        BeginningEdit="dgdData_BeginningEdit">
+                <DataGrid.Resources>
+                    <helper:BindingProxy x:Key="DataContextProxy"
+                                         Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="70"
+                                        x:Name="stt"
+                                        Header="STT"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                        Binding="{Binding STT, UpdateSourceTrigger=LostFocus}"
+                                        IsReadOnly="True" />
+                    <DataGridTextColumn Width="300"
+                                        x:Name="tenDuAn"
+                                        Header="Tên dự án"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                        Binding="{Binding STen, UpdateSourceTrigger=LostFocus}"
+                                        IsReadOnly="False" />
+                    <DataGridTextColumn x:Name="tenDonViQuanLy"
+                                        Width="200"
+                                        Header="Đơn vị thực hiện dự án(F6)"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        Binding="{Binding STenDonVi}"
+                                        IsReadOnly="True" />
+                    <DataGridTextColumn x:Name="diaDiemThucHien"
+                                        Header="Địa điểm thực hiện"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                        Binding="{Binding SDiaDiem, UpdateSourceTrigger=LostFocus}"
+                                        IsReadOnly="False" />
+                    <DataGridTextColumn x:Name="thoiGianThucHienTu"
+                                        Header="Thời gian khởi công"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                        Binding="{Binding IGiaiDoanTu, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,StringFormat=d}"
+                                        IsReadOnly="False" />
+                    <DataGridTextColumn x:Name="thoiGianThucHienDen"
+                                        Header="Thời gian hoàn thành"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}"
+                                        Binding="{Binding IGiaiDoanDen, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,StringFormat=d}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                        IsReadOnly="False" />
+                    <DataGridTextColumn x:Name="loaiCongTrinh"
+                                        Header="Loại công trình (F6)"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        Binding="{Binding STenLoaiCongTrinh}"
+                                        IsReadOnly="True" />
+                    <component:DataGridTextColumn x:Name="nguonVon"
+                                                  Header="Nguồn vốn (F6)"
+                                                  IsReadOnly="True"
+                                                  Binding="{Binding STenNguonVon}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                        <DataGridColumn.HeaderTemplate>
+
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="nguonVon"
+                                                                             Path="ActualWidth" />
+                                                                    <Binding ElementName="hanMucDauTu"
+                                                                             Path="ActualWidth" />
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center"
+                                                           Name="canvas8"
+                                                           Text="HẠN MỨC ĐẦU TƯ ĐỀ NGHỊ" />
+
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup"
+                                                   Text="Nguồn vốn (F6)" />
+                                    </Border>
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="hanMucDauTu"
+                                                  StringFormat="{}{0:N0}"
+                                                  Header="{Binding Data.SHeaderHanMucDauTu, Source={StaticResource DataContextProxy}}"
+                                                  Binding="{Binding FHanMucDauTu, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FHanMucDauTu, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderTemplate="{StaticResource RightHeader}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}" />
+                    <component:DataGridTextColumn x:Name="tongSoNhuCauNSQP"
+                                                  IsReadOnly="True"
+                                                  Header="Tổng số nhu cầu NSQP"
+                                                  Binding="{Binding FTongSoNhuCauNSQP, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FTongSoNhuCauNSQP, Source={StaticResource DataContextProxy}}"
+                                                  Visibility="{Binding Data.IsDuAnChuyenTiep, Source={StaticResource DataContextProxy}, Converter={StaticResource InvertBooleanToVisibilityConverter}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderWrap}" />
+                    <component:DataGridTextColumn x:Name="vonNSQPLuyKe"
+                                                  IsReadOnly="True"
+                                                  Header="{Binding Data.SHeaderLuyKeNSQPHetNam, Source={StaticResource DataContextProxy}}"
+                                                  Binding="{Binding FVonNSQPLuyKe, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FVonNSQPLuyKe, Source={StaticResource DataContextProxy}}"
+                                                  Visibility="{Binding Data.IsDuAnChuyenTiep, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="vonNSQP"
+                                                  IsReadOnly="True"
+                                                  Header="{Binding Data.SHeaderVonNSQPNam, Source={StaticResource DataContextProxy}}"
+                                                  Binding="{Binding FVonNSQP, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FVonNSQP, Source={StaticResource DataContextProxy}}"
+                                                  Visibility="{Binding Data.IsDuAnChuyenTiep, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriKeHoach"
+                                                  IsReadOnly="True"
+                                                  Header="Tổng số"
+                                                  Binding="{Binding FGiaTriKeHoach, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriKeHoach, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                        <DataGridColumn.HeaderTemplate>
+
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="giaTriNamThuNhatOrigin"
+                                                                             Path="ActualWidth" />
+                                                                    <Binding ElementName="giaTriNamThuNhat"
+                                                                             Path="ActualWidth" />
+                                                                    <Binding ElementName="giaTriNamThuHaiOrigin"
+                                                                             Path="ActualWidth" />
+                                                                    <Binding ElementName="giaTriNamThuHai"
+                                                                             Path="ActualWidth" />
+                                                                    <Binding ElementName="giaTriNamThuBaOrigin"
+                                                                             Path="ActualWidth" />
+                                                                    <Binding ElementName="giaTriNamThuBa"
+                                                                             Path="ActualWidth" />
+                                                                    <Binding ElementName="giaTriNamThuTuOrigin"
+                                                                             Path="ActualWidth" />
+                                                                    <Binding ElementName="giaTriNamThuTu"
+                                                                             Path="ActualWidth" />
+                                                                    <Binding ElementName="giaTriNamThuNamOrigin"
+                                                                             Path="ActualWidth" />
+                                                                    <Binding ElementName="giaTriNamThuNam"
+                                                                             Path="ActualWidth" />
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center"
+                                                           Name="canvas13"
+                                                           Text="{Binding Data.Model.HeaderGroupVonBoTri, Source={StaticResource DataContextProxy}}" />
+
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup"
+                                                   Text="Tổng số" />
+                                    </Border>
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriNamThuNhatOrigin"
+                                                  IsReadOnly="True"
+                                                  StringFormat="{}{0:N0}"
+                                                  Header="{Binding Data.Model.Header1, Source={StaticResource DataContextProxy}}"
+                                                  Visibility="{Binding Data.IsDieuChinh, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  Binding="{Binding FGiaTriNamThuNhatOrigin, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriNamThuNhatOrigin, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                        <DataGridColumn.HeaderTemplate>
+
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup"
+                                                   Text="{Binding Data.Model.Header1, Source={StaticResource DataContextProxy}}" />
+                                    </Border>
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriNamThuNhat"
+                                                  StringFormat="{}{0:N0}"
+                                                  Binding="{Binding FGiaTriNamThuNhat, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriNamThuNhat, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                                  Header="{Binding Data.Model.HeaderModified1, Source={StaticResource DataContextProxy}}">
+                        <DataGridColumn.HeaderTemplate>
+
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup"
+                                                   Text="{Binding Data.Model.HeaderModified1, Source={StaticResource DataContextProxy}}" />
+                                    </Border>
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriNamThuHaiOrigin"
+                                                  IsReadOnly="True"
+                                                  StringFormat="{}{0:N0}"
+                                                  Visibility="{Binding Data.IsDieuChinh, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  Binding="{Binding FGiaTriNamThuHaiOrigin, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriNamThuHaiOrigin, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                                  Header="{Binding Data.Model.Header2, Source={StaticResource DataContextProxy}}">
+                        <DataGridColumn.HeaderTemplate>
+
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup"
+                                                   Text="{Binding Data.Model.Header2, Source={StaticResource DataContextProxy}}" />
+                                    </Border>
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriNamThuHai"
+                                                  StringFormat="{}{0:N0}"
+                                                  Binding="{Binding FGiaTriNamThuHai, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriNamThuHai, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                                  Header="{Binding Data.Model.HeaderModified2, Source={StaticResource DataContextProxy}}">
+                        <DataGridColumn.HeaderTemplate>
+
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup"
+                                                   Text="{Binding Data.Model.HeaderModified2, Source={StaticResource DataContextProxy}}" />
+                                    </Border>
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriNamThuBaOrigin"
+                                                  IsReadOnly="True"
+                                                  StringFormat="{}{0:N0}"
+                                                  Visibility="{Binding Data.IsDieuChinh, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  Binding="{Binding FGiaTriNamThuBaOrigin, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriNamThuBaOrigin, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                                  Header="{Binding Data.Model.Header3, Source={StaticResource DataContextProxy}}">
+                        <DataGridColumn.HeaderTemplate>
+
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup"
+                                                   Text="{Binding Data.Model.Header3, Source={StaticResource DataContextProxy}}" />
+                                    </Border>
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriNamThuBa"
+                                                  StringFormat="{}{0:N0}"
+                                                  Binding="{Binding FGiaTriNamThuBa, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriNamThuBa, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                                  Header="{Binding Data.Model.HeaderModified3, Source={StaticResource DataContextProxy}}">
+                        <DataGridColumn.HeaderTemplate>
+
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup"
+                                                   Text="{Binding Data.Model.HeaderModified3, Source={StaticResource DataContextProxy}}" />
+                                    </Border>
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriNamThuTuOrigin"
+                                                  IsReadOnly="True"
+                                                  StringFormat="{}{0:N0}"
+                                                  Visibility="{Binding Data.IsDieuChinh, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  Binding="{Binding FGiaTriNamThuTuOrigin, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriNamThuTuOrigin, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                                  Header="{Binding Data.Model.Header4, Source={StaticResource DataContextProxy}}">
+                        <DataGridColumn.HeaderTemplate>
+
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup"
+                                                   Text="{Binding Data.Model.Header4, Source={StaticResource DataContextProxy}}" />
+                                    </Border>
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriNamThuTu"
+                                                  StringFormat="{}{0:N0}"
+                                                  Binding="{Binding FGiaTriNamThuTu, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriNamThuTu, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                                  Header="{Binding Data.Model.HeaderModified4, Source={StaticResource DataContextProxy}}">
+                        <DataGridColumn.HeaderTemplate>
+
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup"
+                                                   Text="{Binding Data.Model.HeaderModified4, Source={StaticResource DataContextProxy}}" />
+                                    </Border>
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriNamThuNamOrigin"
+                                                  IsReadOnly="True"
+                                                  StringFormat="{}{0:N0}"
+                                                  Visibility="{Binding Data.IsDieuChinh, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  Binding="{Binding FGiaTriNamThuNamOrigin, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriNamThuNamOrigin, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                                  Header="{Binding Data.Model.Header5, Source={StaticResource DataContextProxy}}">
+                        <DataGridColumn.HeaderTemplate>
+
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup"
+                                                   Text="{Binding Data.Model.Header5, Source={StaticResource DataContextProxy}}" />
+                                    </Border>
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriNamThuNam"
+                                                  StringFormat="{}{0:N0}"
+                                                  Binding="{Binding FGiaTriNamThuNam, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriNamThuNam, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                                  HeaderTemplate="{StaticResource RightHeader}"
+                                                  Header="{Binding Data.Model.HeaderModified5, Source={StaticResource DataContextProxy}}">
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriBoTriOrigin"
+                                                  IsReadOnly="True"
+                                                  StringFormat="{}{0:N0}"
+                                                  Binding="{Binding FGiaTriBoTriOrigin, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriBoTriOrigin, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderWrap}"
+                                                  Header="{Binding Data.Model.HeaderAfterYear, Source={StaticResource DataContextProxy}}">
+                        <DataGridTextColumn.Visibility>
+                            <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityConverter}">
+                                <Binding Path="Data.IsDuAnChuyenTiep"
+                                         Converter="{StaticResource InvertBooleanConverter}"
+                                         Source="{StaticResource DataContextProxy}" />
+                                <Binding Path="Data.IsDieuChinh"
+                                         Source="{StaticResource DataContextProxy}" />
+                            </MultiBinding>
+                        </DataGridTextColumn.Visibility>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn x:Name="giaTriBoTri"
+                                                  IsReadOnly="True"
+                                                  StringFormat="{}{0:N0}"
+                                                  Visibility="{Binding Data.IsDuAnChuyenTiep, Source={StaticResource DataContextProxy}, Converter={StaticResource InvertBooleanToVisibilityConverter}}"
+                                                  Binding="{Binding FGiaTriBoTri, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                                  Total="{Binding Data.SummaryItem.FGiaTriBoTri, Source={StaticResource DataContextProxy}}"
+                                                  ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                                  EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                                                  HeaderStyle="{StaticResource DataGridColumnHeaderWrap}"
+                                                  Header="{Binding Data.Model.HeaderAfterYearModified, Source={StaticResource DataContextProxy}}">
+                    </component:DataGridTextColumn>
+                    <DataGridTextColumn Width="500"
+                                        x:Name="ghiChu"
+                                        Header="Ghi chú"
+                                        Binding="{Binding SGhiChu, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderWrap}" />
+                </DataGrid.Columns>
+            </component:ExpandedDataGrid>
+            <component:ProgressDialog Grid.RowSpan="3"></component:ProgressDialog>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

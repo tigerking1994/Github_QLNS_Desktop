@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.SystemAdmin.AppVersion.AppVersionDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.SystemAdmin.AppVersion"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             mc:Ignorable="d">
+    <Grid Margin="16">
+        <StackPanel Orientation="Vertical">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="update" Style="{StaticResource DialogScreenIconStyle}"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding Description}"></TextBlock>
+                </StackPanel>
+            </DockPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <Grid Margin="0 8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                
+                <TextBox
+                    Grid.Row="0"
+                    Margin="0 2 0 2"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    materialDesign:HintAssist.Hint="Phiên bản"
+                    Text="{Binding Model.Version}"/>
+                
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="8 2 4 2"
+                    IsReadOnly="True"
+                    ToolTip="{Binding Model.FileName}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    materialDesign:HintAssist.Hint="File"
+                    Text="{Binding Model.FileName}"/>
+                
+                <Button Grid.Row="0" Margin="2 2 0 2" Command="{Binding UploadFileCommand}"  Grid.Column="2" MaxWidth="100">
+                    <materialDesign:PackIcon Kind="File"/>
+                </Button>
+                
+                <TextBox
+                    Grid.Row="1"
+                    Grid.ColumnSpan="3"
+                    Margin="0 2 0 2"
+                    Height="120"
+                    TextWrapping="Wrap"
+                    AcceptsReturn="True"
+                    VerticalScrollBarVisibility="Auto"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    materialDesign:HintAssist.Hint="Mô tả"
+                    Text="{Binding Model.Description}" />
+            </Grid>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <StackPanel Orientation="Horizontal" Margin="0 15 0 0" HorizontalAlignment="Right">
+                <Button 
+                    IsDefault="True"
+                    Margin="5 0 0 0"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBooleanConverter}}"
+                    Command="{Binding SaveCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave"/>
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lưu dữ liệu</TextBlock>
+                    </StackPanel>
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button
+                    IsCancel="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBooleanConverter}}"
+                    Command="{Binding Path=CloseCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+        <component:ProgressDialog/>
+    </Grid>
+</UserControl>

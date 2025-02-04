@@ -1,0 +1,254 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.NewSalary.NewImportSalary.NewImportSalary"
+        x:Name="ImportSalaryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.NewSalary.NewImportSalary"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+        xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper" xmlns:importsalary="clr-namespace:VTS.QLNS.CTC.App.ViewModel.NewSalary.NewImportSalary"
+        xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+        d:DataContext="{d:DesignInstance Type=importsalary:ImportSalaryViewModel}"
+        mc:Ignorable="d" 
+        WindowState="Maximized"
+        d:DesignHeight="450" d:DesignWidth="800"
+        Title="Import dữ liệu bảng lương tháng">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <materialDesign:PackIcon Kind="MicrosoftExcel" Style="{StaticResource DialogScreenIconStyle}"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                <TextBlock Text="IMPORT DỮ LIỆU BẢNG LƯƠNG" FontWeight="Bold"/>
+                <TextBlock Text="Chọn file Excel"/>
+            </StackPanel>
+        </DockPanel>
+        <Separator Grid.Row="1" Background="{DynamicResource MaterialDesignDivider}"/>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border BorderThickness="1" BorderBrush="{DynamicResource MaterialDesignDivider}" Margin="0 10 0 0" Padding="5 0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                            Grid.Column="0"
+                            IsEnabled="False"
+                            materialDesign:HintAssist.Hint="Lựa chọn file Excel"
+                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                            BorderThickness="0"
+                            VerticalAlignment="Center" 
+                            Text="{Binding FileName}"/>
+                    <Button
+                            Style="{DynamicResource MaterialDesignToolButton}"
+                            Grid.Column="1"
+                            Command="{Binding UploadFileCommand}">
+                        <materialDesign:PackIcon
+                                Kind="FileUpload"
+                                Margin="8 0 0 0" />
+                    </Button>
+                </Grid>
+            </Border>
+            <Grid Grid.Row="1"
+                  Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button 
+                            Margin="10 0 0 0"
+                            Width="120"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Command="{Binding ProcessFileCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileCheck" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Kiểm tra"/>
+                        </StackPanel>
+                    </Button>
+                    <Button 
+                            Margin="5 0 0 0"
+                            Width="120"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Command="{Binding ResetDataCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Hủy bỏ"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <Grid 
+                    Grid.Row="2"
+                    Margin="0 10 0 0">
+                <StackPanel
+                        Orientation="Horizontal">
+                    <RadioButton
+                            x:Name="RbSalaryMonth"
+                            Style="{StaticResource MaterialDesignTabRadioButton}"
+                            GroupName="TabIndex"
+                            IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:ImportTabIndex.Data}}"
+                            Content="Thông tin bảng lương" />
+                    <RadioButton
+                            x:Name="RbSalaryMonthDetail"
+                            Style="{StaticResource MaterialDesignTabRadioButton}"
+                            GroupName="TabIndex"
+                            IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:ImportTabIndex.MLNS}}"
+                            Content="Thông tin bảng lương chi tiết" />
+                </StackPanel>
+            </Grid>
+            <Grid
+                Grid.Row="3"
+                Margin="0 5 0 0">
+                <DataGrid
+                    x:Name="DgSalaryImport"
+                    Visibility="{Binding IsChecked, ElementName=RbSalaryMonth, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    AutoGenerateColumns="False" 
+                    CanUserResizeColumns="True"
+                    BorderThickness="1"
+                    HorizontalScrollBarVisibility="Auto"
+                    FrozenColumnCount ="2"
+                    CanUserAddRows="False"
+                    GridLinesVisibility="All"
+                    RowStyle="{StaticResource DataGridRowDetail}"
+                    ItemsSource="{Binding SalaryMonthImportModels}"
+                    SelectedItem="{Binding SeletedBangLuong}">
+                    <DataGrid.Resources>
+                        <helper:BindingProxy
+                            x:Key="DataContextProxy"
+                            Data="{Binding}" />
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Trạng thái">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl x:Name="content"/>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding ImportStatus}" Value="True">
+                                            <Setter TargetName="content" Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <materialDesign:PackIcon Kind="CheckCircle" Foreground="Green" HorizontalAlignment="Center"/>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ImportStatus}" Value="False">
+                                            <Setter TargetName="content" Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <materialDesign:PackIcon Kind="CloseCircle" Foreground="Red" HorizontalAlignment="Center"/>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsWarning}" Value="True">
+                                            <Setter TargetName="content" Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <materialDesign:PackIcon Kind="WarningCircleOutline" Foreground="Orange" HorizontalAlignment="Center"/>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn 
+                            Header="Tên bảng lương" 
+                            Binding="{Binding TenBangLuong, UpdateSourceTrigger=LostFocus}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"/>
+                        <DataGridTextColumn 
+                            Header="Từ ngày" 
+                            IsReadOnly="True"
+                            Binding="{Binding TuNgay, UpdateSourceTrigger=LostFocus}"
+                            ElementStyle="{StaticResource DataGridTextColumnCenterStyle}"/>
+                        <DataGridTextColumn 
+                            Header="Đến ngày" 
+                            IsReadOnly="True"
+                            Binding="{Binding DenNgay, UpdateSourceTrigger=LostFocus}"
+                            ElementStyle="{StaticResource DataGridTextColumnCenterStyle}"/>
+                        <DataGridTextColumn 
+                            Header="Mã đơn vị" 
+                            IsReadOnly="True"
+                            Binding="{Binding MaDonVi, UpdateSourceTrigger=LostFocus}"
+                            ElementStyle="{StaticResource DataGridTextColumnCenterStyle}"/>
+                        <DataGridTextColumn 
+                            Header="Tháng" 
+                            IsReadOnly="True"
+                            Binding="{Binding Thang, UpdateSourceTrigger=LostFocus}"
+                            ElementStyle="{StaticResource DataGridTextColumnCenterStyle}"/>
+                        <DataGridTextColumn 
+                            Header="Năm" 
+                            IsReadOnly="True"
+                            Binding="{Binding Nam, UpdateSourceTrigger=LostFocus}"
+                            ElementStyle="{StaticResource DataGridTextColumnCenterStyle}"/>
+                        <DataGridTextColumn 
+                            Header="Mã cách tính lương"
+                            IsReadOnly="True"
+                            Binding="{Binding MaCachTinhLuong, UpdateSourceTrigger=LostFocus}"
+                            ElementStyle="{StaticResource DataGridTextColumnCenterStyle}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Visibility="{Binding IsChecked, ElementName=RbSalaryMonthDetail, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <component:ExpandedDataGrid  
+                        Grid.Row="0" 
+                        x:Name="DgSalaryImportDetail"
+                        Style="{StaticResource MaterialDesignDataGrid}"
+                        ItemsSource="{Binding SalaryMonthDetailImportViewModels}"  
+                        AutoGenerateColumns="False" 
+                        CanUserResizeColumns="True"
+                        BorderThickness="1"
+                        HorizontalScrollBarVisibility="Auto"
+                        FrozenColumnCount ="3"
+                        CanUserAddRows="False"
+                        RowStyle="{StaticResource DataGridRowIndex}"
+                        EnableRowVirtualization="True"
+                        GridLinesVisibility="All">
+                    </component:ExpandedDataGrid>
+                </Grid>
+            </Grid>
+        </Grid>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 15 0 0" HorizontalAlignment="Right">
+            <Button 
+                    IsDefault="True"
+                    Margin="5 0 0 0"
+                    IsEnabled="{Binding IsSaveData}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding SaveCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ContentSave" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu dữ liệu"/>
+                </StackPanel>
+            </Button>
+            <Button
+                    IsCancel="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{Binding CloseCommand}"
+                    CommandParameter="{Binding ElementName=ImportSalaryWindow}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CloseOutline" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Đóng"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,406 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Budget.DemandCheck.FunctionMap.DemandCheckFunctionMap"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:demandCheck="clr-namespace:VTS.QLNS.CTC.App.ViewModel.Budget.DemandCheck"
+             d:DataContext="{d:DesignInstance demandCheck:DemandCheckFunctionMapViewModel, IsDesignTimeCreatable=True}"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="IconStyle" TargetType="materialDesign:PackIcon">
+            <Setter Property="Height" Value="35" />
+            <Setter Property="Width" Value="35" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+        <Style
+            x:Key="BtnSettlementStyle"
+            BasedOn="{StaticResource MaterialDesignFlatLightBgButton}"
+            TargetType="Button">
+            <Setter Property="Width" Value="320" />
+            <Setter Property="Height" Value="50" />
+            <Setter Property="Margin" Value="0,0,0,20" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Background" Value="#ec9f48" />
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+        <Style x:Key="TxtSettlementTitleStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="10,0,0,0" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="15" />
+        </Style>
+        <Style x:Key="TxtSettlementDescStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="10,0,0,0" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style
+            x:Key="TxtSettlementFunctionStyle"
+            BasedOn="{StaticResource MaterialDesignBody2TextBlock}"
+            TargetType="TextBlock">
+            <Setter Property="Margin" Value="15" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Grid.Column" Value="0" />
+        </Style>
+        <Style x:Key="TxtTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="25" />
+            <Setter Property="Foreground" Value="DarkRed" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Grid.Row="0"
+            Margin="0,20,0,0"
+            HorizontalAlignment="Center"
+            Orientation="Vertical">
+            <TextBlock Style="{StaticResource TxtTitle}" TextAlignment="Center">SƠ ĐỒ CHỨC NĂNG</TextBlock>
+            <TextBlock Style="{StaticResource TxtTitle}">DỰ TOÁN SỐ KIỂM TRA NGÂN SÁCH NĂM 2020</TextBlock>
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="1"
+            Margin="0,100,0,0"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <StackPanel
+                Margin="0,-100,0,0"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <TextBlock FontWeight="Bold" Text="Nhận số kiểm tra" />
+                <Button
+                    Margin="0,20,0,0"
+                    Background="Green"
+                    Command="{Binding Path=CheckCommand}"
+                    Style="{StaticResource MaterialDesignFloatingActionDarkButton}">
+                    <materialDesign:PackIcon Kind="ArrowDownBoldHexagonOutline" Style="{StaticResource IconStyle}" />
+                </Button>
+            </StackPanel>
+            <Canvas
+                Width="60"
+                Height="20"
+                Margin="-35,-65,0,0">
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="15"
+                    X2="155"
+                    Y1="10"
+                    Y2="10" />
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="155"
+                    X2="150"
+                    Y1="10"
+                    Y2="5" />
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="155"
+                    X2="150"
+                    Y1="10"
+                    Y2="15" />
+            </Canvas>
+            <StackPanel
+                Margin="100,0,100,0"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <materialDesign:Card
+                    Width="329"
+                    Margin="0,0,0,50"
+                    Padding="10"
+                    Background="#ffffe0"
+                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            Grid.Row="0"
+                            Margin="16,25,16,25"
+                            FontSize="16"
+                            Foreground="Black"
+                            Text="LẬP NHU CẦU SỐ KIỂM TRA"
+                            TextAlignment="Center" />
+                        <StackPanel Grid.Row="1" Orientation="Vertical">
+                            <Button
+                                x:Name="btnRegularBudget"
+                                Command="{Binding Path=DemandCommand}"
+                                Style="{StaticResource BtnSettlementStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="HeartBoxOutline" Style="{StaticResource IconStyle}" />
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Style="{StaticResource TxtSettlementTitleStyle}">Lập nhu cầu ngân sách</TextBlock>
+                                        <TextBlock Style="{StaticResource TxtSettlementDescStyle}">Lập nhu cầu và gửi nhu cầu ngân sách</TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Button>
+                            <Button
+                                x:Name="btnDefenseBudget"
+                                Command="{Binding Path=AllocationCommand}"
+                                Style="{StaticResource BtnSettlementStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="FlagCheckered" Style="{StaticResource IconStyle}" />
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Style="{StaticResource TxtSettlementTitleStyle}">Phân bổ số kiểm tra</TextBlock>
+                                        <TextBlock Style="{StaticResource TxtSettlementDescStyle}">Phân skt cho đơn vị trực thuộc</TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:Card>
+                <Canvas
+                    Width="60"
+                    Height="20"
+                    Margin="60,-70,0,0">
+                    <Line
+                        Stroke="CadetBlue"
+                        StrokeDashCap="Round"
+                        StrokeEndLineCap="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="2"
+                        X1="0"
+                        X2="0"
+                        Y1="0"
+                        Y2="43" />
+                    <Line
+                        Stroke="CadetBlue"
+                        StrokeDashCap="Round"
+                        StrokeEndLineCap="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="2"
+                        X1="0"
+                        X2="5"
+                        Y1="43"
+                        Y2="38" />
+                    <Line
+                        Stroke="CadetBlue"
+                        StrokeDashCap="Round"
+                        StrokeEndLineCap="Round"
+                        StrokeStartLineCap="Round"
+                        StrokeThickness="2"
+                        X1="-5"
+                        X2="0"
+                        Y1="38"
+                        Y2="43" />
+                </Canvas>
+                <Button Background="#219aa0" Style="{StaticResource BtnSettlementStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FileExcel" Style="{StaticResource IconStyle}" />
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                                Width="220"
+                                Style="{StaticResource TxtSettlementTitleStyle}"
+                                Text="Xuất dữ liệu"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Width="240"
+                                Style="{StaticResource TxtSettlementTitleStyle}"
+                                Text="Xuất file dữ liệu nhu cầu và skt ra excel"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <Canvas
+                Width="60"
+                Height="20"
+                Margin="-130,-65,0,0">
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="0"
+                    X2="140"
+                    Y1="10"
+                    Y2="10" />
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="80"
+                    X2="80"
+                    Y1="10"
+                    Y2="75" />
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="80"
+                    X2="80"
+                    Y1="10"
+                    Y2="-55" />
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="80"
+                    X2="140"
+                    Y1="75"
+                    Y2="75" />
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="80"
+                    X2="140"
+                    Y1="-55"
+                    Y2="-55" />
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="140"
+                    X2="135"
+                    Y1="-55"
+                    Y2="-50" />
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="140"
+                    X2="135"
+                    Y1="-55"
+                    Y2="-60" />
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="140"
+                    X2="135"
+                    Y1="75"
+                    Y2="70" />
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="140"
+                    X2="135"
+                    Y1="75"
+                    Y2="80" />
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="140"
+                    X2="135"
+                    Y1="10"
+                    Y2="15" />
+                <Line
+                    Stroke="CadetBlue"
+                    StrokeDashCap="Round"
+                    StrokeEndLineCap="Round"
+                    StrokeStartLineCap="Round"
+                    StrokeThickness="2"
+                    X1="140"
+                    X2="135"
+                    Y1="10"
+                    Y2="5" />
+            </Canvas>
+            <StackPanel
+                Margin="50,-45,0,0"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <materialDesign:Card
+                    Width="250"
+                    Margin="0,0,0,20"
+                    Background="#42a5f5"
+                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource TxtSettlementFunctionStyle}" Text="Báo cáo lập nhu cầu" />
+                        <materialDesign:PopupBox Grid.Column="1" HorizontalAlignment="Right">
+                            <StackPanel>
+                                <Button Command="{Binding PrintActionCommand}" CommandParameter="{x:Static localEnum:DemandCheckPrintType.REPORT_ORG_DEMAND_DETAIL_NUMBER}"  Content="Chi tiết số nhu cầu đơn vị trực thuộc" />
+                                <Button Command="{Binding PrintActionCommand}" CommandParameter="{x:Static localEnum:DemandCheckPrintType.REPORT_SYNTHESIS_ORG_DEMAND_DETAIL_NUMBER}"  Content="Tổng hợp số nhu cầu đơn vị" />
+                                <Button Command="{Binding PrintActionCommand}" CommandParameter="{x:Static localEnum:DemandCheckPrintType.REPORT_SYNTHESIS_DEMAND_DETAIL_NUMBER}"  Content="Tổng hợp số nhu cầu" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                    </Grid>
+                </materialDesign:Card>
+
+                <materialDesign:Card
+                    Width="250"
+                    Margin="0,0,0,20"
+                    Background="#42a5f5"
+                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource TxtSettlementFunctionStyle}" Text="Báo cáo số kiểm tra" />
+                        <materialDesign:PopupBox Grid.Column="1" HorizontalAlignment="Right">
+                            <StackPanel>
+                                <Button Content="Báo cáo số kiểm tra" />
+                                <Button Content="Chi tiết phân bổ số kiểm tra" />
+                                <Button Content="Tổng hợp phân bổ số kiểm tra" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                    </Grid>
+                </materialDesign:Card>
+
+                <materialDesign:Card
+                    Width="250"
+                    Margin="0,0,0,20"
+                    Background="#42a5f5"
+                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource TxtSettlementFunctionStyle}" Text="Báo cáo tổng hợp" />
+                    </Grid>
+                </materialDesign:Card>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Shared.AttachmentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d">
+    <StackPanel Orientation="Vertical" Margin="{Binding MarginRequirement, FallbackValue=16}">
+        <DockPanel>
+            <materialDesign:PackIcon Kind="Attachment" Style="{StaticResource DialogScreenIconStyle}"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                <TextBlock Text="{Binding Name}" FontWeight="Bold"></TextBlock>
+                <TextBlock Text="{Binding Description}"></TextBlock>
+            </StackPanel>
+        </DockPanel>
+        <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+        <StackPanel >
+            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                <Button 
+                    Style="{StaticResource SearchBarBtnStyle}" 
+                    Command="{Binding ViewFileCommand}"
+                    ToolTip="Xem (PDF)">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FileEye" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xem (PDF)"/>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button 
+                    Style="{StaticResource SearchBarBtnStyle}" 
+                    Command="{Binding DownloadFileCommand}"
+                    ToolTip="Tải xuống">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Download" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tải xuống"/>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button 
+                    Style="{StaticResource SearchBarBtnStyle}" 
+                    Command="{Binding DownloadAllFileCommand}"
+                    ToolTip="Tải xuống (Tất cả)">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Downloads" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tải xuống (Tất cả)"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <DataGrid
+                Margin="0 5 0 0"
+                Width="500"
+                MaxHeight="400"
+                VerticalAlignment="Top"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                CanUserDeleteRows="False"
+                BorderThickness="1"
+                CanUserAddRows="False"
+                GridLinesVisibility="All"
+                IsReadOnly="True"
+                RowStyle="{StaticResource DataGridRowDetail}"
+                CellStyle="{StaticResource DataGridCellDetail}"
+                ItemsSource="{Binding ItemsAttachment}"
+                SelectedItem="{Binding SelectedAttachment}"
+                ext:DataGridBehavior.DisplayRowNumber="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn  
+                        Header="STT"
+                        Width="60"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}"
+                        Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}, Path=Header}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Header="Tệp"
+                        Width="*"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                        Binding="{Binding FileName}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
+            <Button
+                IsCancel="True"
+                Style="{StaticResource MaterialDesignOutlinedButton}"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CloseOutline" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                </StackPanel>
+                <Button.CommandParameter>
+                    <system:Boolean>False</system:Boolean>
+                </Button.CommandParameter>
+            </Button>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

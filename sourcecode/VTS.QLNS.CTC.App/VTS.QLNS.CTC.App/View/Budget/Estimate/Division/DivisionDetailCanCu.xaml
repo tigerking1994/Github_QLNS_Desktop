@@ -1,0 +1,131 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Budget.Estimate.Division.DivisionDetailCanCu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Budget.Estimate.Division"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="16">
+        <StackPanel Orientation="Vertical">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="DatabaseCheck" Style="{StaticResource DialogScreenIconStyle}"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                    <TextBlock  Text="{Binding Name}" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding Description}"></TextBlock>
+                    <Separator Background="{DynamicResource MaterialDesignDivider}" Margin="0 5 0 0"/>
+                </StackPanel>
+            </DockPanel>
+            <component:ExpandedDataGrid
+                x:Name="dgdDataSourceFromPhanBoNganh"
+                Grid.Row="2"
+                Margin="0 5 0 0"
+                MaxHeight="450"
+                IsReadOnly="True"
+                FrozenColumnCount="3"
+                BorderThickness="1"
+                CanUserResizeColumns="True"
+                HorizontalScrollBarVisibility="Auto"
+                CanUserAddRows="False"
+                GridLinesVisibility="All"
+                AutoGenerateColumns="False"
+                RowStyle="{StaticResource DataGridRowIndex}"
+                Style="{StaticResource MaterialDesignDataGrid}"
+                ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.Resources>
+                    <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn 
+                        IsReadOnly="False"
+                        Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" 
+                        ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                        EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                        <DataGridCheckBoxColumn.Header>
+                            <Border Background="Transparent">
+                                <CheckBox IsChecked="{Binding Data.IsAllItemsSelected, Source={StaticResource DataContextProxy}}" />
+                            </Border>
+                        </DataGridCheckBoxColumn.Header>
+                        <DataGridCheckBoxColumn.HeaderStyle>
+                            <Style
+                                TargetType="{x:Type DataGridColumnHeader}"
+                                BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridCheckBoxColumn.HeaderStyle>
+                    </DataGridCheckBoxColumn>
+                    <DataGridTextColumn Header="Đơn vị" Binding="{Binding TenDonVi}" ElementStyle="{StaticResource DataGridTextColumnStyle}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="Số công văn" Binding="{Binding SoCongVan}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Số chứng từ" Binding="{Binding SoChungTu}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Ngày chứng từ" Binding="{Binding NgayChungTu, Converter={StaticResource DateTimeToStringConverter}}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Nguồn ngân sách" Binding="{Binding NguonNganSach}"></DataGridTextColumn>
+                    <DataGridTextColumn
+                        Header="Tự chi tại ngành"
+                        Visibility="{Binding Data.Model.LoaiChungTu, Source={StaticResource DataContextProxy}, Converter={StaticResource NSSDToVisibilityConverter}}"
+                        Binding="{Binding TuChiTaiNganh, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Header="Tự chi tại đơn vị"
+                        Visibility="{Binding Data.Model.LoaiChungTu, Source={StaticResource DataContextProxy}, Converter={StaticResource NSSDToVisibilityConverter}}"
+                        Binding="{Binding TuChiTaiDonVi, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Header="Hàng nhập"
+                        Visibility="{Binding Data.Model.LoaiChungTu, Source={StaticResource DataContextProxy}, Converter={StaticResource NSBDToVisibilityConverter}}"
+                        Binding="{Binding HangNhap, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Header="Hàng mua"
+                        Visibility="{Binding Data.Model.LoaiChungTu, Source={StaticResource DataContextProxy}, Converter={StaticResource NSBDToVisibilityConverter}}"
+                        Binding="{Binding HangMua, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Header="Phân cấp"
+                        Binding="{Binding PhanCap, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Header="Dự phòng"
+                        Binding="{Binding DuPhong, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}">
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </component:ExpandedDataGrid>
+            <StackPanel Orientation="Horizontal" Margin="0 15 0 0" HorizontalAlignment="Right">
+                <Button 
+                    IsEnabled="{Binding IsSaveData}"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding SaveCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lấy dữ liệu</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button
+                    IsCancel="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                    <Button.CommandParameter>
+                        <system:Boolean>False</system:Boolean>
+                    </Button.CommandParameter>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

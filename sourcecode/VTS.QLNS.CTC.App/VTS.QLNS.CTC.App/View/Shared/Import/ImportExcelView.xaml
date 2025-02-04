@@ -1,0 +1,96 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Shared.Import.ImportExcelView"
+        Name="ImportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Shared.Import"
+        xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        WindowState="Maximized"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        Title="Nhập dữ liệu từ file excel">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <materialDesign:PackIcon Kind="Import" Style="{StaticResource DialogScreenIconStyle}"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                <TextBlock Text="Tiện ích - Nhập dữ liệu từ excel" FontWeight="Bold"></TextBlock>
+                <TextBlock Text="Cho phép Đ/c lấy dữ liệu từ file excel"></TextBlock>
+            </StackPanel>
+        </DockPanel>
+        <Separator Grid.Row="1" Background="{DynamicResource MaterialDesignDivider}"/>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="10*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ListBox IsEnabled="False" SelectedIndex="{Binding SelectedIndex}" ItemsSource="{Binding ViewModelBases}" Grid.Column="0" Margin="10 15">
+                <ListBox.Style>
+                    <Style TargetType="{x:Type ListBox}">
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="BorderBrush" Value="#e8e8e8" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.Style>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Border>
+                                <TextBlock Height="30" Margin="3,3,3,0" FontSize="15" Foreground="Black" FontWeight="DemiBold" Text="{Binding Path=Name}"/>
+                            </Border>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Border BorderThickness="1" BorderBrush="#dddbdb" Grid.Column="1"  Margin="5 15">
+                <ContentControl
+                    DataContext="{Binding CurrentPage}"
+                    Margin="{Binding MarginRequirement, FallbackValue=16}"
+                    Content="{Binding Content, UpdateSourceTrigger=PropertyChanged, FallbackValue={x:Null}}"/>
+            </Border>
+        </Grid>
+        <Separator Grid.Row="3" Background="{DynamicResource MaterialDesignDivider}"/>
+        <StackPanel Grid.Row="4" HorizontalAlignment="Right" Orientation="Horizontal" Margin="5 7">
+            <Button
+                    IsEnabled="{Binding IsEnablePreviousBtn}"
+                    Margin="5 15 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{Binding PreviousCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="SkipPrevious" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Quay lại</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button
+                    IsEnabled="{Binding IsEnableNextBtn}"
+                    Margin="5 15 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{Binding NextCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="SkipNext" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Tiếp theo</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button IsCancel="True"
+                    Margin="5 15 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{Binding CloseWindowCommand}" 
+                    CommandParameter="{Binding ElementName=ImportWindow}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CloseOutline" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

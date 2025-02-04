@@ -1,0 +1,135 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.Component.AttachmentForm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             mc:Ignorable="d">
+    <StackPanel>
+        <TextBlock FontWeight="SemiBold" Text="TỆP ĐÍNH KÈM"></TextBlock>
+        <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
+            <Button
+                IsEnabled="{Binding BIsEnable}"
+                Style="{StaticResource SearchBarBtnStyle}"
+                Command="{Binding UploadFileCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Paperclip" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Chọn tệp"/>
+                </StackPanel>
+            </Button>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+            <Button
+                IsEnabled="{Binding BIsEnable}"
+                Style="{StaticResource SearchBarBtnStyle}"
+                Command="{Binding DeleteFileCommand}"
+                ToolTip="Xóa">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Delete" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xóa"/>
+                </StackPanel>
+            </Button>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+            <Button
+                Style="{StaticResource SearchBarBtnStyle}"
+                Command="{Binding DownloadFileCommand}"
+                ToolTip="Tải xuống">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Download" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tải xuống"/>
+                </StackPanel>
+            </Button>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+            <Button
+                Style="{StaticResource SearchBarBtnStyle}"
+                Command="{Binding DownloadAllFileCommand}"
+                ToolTip="Tải xuống (Tất cả)">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Downloads" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tải xuống (Tất cả)"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <Border>
+            <DataGrid
+                Margin="0 5 0 0"
+                VerticalAlignment="Top"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                CanUserDeleteRows="False"
+                BorderThickness="1"
+                CanUserAddRows="False"
+                GridLinesVisibility="All"
+                IsReadOnly="{Binding IsShowCanCu, Converter={StaticResource InvertBooleanConverter}}"
+                HorizontalScrollBarVisibility="Auto"
+                Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                MaxHeight="250"
+                RowStyle="{StaticResource DataGridRowDetail}"
+                CellStyle="{StaticResource DataGridCellDetail}"
+                ItemsSource="{Binding ItemsAttachment}"
+                SelectedItem="{Binding SelectedAttachment}"
+                ext:DataGridBehavior.DisplayRowNumber="True">
+                <DataGrid.Resources>
+                    <helper:BindingProxy
+                        x:Key="DataContextProxy"
+                        Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn  
+                        Header="STT"
+                        Width="60"
+                        IsReadOnly="True"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}"
+                        Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}, Path=Header}">
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn 
+                        Visibility="{Binding Data.IsShowCanCu, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
+                        Header="Số căn cứ"
+                        Binding="{Binding SSoCanCu, UpdateSourceTrigger=LostFocus}" 
+                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}">
+                    </DataGridTextColumn>
+
+                    <DataGridTemplateColumn x:Name="dNgayCanCu" Header="Ngày căn cứ"
+                        Visibility="{Binding Data.IsShowCanCu, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DNgayCanCu, Converter={StaticResource DateTimeToStringConverter}}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <DatePicker Language="vi-VN"  SelectedDate="{Binding DNgayCanCu}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn x:Name="cbxLoaiCanCu" Header="Loại căn cứ" 
+                        Visibility="{Binding Data.IsShowCanCu, Source={StaticResource DataContextProxy}, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox
+                                    IsEditable="True"
+                                    DisplayMemberPath="DisplayItem"
+                                    SelectedValuePath="ValueItem"
+                                    SelectedValue="{Binding ILoaiCanCu, UpdateSourceTrigger=LostFocus}"
+                                    ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ItemsLoaiCanCu}">
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn
+                        Header="Tệp"
+                        Width="*"
+                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                        Binding="{Binding FileName}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ReleaseNoteModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReleaseDate>2024-11-10T18:00:07.701445+07:00</ReleaseDate>
+	<NoteDetails>
+		<ReleaseNoteDetailModel>
+			<Module>Hệ thống</Module>
+			<Features>
+				<string>Thêm chức năng so sánh CSDL (tiện ích)</string>
+				<string>Thêm chức năng phục hồi dữ liệu chuẩn</string>
+				<string>Thêm chức năng phục hồi dữ liệu từ CSDL cũ</string>
+				<string>Thêm tính năng xem các thay đổi phần mềm theo phiên bản</string>
+			</Features>
+			<BugFixes />
+			<Improvements>
+				<string>Tối ưu hiệu năng khi cập nhật phiên bản mới từ bản cài đặt</string>
+				<string>Tối ưu hiệu năng phần mềm khi chạy với CSDL mới</string>
+			</Improvements>
+		</ReleaseNoteDetailModel>
+		<ReleaseNoteDetailModel>
+			<Module>Ngân sách</Module>
+			<Features>
+				<string>Đổi mẫu báo cáo Quyết toán quân số liên thẩm theo mẫu 4554</string>
+			</Features>
+			<BugFixes>
+				<string>Sửa các lỗi phần số nhu cầu, kiểm tra</string>
+				<string>Sửa các lỗi khác</string>
+			</BugFixes>
+			<Improvements />
+		</ReleaseNoteDetailModel>
+	</NoteDetails>
+</ReleaseNoteModel>

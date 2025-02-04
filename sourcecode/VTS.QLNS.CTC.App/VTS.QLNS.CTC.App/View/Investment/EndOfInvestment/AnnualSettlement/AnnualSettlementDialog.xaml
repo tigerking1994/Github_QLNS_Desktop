@@ -1,0 +1,271 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Investment.EndOfInvestment.AnnualSettlement.AnnualSettlementDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Investment.EndOfInvestment.AnnualSettlement"
+             mc:Ignorable="d" 
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="16">
+        <StackPanel Orientation="Vertical" MinHeight="500">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="PlaylistPlus" Style="{StaticResource DialogScreenIconStyle}"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                    <TextBlock  Text="{Binding Name}" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding Description}"></TextBlock>
+                </StackPanel>
+            </DockPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <Grid Margin="0 8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0">
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">THÔNG TIN CHUNG</TextBlock>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox
+                            x:Uid="cbxDonViQuanLy"
+                            Margin="0 2 10 2"
+                            Width="510"
+                            materialDesign:HintAssist.Hint="Đơn vị quản lý"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            SelectedItem="{Binding CbxLoaiDonViSelected}"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                            ItemsSource="{Binding CbxLoaiDonVi}" 
+                            IsEnabled="{Binding IsInsert}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox
+                            Width="250"
+                            Margin="0 2 10 2"
+                            VerticalAlignment="Center" 
+                            materialDesign:HintAssist.Hint="Số đề nghị"
+                            Text="{Binding Model.sSoDeNghi}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                        <DatePicker
+                            Language="vi-VN"
+                            Width="250"
+                            Margin="0 2 10 2"
+                            materialDesign:HintAssist.Hint="Ngày đề nghị"
+                            IsEnabled="{Binding IsInsert}"
+                            SelectedDate="{Binding DNgayDeNghi}"
+                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox
+                            Width="250"
+                            Margin="0 2 0 2"
+                            materialDesign:HintAssist.Hint="Người lập"
+                            Text="{Binding Model.sNguoiLap}"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                        <TextBox
+                            Margin="10 2 0 2"
+                            Width="250"
+                            materialDesign:HintAssist.Hint="Năm kế hoạch"
+                            IsEnabled="{Binding IsInsert}"
+                            Text="{Binding INamKeHoach}"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox
+                            Width="250"
+                            Margin="0 0 0 0"
+                            IsEnabled="{Binding IsInsert}"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            materialDesign:HintAssist.Hint="Nguồn vốn"
+                            SelectedItem="{Binding NguonVonSelected}"
+                            ItemsSource="{Binding DataNguonVon}"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                        <ComboBox
+                            Width="250"
+                            Margin="10 0 0 0"
+                            IsEnabled="{Binding IsInsert}"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            materialDesign:HintAssist.Hint="Kế hoạch vốn"
+                            SelectedItem="{Binding KeHoachVonSelected}"
+                            ItemsSource="{Binding DataKeHoachVon}"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox
+                            Width="250"
+                            IsEnabled="{Binding IsInsert}"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            materialDesign:HintAssist.Hint="Loại thanh toán"
+                            SelectedItem="{Binding CbxLoaiThanhToanSelected}"
+                            ItemsSource="{Binding CbxLoaiThanhToan}"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                        <ComboBox
+                            Width="250"
+                            Margin="10 2 10 2"
+                            IsEnabled="{Binding IsInsert}"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            materialDesign:HintAssist.Hint="Dự án"
+                            SelectedItem="{Binding DuAnSelected}"
+                            ItemsSource="{Binding DataDuAn}"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox
+                            Width="250"
+                            IsEnabled="{Binding IsInsert}"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            materialDesign:HintAssist.Hint="Hợp đồng"
+                            SelectedItem="{Binding HopDongSelected}"
+                            ItemsSource="{Binding DataHopDong}"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                        <TextBox
+                            Width="250"
+                            Margin="10 2 10 2"
+                            VerticalAlignment="Center"
+                            IsReadOnly="True"
+                            IsEnabled="{Binding IsInsert}"
+                            materialDesign:HintAssist.Hint="Giá trị hợp đồng"
+                            Text="{Binding GiaTriHopDong, StringFormat={}{0:N0}}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    </StackPanel>
+                    <StackPanel Margin="0 10 0 0">
+                        <TextBlock FontWeight="Bold">THÔNG TIN ĐƠN VỊ THỤ HƯỞNG</TextBlock>
+                        <StackPanel Margin="0 5 0 0" Orientation="Vertical">
+                            <TextBlock>Tên nhà thầu:</TextBlock>
+                            <TextBlock Text="{Binding TenNhaThau}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Margin="0 5 0 0" Orientation="Vertical">
+                            <TextBlock>Số tài khoản nhà thầu:</TextBlock>
+                            <TextBlock Text="{Binding StkNhaThau}"></TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1">
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="2">
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">THÔNG TIN THANH TOÁN</TextBlock>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Lũy kế thanh toán</TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox
+                            Width="250"
+                            Margin="0 2 10 2"
+                            VerticalAlignment="Center"
+                            IsReadOnly="True"
+                            materialDesign:HintAssist.Hint="Vốn trong nước"
+                            Text="{Binding LuyKeTN, StringFormat={}{0:N0}}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                        <TextBox
+                            Width="250"
+                            Margin="0 2 10 2"
+                            IsReadOnly="True"
+                            VerticalAlignment="Center" 
+                            materialDesign:HintAssist.Hint="Vốn ngoài nước"
+                            Text="{Binding LuyKeNN, StringFormat={}{0:N0}}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Nội dung</TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox
+                            Width="510"
+                            Margin="0 2 10 2"
+                            VerticalAlignment="Center" 
+                            materialDesign:HintAssist.Hint="Nội dung"
+                            Text="{Binding Model.sGhiChu}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Số đề nghị tạm ứng</TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox
+                            Width="250"
+                            Margin="0 2 10 2"
+                            VerticalAlignment="Center" 
+                            materialDesign:HintAssist.Hint="Vốn trong nước"
+                            Text="{Binding Model.fGiaTriThanhToanTN, StringFormat={}{0:N0}}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                        <TextBox
+                            Width="250"
+                            Margin="0 2 10 2"
+                            VerticalAlignment="Center" 
+                            materialDesign:HintAssist.Hint="Vốn ngoài nước"
+                            Text="{Binding Model.fGiaTriThanhToanNN, StringFormat={}{0:N0}}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Số thu hồi tạm ứng</TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox
+                            Width="250"
+                            Margin="0 2 10 2"
+                            VerticalAlignment="Center" 
+                            materialDesign:HintAssist.Hint="Vốn trong nước"
+                            Text="{Binding Model.fGiaTriThuHoiTN, StringFormat={}{0:N0}}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                        <TextBox
+                            Width="250"
+                            Margin="0 2 10 2"
+                            VerticalAlignment="Center" 
+                            materialDesign:HintAssist.Hint="Vốn ngoài nước"
+                            Text="{Binding Model.fGiaTriThuHoiNN, StringFormat={}{0:N0}}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <StackPanel Orientation="Horizontal" Margin="0 15 0 0" HorizontalAlignment="Right">
+                <Button 
+                    IsDefault="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding SaveCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lưu dữ liệu</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button
+                    IsCancel="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                    <Button.CommandParameter>
+                        <system:Boolean>False</system:Boolean>
+                    </Button.CommandParameter>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

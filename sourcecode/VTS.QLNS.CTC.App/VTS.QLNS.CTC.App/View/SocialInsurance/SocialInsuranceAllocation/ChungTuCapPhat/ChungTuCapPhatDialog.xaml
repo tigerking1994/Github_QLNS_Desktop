@@ -1,0 +1,471 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.SocialInsurance.SocialInsuranceAllocation.ChungTuCapPhat.ChungTuCapPhatDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Budget.Allocation"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:ChungTuCapPhatDialog="clr-namespace:VTS.QLNS.CTC.App.ViewModel.SocialInsurance.SocialInsuranceAllocation.ChungTuCapPhat"
+             d:DataContext="{d:DesignInstance Type=ChungTuCapPhatDialog:ChungTuCapPhatDialogViewModel}"
+             mc:Ignorable="d">
+    <Grid Margin="16">
+        <StackPanel Orientation="Vertical">
+            <DockPanel>
+                <materialDesign:PackIcon Kind="PlaylistPlus"
+                                         Style="{StaticResource DialogScreenIconStyle}" />
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            Margin="10 0">
+                    <TextBlock Text="{Binding Name}"
+                               FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding Description}"></TextBlock>
+                </StackPanel>
+            </DockPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}" />
+            <Grid Margin="0 8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBox"
+                               BasedOn="{StaticResource MaterialDesignTextBox}">
+                            <Setter Property="Width"
+                                    Value="200" />
+                            <Setter Property="materialDesign:HintAssist.IsFloating"
+                                    Value="True" />
+                            <Setter Property="Margin"
+                                    Value="0 2 10 2" />
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Left" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center" />
+                        </Style>
+                        <Style TargetType="DatePicker"
+                               BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}">
+                            <Setter Property="Width"
+                                    Value="200" />
+                            <Setter Property="materialDesign:HintAssist.IsFloating"
+                                    Value="True" />
+                            <Setter Property="Margin"
+                                    Value="0 2 10 2" />
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Left" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center" />
+                        </Style>
+                        <Style TargetType="ComboBox"
+                               BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating"
+                                    Value="True" />
+                            <Setter Property="Margin"
+                                    Value="0 2 10 2" />
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox materialDesign:HintAssist.Hint="Số"
+                                 IsEnabled="False"
+                                 Text="{Binding Model.SSoChungTu}" />
+                        <DatePicker  Language="vi-VN"
+                                     materialDesign:HintAssist.Hint="Ngày"
+                                     SelectedDate="{Binding DNgayChungTu}"
+                                     Text="{Binding DNgayChungTu}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox materialDesign:HintAssist.Hint="Số kế hoạch"
+                                 Text="{Binding Model.SSoQuyetDinh}"
+                                 VerticalAlignment="Center" />
+                        <DatePicker Language="vi-VN"
+                                    materialDesign:HintAssist.Hint="Ngày quyết định"
+                                    SelectedDate="{Binding DNgayQuyetDinh}" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Row="1">
+                    <StackPanel Grid.Row="0"
+                                Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                   TargetType="ComboBox">
+                                <Setter Property="Width"
+                                        Value="200" />
+                                <Setter Property="materialDesign:HintAssist.IsFloating"
+                                        Value="True" />
+                                <Setter Property="Margin"
+                                        Value="0 2 10 2" />
+                                <Setter Property="HorizontalAlignment"
+                                        Value="Left" />
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center" />
+                            </Style>
+                            <Style TargetType="TextBox"
+                                   BasedOn="{StaticResource MaterialDesignTextBox}">
+                                <Setter Property="Width"
+                                        Value="200" />
+                                <Setter Property="materialDesign:HintAssist.IsFloating"
+                                        Value="True" />
+                                <Setter Property="Margin"
+                                        Value="0 2 10 2" />
+                                <Setter Property="HorizontalAlignment"
+                                        Value="Left" />
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center" />
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <ComboBox Grid.Column="0"
+                                  Visibility="{Binding IsDetail, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  IsEditable="False"
+                                  IsEnabled="{Binding IsEnabled}"
+                                  DisplayMemberPath="DisplayItem"
+                                  materialDesign:HintAssist.Hint="---Loại chi---"
+                                  materialDesign:TextFieldAssist.HasClearButton="False"
+                                  SelectedItem="{Binding SelectedDanhMucLoaiChi, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding ItemsDanhMucLoaiChi}">
+                        </ComboBox>
+                        <TextBox Visibility="{Binding IsFTyLeThu, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                 materialDesign:HintAssist.Hint="Số cấp kinh phí = % số dự toán"
+                                 IsReadOnly="False"
+                                 PreviewTextInput="NumberValidationTextBox"
+                                 Text="{Binding Model.FTyLeThu, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+                    </StackPanel>
+                    <!--<StackPanel Orientation="Horizontal" Grid.Row="2">
+                    </StackPanel>-->
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                   TargetType="ComboBox">
+                                <Setter Property="Width"
+                                        Value="410" />
+                                <Setter Property="materialDesign:HintAssist.IsFloating"
+                                        Value="True" />
+                                <Setter Property="Margin"
+                                        Value="0,0,0,0" />
+                                <Setter Property="HorizontalAlignment"
+                                        Value="Left" />
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center" />
+                            </Style>
+                            <Style TargetType="TextBox"
+                                   BasedOn="{StaticResource MaterialDesignTextBox}">
+                                <Setter Property="Width"
+                                        Value="410" />
+                                <Setter Property="Height"
+                                        Value="80" />
+                                <Setter Property="materialDesign:HintAssist.IsFloating"
+                                        Value="True" />
+                                <Setter Property="Margin"
+                                        Value="0 0 0 0" />
+                                <Setter Property="HorizontalAlignment"
+                                        Value="Left" />
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <StackPanel Grid.Row="1"
+                                    Orientation="Horizontal">
+                            <ComboBox Margin="0 10 10 0"
+                                      IsEnabled="{Binding IsEnabled}"
+                                      materialDesign:HintAssist.Hint="Quý"
+                                      ItemsSource="{Binding DataLoaiQuy}"
+                                      SelectedItem="{Binding SelectedLoaiQuy}"
+                                      DisplayMemberPath="DisplayItem">
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel  Grid.Row="3"
+                                     Orientation="Horizontal">
+                            <TextBox VerticalAlignment="Stretch"
+                                     materialDesign:HintAssist.Hint="Mô tả chi tiết"
+                                     Text="{Binding Model.SMoTa}"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     HorizontalAlignment="Left"
+                                     VerticalScrollBarVisibility="Auto" />
+                        </StackPanel>
+                    </StackPanel>
+
+                </StackPanel>
+
+                <!--<Border
+                    Grid.Column="1"
+                    Grid.RowSpan="3"
+                    Background="White"
+                    Visibility="{Binding IsDetail, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    BorderThickness="1"
+                    BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <StackPanel
+                        Orientation="Vertical"
+                        VerticalAlignment="Top">
+                        <materialDesign:ColorZone
+                            Mode="PrimaryLight">
+                            <DockPanel HorizontalAlignment="Stretch" Margin="8">
+                                <CheckBox IsChecked="{Binding SelectAllLNS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBlock Text="{Binding SelectedCountLNS}"></TextBlock>
+                                </CheckBox>
+                                <Border
+                                    Margin="8 0 0 0"
+                                    Background="White"
+                                    MaxHeight="30"
+                                    CornerRadius="3"
+                                    Width="120"
+                                    HorizontalAlignment="Right"
+                                    ToolTip="Enter to search, ignore case">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button
+                                            x:Name="SearchButton"
+                                            Style="{DynamicResource MaterialDesignToolButton}"
+                                            Height="24"
+                                            Width="24">
+                                            <materialDesign:PackIcon Margin="0" Kind="Magnify" Opacity=".56"/>
+                                        </Button>
+                                        <TextBox
+                                            Grid.Column="1"
+                                            Margin="5 0 0 0"
+                                            materialDesign:HintAssist.Hint="Tìm kiếm"
+                                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                            BorderThickness="0"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding SearchLNS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </Border>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <ListView Height="370" ItemsSource="{Binding DataLNS}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding LNSDisplay}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>-->
+                <!--<Border Visibility="{Binding IsDetail, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Grid.Column="2"
+                        Grid.RowSpan="3"
+                        Margin="8 0 0 0"
+                        Background="White"
+                        BorderThickness="1"
+                        IsEnabled="{Binding IsEnableDonVi}"
+                        BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Top">
+                        <materialDesign:ColorZone Mode="PrimaryLight">
+                            <DockPanel HorizontalAlignment="Stretch"
+                                       Margin="8">
+                                <CheckBox IsChecked="{Binding SelectAllDonVi,Mode=TwoWay}">
+                                    <TextBlock Text="{Binding SelectedCountDonVi}" />
+                                </CheckBox>
+                                <Border Margin="8 0 0 0"
+                                        Background="White"
+                                        MaxHeight="30"
+                                        CornerRadius="3"
+                                        Width="100"
+                                        HorizontalAlignment="Right"
+                                        ToolTip="Enter to search, ignore case">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                                Height="24"
+                                                Width="24">
+                                            <materialDesign:PackIcon Margin="0"
+                                                                     Kind="Magnify"
+                                                                     Opacity=".56" />
+                                        </Button>
+                                        <TextBox Grid.Column="1"
+                                                 Margin="0 0 5 0"
+                                                 Background="white"
+                                                 materialDesign:HintAssist.Hint="Tìm kiếm"
+                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                                 BorderThickness="0"
+                                                 VerticalAlignment="Center"
+                                                 Text="{Binding SearchDonVi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        </TextBox>
+                                    </Grid>
+                                </Border>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <ListView Height="370"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ItemsSource="{Binding DonViModelItems}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding DisplayItem}"
+                                              IsChecked="{Binding Path=IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>-->
+
+                <Border Visibility="{Binding IsDetail, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Grid.Column="2"
+                        Grid.RowSpan="3"
+                        Margin="8 0 0 0"
+                        Background="White"
+                        BorderThickness="1"
+                        IsEnabled="{Binding IsEnableDonVi}"
+                        BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Top">
+                        <materialDesign:ColorZone Mode="PrimaryLight">
+                            <DockPanel HorizontalAlignment="Stretch"
+                                       Margin="8">
+                                <CheckBox IsChecked="{Binding IsSelectedAllAgency,Mode=TwoWay}">
+                                    <TextBlock Text="{Binding SelectedAgencyCount}" />
+                                </CheckBox>
+                                <Border Margin="8 0 0 0"
+                                        Background="White"
+                                        MaxHeight="30"
+                                        CornerRadius="3"
+                                        Width="100"
+                                        HorizontalAlignment="Right"
+                                        ToolTip="Enter to search, ignore case">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Style="{DynamicResource MaterialDesignToolButton}"
+                                                Height="24"
+                                                Width="24">
+                                            <materialDesign:PackIcon Margin="0"
+                                                                     Kind="Magnify"
+                                                                     Opacity=".56" />
+                                        </Button>
+                                        <TextBox Grid.Column="1"
+                                                 Margin="0 0 5 0"
+                                                 Background="white"
+                                                 materialDesign:HintAssist.Hint="Tìm kiếm"
+                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                                 BorderThickness="0"
+                                                 VerticalAlignment="Center"
+                                                 Text="{Binding SearchDonVi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        </TextBox>
+                                    </Grid>
+                                </Border>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <ListView Height="370"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ItemsSource="{Binding Agencies}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding MaTenDonVi}"
+                                              IsChecked="{Binding Selected, UpdateSourceTrigger=PropertyChanged}" />
+                                    <!--IsChecked="{Binding Path=IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+                <Grid Grid.Row="3"
+                      Margin="0 5 0 0">
+                    <component:ExpandedDataGrid Width="750"
+                                                x:Name="DgDemandIndex"
+                                                Visibility="{Binding IsAgregate, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                VerticalAlignment="Top"
+                                                AutoGenerateColumns="False"
+                                                BorderThickness="1"
+                                                CanUserAddRows="False"
+                                                CanUserResizeColumns="True"
+                                                FrozenColumnCount="3"
+                                                HorizontalScrollBarVisibility="Auto"
+                                                IsReadOnly="True"
+                                                GridLinesVisibility="All"
+                                                ColumnInfo="{Binding Columns}"
+                                                ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                                                ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                                                Style="{StaticResource MaterialDesignDataGrid}"
+                                                RowStyle="{StaticResource DataGridRowIndex}"
+                                                ItemsSource="{Binding ListBhCpChungTuModel}"
+                                                ext:DataGridBehavior.LastColumnFill="True"
+                                                ext:SelectionChangedBehaviour.Command="{Binding SelectionChangedCommand}">
+                        <DataGrid.Resources>
+                            <helper:BindingProxy x:Key="DataContextProxy"
+                                                 Data="{Binding}" />
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+
+                            <materialDesign:DataGridTextColumn Binding="{Binding SSoChungTu}"
+                                                               ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                               Header="Số chứng từ" />
+                            <materialDesign:DataGridTextColumn Binding="{Binding SID_MaDonVi}"
+                                                               ElementStyle="{StaticResource DataGridTextColumnCenterStyle}"
+                                                               Header="Đơn vị" />
+
+                            <materialDesign:DataGridTextColumn Binding="{Binding STenDanhMucLoaiChi}"
+                                                               ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                               Header="Loai kinh phí" />
+
+                            <materialDesign:DataGridTextColumn Binding="{Binding SSoQuyetDinh}"
+                                                               ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                               Header="Số quyết định" />
+                            <materialDesign:DataGridTextColumn Binding="{Binding DNgayChungTu, Converter={StaticResource DateTimeToStringConverter}}"
+                                                               ElementStyle="{StaticResource DataGridTextColumnCenterStyle}"
+                                                               Header="Ngày chứng từ" />
+
+                            <materialDesign:DataGridTextColumn Binding="{Binding SMoTa}"
+                                                               ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                               Header="Mô tả" />
+
+                            <materialDesign:DataGridTextColumn Binding="{Binding FTienKeHoachCap, Converter={StaticResource NumberToStringEmptyConverter},UpdateSourceTrigger=LostFocus,StringFormat={}{0:N0}}"
+                                                               ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                                               Header="Kế hoạch cấp" />
+
+                            <materialDesign:DataGridTextColumn Binding="{Binding SNguoiTao}"
+                                                               ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                                                               Header="Người tạo" />
+                        </DataGrid.Columns>
+                    </component:ExpandedDataGrid>
+                </Grid>
+            </Grid>
+            <Separator Background="{DynamicResource MaterialDesignDivider}" />
+            <StackPanel Orientation="Horizontal"
+                        Margin="0 15 0 0"
+                        HorizontalAlignment="Right">
+                <Button IsDefault="True"
+                        Margin="5 0 0 0"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding SaveCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Lưu dữ liệu</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button IsCancel="True"
+                        Margin="5 0 0 0"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

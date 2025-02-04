@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ReleaseNoteModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ReleaseDate>2024-12-01T09:15:07.701445+07:00</ReleaseDate>
+	<NoteDetails>
+		<ReleaseNoteDetailModel>
+			<Module>Ngân sách</Module>
+			<Features>
+				<string>Thêm công thức cho báo cáo "Thông báo phân bổ dự toán - Đơn vị"</string>
+				<string>Thêm công thức cho báo cáo "Thông báo phân bổ dự toán - Ngành"</string>
+				<string>Thêm công thức cho báo cáo "Công khai dự toán thu, chi NSNN -TT57"</string>
+			</Features>
+			<Improvements />
+		</ReleaseNoteDetailModel>
+	</NoteDetails>
+</ReleaseNoteModel>

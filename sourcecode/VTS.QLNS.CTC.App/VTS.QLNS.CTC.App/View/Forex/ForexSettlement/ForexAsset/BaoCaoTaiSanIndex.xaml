@@ -1,0 +1,831 @@
+﻿<UserControl
+    x:Class="VTS.QLNS.CTC.App.View.Forex.ForexSettlement.ForexAsset.BaoCaoTaiSanIndex"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Forex.ForexSettlement.ForexAsset"
+    xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+    xmlns:custom="clr-namespace:VTS.QLNS.CTC.Custom;assembly=VTS.QLNS.CTC.Custom"
+    xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+    xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+    xmlns:extensions="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+    mc:Ignorable="d">
+    <UserControl.InputBindings>
+        <KeyBinding
+            Key="F3"
+            Command="{Binding AddCommand}" />
+        <KeyBinding
+            Key="F4"
+            Command="{Binding DeleteCommand}" />
+        <KeyBinding
+            Key="F5"
+            Command="{Binding RefeshCommand}" />
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto"></RowDefinition>
+            <RowDefinition
+                Height="Auto"></RowDefinition>
+            <RowDefinition
+                Height="Auto"></RowDefinition>
+            <RowDefinition
+                Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <DockPanel
+            Grid.Row="0">
+            <materialDesign:PackIcon
+                Kind="DriveDocument"
+                Height="32"
+                Width="32"
+                Foreground="{DynamicResource PrimaryHueMidBrush}" />
+            <StackPanel
+                Orientation="Vertical">
+                <TextBlock
+                    FontWeight="Bold"
+                    Text="{Binding Title}"></TextBlock>
+                <TextBlock
+                    Text="{Binding Description}"></TextBlock>
+                <Separator
+                    Background="{StaticResource MaterialDesignDivider}"
+                    Margin="0 5 0 0" />
+            </StackPanel>
+        </DockPanel>
+        <StackPanel
+            Grid.Row="1"
+            Margin="0 5 0 0">
+            <Separator
+                Background="{DynamicResource MaterialDesignDivider}" />
+            <ScrollViewer
+                HorizontalScrollBarVisibility="Auto"
+                VerticalScrollBarVisibility="Disabled">
+                <StackPanel
+                    Orientation="Horizontal"
+                    Margin="0 0 5 0">
+                    <Separator
+                        Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <custom:AutoCompleteComboBox
+                        Width="{Binding ElementName=aTenDonVi, Path=ActualWidth}"
+                        Margin="5 0 5 0"
+                        materialDesign:TextFieldAssist.HasClearButton="True"                        
+                        materialDesign:HintAssist.Hint="Đơn vị"
+                        ItemsSource="{Binding ItemsDonVi}"
+                        SelectedItem="{Binding SelectedDonVi}"
+                        DisplayMemberPath="TenDonViDisplay"
+                        TextSearch.TextPath="TenDonViDisplay"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                        SelectedValuePath="TenDonVi"/>
+                    <Separator
+                        Visibility="{Binding IsChecked, ElementName=RbDanhSachTaiSan, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <custom:AutoCompleteComboBox
+                        Visibility="{Binding IsChecked, ElementName=RbDanhSachTaiSan, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Width="{Binding ElementName=aTenDuAn, Path=ActualWidth}"
+                        Margin="5 0 5 0"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        materialDesign:HintAssist.Hint="Thuộc dự án"
+                        ItemsSource="{Binding ItemsDuAn}"
+                        SelectedItem="{Binding SelectedDuAn}"
+                        DisplayMemberPath="TenDuAnDisplay"
+                        TextSearch.TextPath="TenDuAnDisplay"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                        SelectedValuePath="TenDuAn"/>
+                    <Separator
+                        Visibility="{Binding IsChecked, ElementName=RbDanhSachTaiSan, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <custom:AutoCompleteComboBox
+                        Visibility="{Binding IsChecked, ElementName=RbDanhSachTaiSan, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Width="{Binding ElementName=aSTenHopDong, Path=ActualWidth}"
+                        Margin="5 0 5 0"
+                        materialDesign:TextFieldAssist.HasClearButton="True"                       
+                        materialDesign:HintAssist.Hint="Thuộc hợp đồng"
+                        ItemsSource="{Binding ItemsHopDong}"
+                        SelectedItem="{Binding SelectedHopDong}"
+                        DisplayMemberPath="TenHopDongDisplay"
+                        TextSearch.TextPath="TenHopDongDisplay"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                        SelectedValuePath="STenHopDong"/>
+                    <Separator
+                        Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button
+                        Style="{StaticResource SearchBarBtnStyle}"
+                        Command="{Binding SearchCommand}">
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Kind="Search" />
+                            <TextBlock
+                                Style="{StaticResource SearchBarBtnTextStyle}"
+                                Text="Tìm kiếm" />
+                        </StackPanel>
+                    </Button>
+                    <Separator
+                        Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button
+                        Command="{Binding RemoveFilterCommand}"
+                        Style="{StaticResource SearchBarBtnStyle}"
+                        ToolTip="Filter">
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Kind="FilterRemoveOutline" />
+                        </StackPanel>
+                    </Button>
+                    <Separator
+                        Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button Style="{DynamicResource SearchBarBtnStyle}" Command="{Binding PrintCommand}" IsEnabled="{Binding IsAllowPrint}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Printer"/>
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="In báo cáo"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="2">
+            <Separator
+                Background="{DynamicResource MaterialDesignDivider}" />
+            <StackPanel
+                Orientation="Horizontal">
+                <RadioButton
+                    x:Name="RbDanhSachTaiSan"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    IsChecked="{Binding VoucherTabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:VoucherTabIndex.VOUCHER}}"
+                    GroupName="TabIndex"
+                    Content="Danh Sách Tài Sản" />
+
+                <RadioButton
+                    x:Name="RbThongKeTaiSan"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    IsChecked="{Binding VoucherTabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static localEnum:VoucherTabIndex.VOUCHER_AGREGATE}}"
+                    GroupName="TabIndex"
+                    Content="Thống Kê Tài Sản" />
+            </StackPanel>
+        </StackPanel>
+
+        <component:ExpandedDataGrid
+            Visibility="{Binding IsChecked, ElementName=RbDanhSachTaiSan, Converter={StaticResource BooleanToVisibilityConverter}}"
+            x:Name="dgdDataHopDongIndex"
+            Grid.Row="3"
+            Margin="0 5 0 0"
+            IsReadOnly="True"
+            FrozenColumnCount="3"
+            BorderThickness="1"
+            CanUserResizeColumns="True"
+            HorizontalScrollBarVisibility="Auto"
+            CanUserAddRows="False"
+            IsSynchronizedWithCurrentItem="True"
+            GridLinesVisibility="All"
+            ColumnInfo="{Binding Columns}"
+            ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+            ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+            RowStyle="{StaticResource DataGridRowIndex}"
+            Style="{StaticResource MaterialDesignDataGrid}"
+            ItemsSource="{Binding ItemsTaiSan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectedTaiSan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            AutoGenerateColumns="False">
+            <DataGrid.Resources>
+                <helper:BindingProxy
+                    x:Key="DataContextProxy"
+                    Data="{Binding}" />
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <!--<DataGridTemplateColumn 
+                    Header="Đơn vị sử dụng" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataTemplate.Resources>
+                                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {ComponentResourceKey ResourceId=MaterialDataGridComboBoxColumnEditingStyle, TypeInTargetAssembly={x:Type ComboBox}}}" />
+                            </DataTemplate.Resources>
+                            <ComboBox
+                                x:Name="aTenDonVi"
+                                DisplayMemberPath="TenDonViDisplay"
+                                SelectedValuePath="Id"
+                                SelectedValue="{Binding IIdMaDonViId, UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ItemsDonVi}">
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Thuộc dự án">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataTemplate.Resources>
+                                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {ComponentResourceKey ResourceId=MaterialDataGridComboBoxColumnEditingStyle, TypeInTargetAssembly={x:Type ComboBox}}}" />
+                            </DataTemplate.Resources>
+                            <ComboBox
+                                x:Name="aTenDuAn"
+                                DisplayMemberPath="TenDuAnDisplay"
+                                SelectedValuePath="Id"
+                                SelectedValue="{Binding IIdDuAnId, UpdateSourceTrigger=LostFocus}"
+                                ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ItemsDuAn}">
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Thuộc hợp đồng">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataTemplate.Resources>
+                                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {ComponentResourceKey ResourceId=MaterialDataGridComboBoxColumnEditingStyle, TypeInTargetAssembly={x:Type ComboBox}}}" />
+                            </DataTemplate.Resources>
+                            <ComboBox
+                                x:Name="aSTenHopDong"
+                                DisplayMemberPath="TenHopDongDisplay"
+                                SelectedValuePath="Id"
+                                SelectedValue="{Binding IIdHopDongId, UpdateSourceTrigger=LostFocus}"
+                                ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ItemsHopDong}">
+                            </ComboBox>
+                            
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+                <DataGridTextColumn
+                    IsReadOnly="True"
+                    Header="Thuộc đơn vị"
+                    Binding="{Binding STenDonVi}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}" />
+                <DataGridTextColumn
+                    IsReadOnly="True"
+                    Header="Thuộc dự án"
+                    Binding="{Binding STenDuAn}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}" />
+                <DataGridTextColumn
+                    IsReadOnly="True"
+                    Header="Thuộc hợp đồng"
+                    Binding="{Binding STenHopDong}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}" />
+                <DataGridTextColumn
+                    IsReadOnly="True"
+                    Header="Mã tài sản"
+                    Binding="{Binding SMaTaiSan}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}" />
+                <DataGridTextColumn
+                    IsReadOnly="True"
+                    Header="Tên tài sản"
+                    Binding="{Binding STenTaiSan}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}" />
+                <!--<DataGridTemplateColumn 
+                     Header="loại tài sản">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataTemplate.Resources>
+                                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {ComponentResourceKey ResourceId=MaterialDataGridComboBoxColumnEditingStyle, TypeInTargetAssembly={x:Type ComboBox}}}" />
+                            </DataTemplate.Resources>
+                            <ComboBox
+                                DisplayMemberPath="STen"
+                                SelectedValuePath="Id"
+                                SelectedValue="{Binding ILoaiTaiSan, UpdateSourceTrigger=LostFocus}"
+                                ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ItemsLoaiTaiSanQuyetToan}">
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+                <DataGridTextColumn
+                    IsReadOnly="True"
+                    Header="Loại tài sản"
+                    Binding="{Binding SLoaiTaiSan}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}" />
+                <DataGridTextColumn
+                    Header="Mô tả"
+                    Binding="{Binding SMoTaTaiSan, UpdateSourceTrigger=LostFocus}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}" />
+                <!--<DataGridTemplateColumn
+                     Header="Ngày bắt đầu sử dụng" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker Margin="0 -10 0 -10" Padding="0 5 0 10"  SelectedDate="{Binding DNgayBatDauSuDung, UpdateSourceTrigger=LostFocus}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Tình trạng sử dụng">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataTemplate.Resources>
+                                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {ComponentResourceKey ResourceId=MaterialDataGridComboBoxColumnEditingStyle, TypeInTargetAssembly={x:Type ComboBox}}}" />
+                            </DataTemplate.Resources>
+                            <ComboBox
+                                DisplayMemberPath="STen"
+                                SelectedValuePath="Id"
+                                SelectedValue="{Binding ITinhTrangSuDung, UpdateSourceTrigger=LostFocus}"
+                                ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ItemsTinhTrangSuDung}">
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+                <DataGridTextColumn
+                    IsReadOnly="True"
+                    Header="Ngày bắt đầu sử dụng"
+                    Binding="{Binding DNgayBatDauSuDung, Converter={StaticResource DateTimeToStringConverter}}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}" />
+                <DataGridTextColumn
+                    IsReadOnly="True"
+                    Header="Tình trạng sử dụng"
+                    Binding="{Binding STinhTrangSuDung}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}" />
+                <component:DataGridTextColumn
+                    Header="Số lượng"
+                    Binding="{Binding FSoLuong, UpdateSourceTrigger=LostFocus}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}" />
+                <component:DataGridTextColumn
+                    Header="Đơn vị tính"
+                    Binding="{Binding SDonViTinh, UpdateSourceTrigger=LostFocus}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}" />
+                <component:DataGridTextColumn
+                    Header="Nguyên giá"
+                    Binding="{Binding FNguyenGia, UpdateSourceTrigger=LostFocus}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}" />
+                <!--<DataGridTemplateColumn Header="trạng thái sử dụng">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataTemplate.Resources>
+                                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {ComponentResourceKey ResourceId=MaterialDataGridComboBoxColumnEditingStyle, TypeInTargetAssembly={x:Type ComboBox}}}" />
+                            </DataTemplate.Resources>
+                            <ComboBox
+                                DisplayMemberPath="STen"
+                                SelectedValuePath="Id"
+                                SelectedValue="{Binding ITrangThai, UpdateSourceTrigger=LostFocus}"
+                                ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ItemsTrangThaiSuDung}">
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+                <DataGridTextColumn
+                    IsReadOnly="True"
+                    Header="Trạng thái sử dụng"
+                    Binding="{Binding STrangThai}"
+                    EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}" />
+            </DataGrid.Columns>
+        </component:ExpandedDataGrid>
+
+
+        <component:ExpandedDataGrid
+            Visibility="{Binding IsChecked, ElementName=RbThongKeTaiSan, Converter={StaticResource BooleanToVisibilityConverter}}"
+            x:Name="dgdDataThongKeTaiSanIndex"
+            Grid.Row="3"
+            Margin="0 5 0 0"
+            IsReadOnly="True"
+            BorderThickness="1"
+            CanUserResizeColumns="True"
+            HorizontalScrollBarVisibility="Auto"
+            CanUserAddRows="False"
+            IsSynchronizedWithCurrentItem="True"
+            GridLinesVisibility="All"
+            AutoGenerateColumns="False"
+            ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+            ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+            RowStyle="{StaticResource DataGridRowIndex}"
+            Style="{StaticResource MaterialDesignDataGrid}"
+            ItemsSource="{Binding ItemsThongKeTaiSan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            ext:DataGridBehavior.DisplayRowNumber="True">
+            <DataGrid.Resources>
+                <helper:BindingProxy
+                    x:Key="DataContextProxy"
+                    Data="{Binding}" />
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <materialDesign:DataGridTextColumn
+                    x:Name="STT"
+                    Header="STT"
+                    MinWidth="70"
+                    Width="70"
+                    HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}"
+                    Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}, Path=Header}">
+                </materialDesign:DataGridTextColumn>
+                <materialDesign:DataGridTextColumn
+                    x:Name="STenDonVi"
+                    Header="Đơn vị sử dụng"
+                    MinWidth="230"
+                    Width="230"
+                    Binding="{Binding STenDonVi}"
+                    HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}" />
+                <materialDesign:DataGridTextColumn
+                    x:Name="SMaTaiSan"
+                    Header="Mã tài sản"
+                    IsReadOnly="True"
+                    MinWidth="180"
+                    Width="180"
+                    Binding="{Binding SMaTaiSan}"
+                    HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}" />
+                <materialDesign:DataGridTextColumn
+                    x:Name="STenTaiSan"
+                    Header="Tên tài sản"
+                    IsReadOnly="True"
+                    MinWidth="230"
+                    Width="230"
+                    Binding="{Binding STenTaiSan}"
+                    HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                    ElementStyle="{StaticResource DataGridTextColumnDetailLeftStyle}" />
+                <DataGridTemplateColumn
+                    Header="Loại tài sản"
+                    MinWidth="240"
+                    CellStyle="{StaticResource DataGridCellDetailNoPadding}"
+                    HeaderStyle="{StaticResource DataGridColumnHeaderCenterNoPadding}">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="*"
+                                        MinHeight="40" />
+                                    <RowDefinition
+                                        Height="*"
+                                        MinHeight="40" />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    Grid.Row="0"
+                                    Grid.ColumnSpan="2"
+                                    BorderThickness="0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        TextAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextWrapping="Wrap"
+                                        Padding="10"
+                                        Width="220"
+                                        MinWidth="220"
+                                        Text="Loại tài sản" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    BorderThickness="0 1 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        TextAlignment="Center"
+                                        Text="Tài sản hữu hình" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    BorderThickness="0 1 0 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        TextAlignment="Center"
+                                        Text="Tài sản vô hình" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="*" />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    BorderThickness="0 0 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        TextAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Padding="5 0 5 0"
+                                        Style="{StaticResource DataGridTextColumnDetailStyle}"
+                                        Text="{Binding FTaiSan1}" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    BorderThickness="0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        TextAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Padding="5 0 5 0"
+                                        Style="{StaticResource DataGridTextColumnDetailStyle}"
+                                        Text="{Binding FTaiSan2}" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn
+                    Header="Trạng thái sử dụng"
+                    MinWidth="360"
+                    CellStyle="{StaticResource DataGridCellDetailNoPadding}"
+                    HeaderStyle="{StaticResource DataGridColumnHeaderCenterNoPadding}">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="*"
+                                        MinHeight="40" />
+                                    <RowDefinition
+                                        Height="*"
+                                        MinHeight="40" />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    Grid.Row="0"
+                                    Grid.ColumnSpan="3"
+                                    BorderThickness="0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        TextAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextWrapping="Wrap"
+                                        Padding="10"
+                                        Width="340"
+                                        MinWidth="340"
+                                        Text="Trạng thái sử dụng" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    BorderThickness="0 1 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        TextAlignment="Center"
+                                        Text="Chưa sử dụng" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    BorderThickness="0 1 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        TextAlignment="Center"
+                                        Text="Đang sử dụng" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    BorderThickness="0 1 0 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        TextAlignment="Center"
+                                        Text="Không sử dụng" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="*" />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    BorderThickness="0 0 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        TextAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Padding="5 0 5 0"
+                                        Style="{StaticResource DataGridTextColumnDetailStyle}"
+                                        Text="{Binding FTrangThai1}" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    BorderThickness="0 0 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        TextAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Padding="5 0 5 0"
+                                        Style="{StaticResource DataGridTextColumnDetailStyle}"
+                                        Text="{Binding FTrangThai2}" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    BorderThickness="0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        TextAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Padding="5 0 5 0"
+                                        Style="{StaticResource DataGridTextColumnDetailStyle}"
+                                        Text="{Binding FTrangThai3}" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn
+                    Header="Tình trạng sử dụng"
+                    MinWidth="360"
+                    CellStyle="{StaticResource DataGridCellDetailNoPadding}"
+                    HeaderStyle="{StaticResource DataGridColumnHeaderCenterNoPadding}">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="*"
+                                        MinHeight="40" />
+                                    <RowDefinition
+                                        Height="*"
+                                        MinHeight="40" />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    Grid.Row="0"
+                                    Grid.ColumnSpan="3"
+                                    BorderThickness="0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        TextAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextWrapping="Wrap"
+                                        Padding="10"
+                                        Width="340"
+                                        MinWidth="340"
+                                        Text="Tình trạng sử dụng" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    BorderThickness="0 1 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        TextAlignment="Center"
+                                        Text="Mới" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    BorderThickness="0 1 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        TextAlignment="Center"
+                                        Text="Cũ" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    BorderThickness="0 1 0 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        TextAlignment="Center"
+                                        Text="Hết giá trị" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="120" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="*" />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    BorderThickness="0 0 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        TextAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Padding="5 0 5 0"
+                                        Style="{StaticResource DataGridTextColumnDetailStyle}"
+                                        Text="{Binding FTinhTrangSuDung1}" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    BorderThickness="0 0 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        TextAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Padding="5 0 5 0"
+                                        Style="{StaticResource DataGridTextColumnDetailStyle}"
+                                        Text="{Binding FTinhTrangSuDung2}" />
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    BorderThickness="0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock
+                                        TextAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Padding="5 0 5 0"
+                                        Style="{StaticResource DataGridTextColumnDetailStyle}"
+                                        Text="{Binding FTinhTrangSuDung3}" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+        </component:ExpandedDataGrid>
+    </Grid>
+</UserControl>

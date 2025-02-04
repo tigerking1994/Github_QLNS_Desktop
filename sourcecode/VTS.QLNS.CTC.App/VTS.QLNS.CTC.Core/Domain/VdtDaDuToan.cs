@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+
+#nullable disable
+
+namespace VTS.QLNS.CTC.Core.Domain
+{
+    public partial class VdtDaDuToan: EntityBase
+    {
+        [Column("iID_DuToanID")]
+        public override Guid Id { get; set; }
+        public Guid IIdDuAnId { get; set; }
+        public Guid? IIdTuVanKhaoSatId { get; set; }
+        public Guid? IIdTuVanThietKeId { get; set; }
+        public string SSoQuyetDinh { get; set; }
+        public DateTime? DNgayQuyetDinh { get; set; }
+        public string SSoToTrinh { get; set; }
+        public DateTime? DNgayToTrinh { get; set; }
+        public string SSoThamDinh { get; set; }
+        public DateTime? DNgayThamDinh { get; set; }
+        public string SCoQuanPheDuyet { get; set; }
+        public string SNguoiKy { get; set; }
+        public string SNoiDung { get; set; }
+        public double? FTongDuToanToTrinh { get; set; }
+        public double? FTongDuToanThamDinh { get; set; }
+        public double? FTongDuToanPheDuyet { get; set; }
+        public Guid? IIdTienTeId { get; set; }
+        public double? FTiGiaDonVi { get; set; }
+        public Guid? IIdDonViTienTeId { get; set; }
+        public double FTiGia { get; set; }
+        public bool BActive { get; set; }
+        public bool BLaThayThe { get; set; }
+        public bool? BIsGoc { get; set; }
+        public bool BLaTongDuToan { get; set; }
+        public bool? BIsKhoiTao { get; set; }
+        public Guid? IIdParentId { get; set; }
+        public Guid? IIdDuToanGocId { get; set; }
+        public string SUserCreate { get; set; }
+        public DateTime? DDateCreate { get; set; }
+        public string SUserUpdate { get; set; }
+        public DateTime? DDateUpdate { get; set; }
+        public string SCoQuanThamDinh { get; set; }
+        public string TenDuToan { get; set; }
+        public string SMoTa { get; set; }
+        public bool? BKhoa { get; set; }
+        public Guid? IIdQddauTuId { get; set; }
+    }
+}

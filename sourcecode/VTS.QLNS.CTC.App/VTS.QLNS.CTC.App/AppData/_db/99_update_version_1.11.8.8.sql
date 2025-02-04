@@ -1,0 +1,1 @@
+﻿alter table danhmuc alter column sTen nvarchar(250) null;

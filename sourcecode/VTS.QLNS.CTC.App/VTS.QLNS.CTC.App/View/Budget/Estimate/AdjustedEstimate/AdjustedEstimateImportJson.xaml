@@ -1,0 +1,378 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Budget.Estimate.AdjustedEstimate.AdjustedEstimateImportJson"
+        Name="AdjustedEstimateImportJsonView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Budget.Estimate.AdjustedEstimate"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+        xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+        xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Title="AdjustedEstimateImportJson">
+    <Grid Margin="16">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0">
+                <materialDesign:PackIcon Kind="MicrosoftExcel" Style="{StaticResource DialogScreenIconStyle}"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding Description}"/>
+                </StackPanel>
+            </DockPanel>
+            <Separator Grid.Row="1" Background="{DynamicResource MaterialDesignDivider}"/>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="250"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border  BorderThickness="1" BorderBrush="{DynamicResource MaterialDesignDivider}" Margin="0 10 0 0" Padding="5 0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox
+                            Grid.Column="0"
+                            IsEnabled="False"
+                            materialDesign:HintAssist.Hint="Lựa chọn file Json"
+                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                            BorderThickness="0"
+                            VerticalAlignment="Center" 
+                            Text="{Binding FilePath}"/>
+                        <Button
+                            Style="{DynamicResource MaterialDesignToolButton}"
+                            Grid.Column="1"
+                            Command="{Binding UploadFileCommand}">
+                            <materialDesign:PackIcon
+                            Kind="FileUpload"
+                            Margin="8 0 0 0" />
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <StackPanel Grid.Column="1"  Orientation="Horizontal" Margin="0 10 0 0">
+                    <Button 
+                        Margin="5 0 0 0"
+                        Width="120"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding ResetDataCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Hủy bỏ"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <DataGrid
+                    x:Name="dgAdjustedEstimateImportJson"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    Margin="0 10 0 0"
+                    AutoGenerateColumns="False" 
+                    CanUserResizeColumns="True"
+                    BorderThickness="1"
+                    HorizontalScrollBarVisibility="Auto"
+                    FrozenColumnCount ="2"
+                    CanUserAddRows="False"
+                    GridLinesVisibility="All"
+                    ItemsSource="{Binding Items}"
+                    SelectedItem="{Binding SelectedItems}"
+                    ext:SelectionMouseDoubleClickBehaviour.Command="{Binding ShowDetailCommand}">
+                    <DataGrid.Resources>
+                        <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Trạng thái">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl x:Name="content"/>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding ImportStatus}" Value="True">
+                                            <Setter TargetName="content" Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <materialDesign:PackIcon Kind="CheckCircle" Foreground="Green" HorizontalAlignment="Center"/>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ImportStatus}" Value="False">
+                                            <Setter TargetName="content" Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <materialDesign:PackIcon Kind="CloseCircle" Foreground="Red" HorizontalAlignment="Center"/>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <materialDesign:DataGridTextColumn 
+                            Header="Số chứng từ" 
+                            Binding="{Binding SSoChungTu}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <materialDesign:DataGridTextColumn 
+                            Header="Ngày chứng từ"
+                            Binding="{Binding DNgayChungTu, Converter={StaticResource DateTimeToStringConverter}}"
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnCenterStyle}" />
+                        <materialDesign:DataGridTextColumn 
+                            Header="Mã đơn vị" 
+                            Binding="{Binding IIdMaDonVi}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <materialDesign:DataGridTextColumn 
+                            Header="Mã nguồn ngân sách" 
+                            Binding="{Binding IIdMaNguonNganSach}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <materialDesign:DataGridTextColumn 
+                            Header="Mã loại chứng từ" 
+                            Binding="{Binding ILoaiChungTu}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <materialDesign:DataGridTextColumn 
+                            Header="Năm làm việc" 
+                            Binding="{Binding INamLamViec}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <materialDesign:DataGridTextColumn 
+                            Header="Mã năm ngân sách" 
+                            Binding="{Binding INamNganSach}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <materialDesign:DataGridTextColumn 
+                            Header="DSLNS" 
+                            Binding="{Binding SDslns}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <materialDesign:DataGridTextColumn 
+                            Header="Mô tả" 
+                            Binding="{Binding SMoTa}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <materialDesign:DataGridTextColumn
+                            Header="Điều chỉnh"
+                            Binding="{Binding FDieuChinh, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"/>
+                        
+
+                        <DataGridTemplateColumn Header="Lỗi">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl x:Name="Function"/>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding ImportStatus}" Value="False">
+                                            <Setter TargetName="Function" Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <Button
+                                                            Style="{StaticResource MaterialDesignIconButton}"
+                                                            ToolTip="Xem thông tin lỗi"
+                                                            Width="25"
+                                                            Height="25"
+                                                            CommandParameter="{x:Static localEnum:ImportTabIndex.Data}"
+                                                            Command="{Binding Path=DataContext.ShowErrorItemsCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
+                                                            <materialDesign:PackIcon
+                                                                Foreground="DarkRed"
+                                                                Width="15"
+                                                                Height="15"
+                                                                Kind="EyeRemove"/>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <DataGrid
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0 10 0 0"
+                    AutoGenerateColumns="False" 
+                    CanUserResizeColumns="True"
+                    BorderThickness="1"
+                    HorizontalScrollBarVisibility="Auto"
+                    FrozenColumnCount ="2"
+                    CanUserAddRows="False"
+                    GridLinesVisibility="All"
+                    ItemsSource="{Binding Details}"
+                    SelectedItem="{Binding SelectedDetail}">
+                    <DataGrid.Resources>
+                        <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Trạng thái">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl x:Name="content"/>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding ImportStatus}" Value="True">
+                                            <Setter TargetName="content" Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <materialDesign:PackIcon Kind="CheckCircle" Foreground="Green" HorizontalAlignment="Center"/>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ImportStatus}" Value="False">
+                                            <Setter TargetName="content" Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <materialDesign:PackIcon Kind="CloseCircle" Foreground="Red" HorizontalAlignment="Center"/>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <materialDesign:DataGridTextColumn 
+                            Header="Mã đơn vị" 
+                            Binding="{Binding IIdMaDonVi}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <!--<materialDesign:DataGridTextColumn 
+                            Header="Tên đơn vị" 
+                            Binding="{Binding STenDonVi}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>-->
+                        <materialDesign:DataGridTextColumn 
+                            Header="Mã nguồn ngân sách" 
+                            Binding="{Binding IIdMaNguonNganSach}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <!--<materialDesign:DataGridTextColumn 
+                            Header="Mã loại" 
+                            Binding="{Binding ILoai}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>-->
+                        <!--<materialDesign:DataGridTextColumn 
+                            Header="Mã loại chứng từ" 
+                            Binding="{Binding ILoaiChungTu}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>-->
+                        <materialDesign:DataGridTextColumn 
+                            Header="Năm làm việc" 
+                            Binding="{Binding INamLamViec}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <materialDesign:DataGridTextColumn 
+                            Header="Mã năm ngân sách" 
+                            Binding="{Binding INamNganSach}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <materialDesign:DataGridTextColumn 
+                            Header="Xâu nối mã" 
+                            Binding="{Binding SXauNoiMa}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <materialDesign:DataGridTextColumn 
+                            Header="Mô tả" 
+                            Binding="{Binding SMoTa}" 
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <materialDesign:DataGridTextColumn
+                            Header="Dự kiến quyết toán đầu năm"
+                            Binding="{Binding FDuKienQtDauNam, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"/>
+                        <materialDesign:DataGridTextColumn
+                            Header="Dự kiến quyết toán cuối năm"
+                            Binding="{Binding FDuKienQtCuoiNam, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"/>
+                        <materialDesign:DataGridTextColumn
+                            Header="Dự toán ngân sách năm"
+                            Binding="{Binding FDuToanNganSachNam, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"/>
+                        
+                        <DataGridTemplateColumn Header="Lỗi">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl x:Name="Function"/>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding ImportStatus}" Value="False">
+                                            <Setter TargetName="Function" Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <Button
+                                                            Style="{StaticResource MaterialDesignIconButton}"
+                                                            ToolTip="Xem thông tin lỗi"
+                                                            Width="25"
+                                                            Height="25"
+                                                            CommandParameter="{x:Static localEnum:ImportTabIndex.Data}"
+                                                            Command="{Binding Path=DataContext.ShowErrorDetailCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
+                                                            <materialDesign:PackIcon
+                                                                Foreground="DarkRed"
+                                                                Width="15"
+                                                                Height="15"
+                                                                Kind="EyeRemove"/>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            <StackPanel Grid.Row="6" Orientation="Horizontal" Margin="0 15 0 0" HorizontalAlignment="Right">
+                <Button 
+                    IsDefault="True"
+                    Margin="5 0 0 0"
+                    IsEnabled="{Binding IsSaveData}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding SaveCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu dữ liệu"/>
+                    </StackPanel>
+                </Button>
+                <Button
+                    IsCancel="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    CommandParameter="{Binding ElementName=AdjustedEstimateImportJsonView}"
+                    Command="{Binding CloseCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Đóng"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+
+</Window>

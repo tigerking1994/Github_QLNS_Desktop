@@ -1,0 +1,307 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Budget.DemandCheck.LevelBudget.LevelBuggetDetailChild"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+        xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+        xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        Name="LevelBuggetChildWindow"
+        ext:CloseWindowBehaviour.Command="{Binding ClosingWindowCommand}"
+        Style="{StaticResource MaterialDesignWindow}" 
+        mc:Ignorable="d"
+        Title="Quản lý ngân sách - Cục tài chính"
+        Height="768" Width="1280"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
+    <Window.InputBindings>
+        <KeyBinding Key="F4" Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=dgdDataLevelBuggetDetailChildDonVi, Path=.}" />
+        <KeyBinding Key="F10" Command="{Binding SaveDataCommand}" />
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}" />
+    </Window.InputBindings>
+    <materialDesign:DialogHost
+        Identifier="LevelBuggetDetailChildDialog"
+        DialogTheme="Inherit">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel
+                Grid.Row="0"
+                Orientation="Vertical">
+                <DockPanel>
+                    <materialDesign:PackIcon Kind="FileDocumentBoxMultiple" Style="{StaticResource DialogScreenIconStyle}"/>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock Text="PHÂN CẤP NGÂN SÁCH" FontWeight="Bold"></TextBlock>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                            <Binding Path="Id_DonVi" />
+                                            <Binding Path="TenDonVi" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </DockPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Visibility="{Binding Model.IsLocked, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                    <Button
+                        Style="{StaticResource SearchBarBtnStyle}"
+                        ext:Permission.Identifier="BUDGET_LEVEL_DETAIL_CHILD_DELETE"
+                        IsEnabled="{Binding IsEnableButtonDelete}"
+                        Command="{Binding DeleteCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Delete" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xóa (F4)"></TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" ext:Permission.Identifier="BUDGET_LEVEL_DETAIL_CHILD_DELETE_ALL"/>
+                    <Button 
+                        ext:Permission.Identifier="BUDGET_LEVEL_DETAIL_CHILD_BTN_DELETE_ALL"
+                        Style="{StaticResource SearchBarBtnStyle}" 
+                        IsEnabled="{Binding IsDeleteAll}"
+                        Command="{Binding DeleteAllCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="DeleteForever" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xóa tất cả"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" ext:Permission.Identifier="BUDGET_LEVEL_DETAIL_CHILD_SAVE"/>
+                <Button
+                    Style="{StaticResource SearchBarBtnStyle}"
+                    ext:Permission.Identifier="BUDGET_LEVEL_DETAIL_CHILD_SAVE"
+                    IsEnabled="{Binding IsSaveData}"
+                    Command="{Binding SaveDataCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu dữ liệu (F10)"></TextBlock>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button Style="{StaticResource SearchBarBtnStyle}" Command="{Binding RefreshCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Refresh" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="(F5)"></TextBlock>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button x:Name="btnShowCol" Style="{StaticResource SearchBarBtnStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Ẩn/hiện cột" />
+                        <materialDesign:PopupBox
+                            Margin="-10 0 0 0"
+                            Name="pbDynamicColumn"
+                            HorizontalAlignment="Right"
+                            StaysOpen="True">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:PackIcon Kind="MenuDown"/>
+                            </materialDesign:PopupBox.ToggleContent>
+                        </materialDesign:PopupBox>
+                    </StackPanel>
+                </Button>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <ComboBox
+                    Name="cbFrozenColumn"
+                    materialDesign:HintAssist.Hint="Cố định cột"
+                    DisplayMemberPath="DisplayItem"
+                    SelectedValuePath="ValueItem"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                <Button Style="{StaticResource SearchBarBtnStyle}" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=LevelBuggetChildWindow}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Close" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <Grid Grid.Row="2" Margin="0 5 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <component:ExpandedDataGrid
+                    x:Name="dgdDataLevelBuggetDetailChildDonVi"
+                    Grid.Row="0"
+                    FrozenColumnCount="5"
+                    VerticalAlignment="Stretch"
+                    AutoGenerateColumns="False"
+                    CanUserResizeColumns="True"
+                    CanUserReorderColumns="False"
+                    BorderThickness="1"
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Auto"
+                    CanUserAddRows="False"
+                    CanUserDeleteRows="False"
+                    GridLinesVisibility="All"
+                    ext:DataGridBehavior.LastColumnFill="True"
+                    ScrollViewer.ScrollChanged="dgdData_ScrollChanged"
+                    ColumnInfo="{Binding Columns}"
+                    Style="{StaticResource MaterialDesignDataGrid}"
+                    ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                    ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                    CellStyle="{StaticResource DataGridCellDetail}"
+                    RowStyle="{StaticResource DataGridRowDetail}"
+                    wpf:DataGridAssist.CornerRadius="0 0 4 4"
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                    ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid.Resources>
+                        <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            x:Name="LNS"
+                            Header="LNS"
+                            Binding="{Binding LNS}"
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}">
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            x:Name="L"
+                            Header="L"
+                            Binding="{Binding L}"
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <DataGridTextColumn
+                            x:Name="K"
+                            Header="K"
+                            Binding="{Binding K}"
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <DataGridTextColumn
+                            x:Name="M"
+                            Header="M"
+                            Binding="{Binding M}"
+                            IsReadOnly="True"
+                            Visibility="{Binding Data.ColumnDisplay.ColumnM, Source={StaticResource DataContextProxy}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <DataGridTextColumn
+                            x:Name="TM"
+                            Header="TM"
+                            Binding="{Binding TM}"
+                            IsReadOnly="True"
+                            Visibility="{Binding Data.ColumnDisplay.ColumnTM, Source={StaticResource DataContextProxy}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <DataGridTextColumn
+                            x:Name="TTM"
+                            Header="TTM"
+                            Binding="{Binding TTM}"
+                            IsReadOnly="True"
+                            Visibility="{Binding Data.ColumnDisplay.ColumnTTM, Source={StaticResource DataContextProxy}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <DataGridTextColumn
+                            x:Name="NG"
+                            Header="NG"
+                            Binding="{Binding NG}"
+                            IsReadOnly="True"
+                            Visibility="{Binding Data.ColumnDisplay.ColumnNG, Source={StaticResource DataContextProxy}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <DataGridTextColumn
+                            x:Name="TNG"
+                            Header="TNG"
+                            Binding="{Binding TNG}"
+                            IsReadOnly="True"
+                            Visibility="{Binding Data.ColumnDisplay.ColumnTNG, Source={StaticResource DataContextProxy}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <DataGridTextColumn
+                            x:Name="TNG1"
+                            Header="TNG1"
+                            Binding="{Binding TNG1}"
+                            IsReadOnly="True"
+                            Visibility="{Binding Data.ColumnDisplay.ColumnTNG1, Source={StaticResource DataContextProxy}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <DataGridTextColumn
+                            x:Name="TNG2"
+                            Header="TNG2"
+                            Binding="{Binding TNG2}"
+                            IsReadOnly="True"
+                            Visibility="{Binding Data.ColumnDisplay.ColumnTNG2, Source={StaticResource DataContextProxy}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <DataGridTextColumn
+                            x:Name="TNG3"
+                            Header="TNG3"
+                            Binding="{Binding TNG3}"
+                            IsReadOnly="True"
+                            Visibility="{Binding Data.ColumnDisplay.ColumnTNG3, Source={StaticResource DataContextProxy}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <DataGridTextColumn
+                            x:Name="MoTa"
+                            Header="Mô tả"
+                            Binding="{Binding MoTa}"
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <DataGridTextColumn
+                            x:Name="DonVi"
+                            Header="Đơn vị"
+                            Binding="{Binding TenDonVi}"
+                            IsReadOnly="True"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                        <component:DataGridTextColumn
+                            x:Name="TuChi"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding PhanCap,UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                            Header="Tự chi"
+                            IsReadOnly="False">
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn
+                            x:Name="HienVat"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding HienVat,UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                            Header="Hiện vật"
+                            IsReadOnly="False">
+                        </component:DataGridTextColumn>
+                        <DataGridTextColumn
+                            x:Name="GhiChu"
+                            Header="Ghi chú"
+                            Binding="{Binding GhiChu}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"/>
+                    </DataGrid.Columns>
+                </component:ExpandedDataGrid>
+                <ScrollViewer Grid.Row="1" x:Name="scrollFooter" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+                    <StackPanel Orientation="Horizontal">
+                        <Grid Width="{Binding ElementName=LNS, Path=ActualWidth}" Visibility="{Binding ElementName=LNS, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=L, Path=ActualWidth}" Visibility="{Binding ElementName=L, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=K, Path=ActualWidth}" Visibility="{Binding ElementName=K, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=M, Path=ActualWidth}" Visibility="{Binding ElementName=M, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=TM, Path=ActualWidth}" Visibility="{Binding ElementName=TM, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=TTM, Path=ActualWidth}" Visibility="{Binding ElementName=TTM, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=NG, Path=ActualWidth}" Visibility="{Binding ElementName=NG, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=TNG, Path=ActualWidth}" Visibility="{Binding ElementName=TNG, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=TNG1, Path=ActualWidth}" Visibility="{Binding ElementName=TNG1, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=TNG2, Path=ActualWidth}" Visibility="{Binding ElementName=TNG2, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=TNG3, Path=ActualWidth}" Visibility="{Binding ElementName=TNG3, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=MoTa, Path=ActualWidth}" Visibility="{Binding ElementName=MoTa, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=DonVi, Path=ActualWidth}" Visibility="{Binding ElementName=DonVi, Path=Visibility}"></Grid>
+                        <Grid Width="{Binding ElementName=TuChi,Path=ActualWidth}" Visibility="{Binding ElementName=TuChi, Path=Visibility}">
+                            <TextBox Text="{Binding TotalPhanCap, StringFormat={}{0:N0}}" Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=HienVat,Path=ActualWidth}" Visibility="{Binding ElementName=HienVat, Path=Visibility}">
+                            <TextBox Text="{Binding TotalHienVat, StringFormat={}{0:N0}}" Style="{StaticResource TextBoxTotalCell}"></TextBox>
+                        </Grid>
+                        <Grid Width="{Binding ElementName=GhiChu, Path=ActualWidth}" Visibility="{Binding ElementName=GhiChu, Path=Visibility}"></Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

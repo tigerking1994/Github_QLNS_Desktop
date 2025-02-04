@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  
+  <Fragment>
+	  <!--
+    <Binary Id="SetupDatabaseBinary" SourceFile="$(var.SetupDatabase.TargetDir)$(var.SetupDatabase.TargetName).CA.dll"/>
+    <CustomAction Id="SetupDatabaseCustomAction" BinaryKey="SetupDatabaseBinary" DllEntry="SetupDatabase" Execute="immediate" Return="check"/>
+	-->
+  </Fragment>
+  
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+		<Directory Id="DesktopFolder" Name="Desktop">
+			<Component Id="ApplicationShortcut" Guid="*">
+				<Shortcut Id="ApplicationShortcut"
+						  Name="!(loc.ProductName_$(var.Platform))"
+						  Description="Opens the program."
+						  Directory="DesktopFolder"
+						  Target="[INSTALLFOLDER]VTS.QLNS.CTC.App.exe"
+						  WorkingDirectory="INSTALLFOLDER"/>
+				<RegistryValue Root="HKCU" Key="SOFTWARE\DESKTOP\$(loc.ProductNameFolder)" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+				<RemoveFolder Id="RemoveShortcutMenu" Directory="DesktopFolder" On="uninstall" />
+			</Component>
+		</Directory>
+      <!-- Start menu -->
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="InstallProgramMenuFolder" Name="!(loc.ProductNameFolder)" />
+      </Directory>
+      
+      <?if $(var.Platform)=x64 ?>
+      
+        <!-- 64 bit -->
+		<!--
+        <Directory Id="ProgramFiles64Folder">
+          <Directory Id="INSTALLFOLDER" Name="!(loc.ProductNameFolder)" />
+        </Directory>
+		-->
+		<Directory Id="INSTALLFOLDER" Name="!(loc.ProductNameFolder)" />
+      <?else?>
+
+        <!-- 32 bit -->
+		<!--
+        <Directory Id="ProgramFilesFolder">
+          <Directory Id="INSTALLFOLDER" Name="!(loc.ProductNameFolder)" />
+        </Directory>
+		-->
+		<Directory Id="INSTALLFOLDER" Name="!(loc.ProductNameFolder)" />
+      <?endif?>
+    </Directory>
+  </Fragment>
+</Wix>

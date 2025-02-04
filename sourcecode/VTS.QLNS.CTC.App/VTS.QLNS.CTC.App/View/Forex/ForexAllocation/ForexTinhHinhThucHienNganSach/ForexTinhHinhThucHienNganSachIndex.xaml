@@ -1,0 +1,1319 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Forex.ForexAllocation.ForexTinhHinhThucHienNganSach.ForexTinhHinhThucHienNganSachIndex"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Forex.ForexAllocation.ForexTinhHinhThucHienNganSach"
+            mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper" 
+             xmlns:converters="clr-namespace:VTS.QLNS.CTC.App.Converters"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:custom="clr-namespace:VTS.QLNS.CTC.Custom;assembly=VTS.QLNS.CTC.Custom"
+             xmlns:utility="clr-namespace:VTS.QLNS.CTC.Utility;assembly=VTS.QLNS.CTC.Utility"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.InputBindings>
+        <KeyBinding Key="F3" Command="{Binding AddCommand}" />
+        <KeyBinding Key="F4" Command="{Binding DeleteCommand}" />
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}" />
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <materialDesign:PackIcon Kind="FormatListText" Height="32" Width="32" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold" Text="{Binding Name}"></TextBlock>
+                <TextBlock Text="{Binding Description}"></TextBlock>
+                <Separator Background="{DynamicResource MaterialDesignDivider}" Margin="0 5 0 0"/>
+            </StackPanel>
+        </DockPanel>
+        <ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <StackPanel Grid.Row="1" Margin="0 5 0 0">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <Setter Property="Width" Value="150"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+                    <Button Style="{StaticResource SearchBarBtnStyle}" ToolTip="F5 (Refresh)" Command="{Binding RefreshCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="(F5)"/>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button Style="{StaticResource SearchBarBtnStyle}" ToolTip="In báo cáo" Command="{Binding PrintReportCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Printer" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="In báo cáo"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button x:Name="btnShowColSelfPay" Style="{StaticResource SearchBarBtnStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Ẩn/hiện cột" />
+                            <materialDesign:PopupBox
+                                    Name="pbDynamicColumn"
+                                    Margin="-10 0 0 0"
+                                    HorizontalAlignment="Right"
+                                    StaysOpen="True">
+                                <materialDesign:PopupBox.Resources>
+                                    <Style TargetType="ScrollViewer">
+                                        <Setter Property="Height" Value="400" />
+                                    </Style>
+                                </materialDesign:PopupBox.Resources>
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <ScrollViewer></ScrollViewer>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <ComboBox
+                        Name="cbFrozenColumn"
+                        materialDesign:HintAssist.Hint="Cố định cột"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        DisplayMemberPath="DisplayItem"
+                        SelectedValuePath="ValueItem"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                </StackPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}" />
+                <StackPanel Orientation="Horizontal">
+                    <Grid Width="{Binding ElementName=STT, Path=ActualWidth}"></Grid>
+                    <Grid Width="{Binding ElementName=iQuy, Path=ActualWidth}">
+                        <custom:AutoCompleteComboBox
+                            Visibility="{Binding IsChecked, ElementName=RbTheoQuyIndex, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Margin="0 0 5 0"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            TextSearch.TextPath="DisplayItem"
+                            materialDesign:HintAssist.Hint="Tất cả các quý"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            SelectedItem="{Binding SelectedQuy }"
+                            ItemsSource="{Binding ItemsQuy}" 
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                    </Grid>
+                    <Grid Width="{Binding ElementName=iNam, Path=ActualWidth}">
+                        <custom:AutoCompleteComboBox
+                            Visibility="{Binding IsChecked, ElementName=RbTheoQuyIndex, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Margin="0 0 5 0"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            TextSearch.TextPath="DisplayItem"
+                            materialDesign:HintAssist.Hint="Các năm"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            SelectedItem="{Binding SelectedNam }"
+                            ItemsSource="{Binding ItemsNam}" 
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                    </Grid>
+                    <Grid Width="{Binding ElementName=iNam, Path=ActualWidth}">
+                        <custom:AutoCompleteComboBox
+                            Visibility="{Binding IsChecked, ElementName=RbTheoGiaiDoanIndex, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Margin="0 0 5 0"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            TextSearch.TextPath="DisplayItem"
+                            materialDesign:HintAssist.Hint="Từ năm"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            SelectedItem="{Binding SelectedTuNam }"
+                            ItemsSource="{Binding ItemsTuNam}" 
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                    </Grid>
+                    <Grid Width="{Binding ElementName=iNam, Path=ActualWidth}">
+                        <custom:AutoCompleteComboBox
+                            Visibility="{Binding IsChecked, ElementName=RbTheoGiaiDoanIndex, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Margin="0 0 5 0"
+                            DisplayMemberPath="DisplayItem"
+                            SelectedValuePath="ValueItem"
+                            TextSearch.TextPath="DisplayItem"
+                            materialDesign:HintAssist.Hint="Đến năm"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            SelectedItem="{Binding SelectedDenNam }"
+                            ItemsSource="{Binding ItemsDenNam}" 
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                    </Grid>
+                    <Grid Width="{Binding ElementName=DonVi, Path=ActualWidth}">
+                        <custom:AutoCompleteComboBox
+                            Margin="0 0 5 0"
+                            IsEditable="True"
+                            DisplayMemberPath="TenDonViDisplay"
+                            SelectedValuePath="TenDonViDisplay"
+                            TextSearch.TextPath="TenDonViDisplay"
+                            materialDesign:HintAssist.Hint="Đơn vị"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            SelectedItem="{Binding SelectedDonVi}"
+                            ItemsSource="{Binding ItemsDonVi}" 
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                    </Grid>
+                    <Button Style="{StaticResource SearchBarBtnStyle}" Command="{Binding SearchCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Search" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tìm kiếm"/>
+                        </StackPanel>
+                    </Button>
+                    <Button 
+                        Style="{StaticResource SearchBarBtnStyle}"
+                        ToolTip="Filter"
+                        Command="{Binding RemoveFilterCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FilterRemoveOutline" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <StackPanel Margin="0 8 0 0" Orientation="Horizontal">
+                    <RadioButton
+                    x:Name="RbTheoGiaiDoanIndex"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    GroupName="TabIndex"
+                    Command="{Binding IndexCommand}"
+                    IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static utility:ImportTabIndex.Data}}"
+                    Content="Theo giai đoạn" />
+                    <RadioButton
+                    x:Name="RbTheoQuyIndex"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    GroupName="TabIndex"
+                    Command="{Binding IndexCommand}"
+                    IsChecked="{Binding TabIndex, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static utility:ImportTabIndex.MLNS}}"
+                    Content="Theo quý" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <component:ExpandedDataGrid
+            Visibility="{Binding IsChecked, ElementName=RbTheoQuyIndex, Converter={StaticResource BooleanToVisibilityConverter}}"
+            x:Name="dgdNHKeHoachLuaChonNhaThauIndex"
+            Grid.Row="2"
+            IsReadOnly="True"
+            BorderThickness="1"
+            CanUserAddRows="False"
+            CanUserResizeColumns="True"
+            HorizontalScrollBarVisibility="Auto"
+            ScrollViewer.VerticalScrollBarVisibility="Visible"
+            IsSynchronizedWithCurrentItem="True"
+            FrozenColumnCount="1"
+            GridLinesVisibility="All"
+            RowStyle="{StaticResource DataGridRowIndex}"
+            Style="{StaticResource MaterialDesignDataGrid}"
+            AutoGenerateColumns="False"
+            ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+            ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+            ScrollViewer.CanContentScroll="True"
+            ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+            <DataGrid.Resources>
+                <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}"/>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                    <DataGridTextColumn
+                                        x:Name="depth"
+                                        Header="STT"
+                                        Width="60"
+                                        Binding="{Binding depth}"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                        ElementStyle="{StaticResource DataGridTextColumnCenterStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                        IsReadOnly="True"/>
+                    <DataGridTextColumn
+                                        x:Name="sNoidung"
+                                        Header="Nội dung"
+                                        Width="500"
+                                        Binding="{Binding sTenNoiDungChi}"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                        ElementStyle="{StaticResource DataGridTextColumnLeftStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                        IsReadOnly="True"/>
+                <component:DataGridTextColumn 
+                                            x:Name="fHopDongUSD"
+                                            Binding="{Binding HopDongUSD , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}" 
+                                            Header="Giá trị (USD)" 
+                                            Width="180"
+                                            IsReadOnly="True"
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                    <DataGridColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+
+                                    <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                        <Grid>
+                                            <Grid.Style>
+                                                <Style TargetType="Grid">
+                                                    <Setter Property="Width">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                <Binding ElementName="fHopDongUSD" Path="ActualWidth"/>
+                                                                <Binding ElementName="fHopDongVND" Path="ActualWidth"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Grid.Style>
+                                            <TextBlock HorizontalAlignment="Center" Text="Giá trị hợp đồng mua sắm hoặc dự toán được duyệt"/>
+                                        </Grid>
+                                    </Canvas>
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                    BorderThickness="0 1 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock Name="HeaderGroup" HorizontalAlignment="Center" Text="{Binding}"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridColumn.HeaderTemplate>
+                </component:DataGridTextColumn>
+                <component:DataGridTextColumn 
+                                            x:Name="fHopDongVND"
+                                            Binding="{Binding HopDongVND , StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}" 
+                                            Header="Giá trị (VND)"
+                                            Width="180"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderTemplate="{StaticResource RightHeader}"/>
+                <component:DataGridTextColumn 
+                                            x:Name="TTCPTongSo"
+                                            Binding="{Binding NCVTTCP , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Tổng số (USD)" 
+                                            Width="180"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                    <DataGridColumn.HeaderTemplate >
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                    
+                                    <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                        <Grid>
+                                            <Grid.Style>
+                                                <Style TargetType="Grid">
+                                                    <Setter Property="Width">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                <Binding ElementName="TTCPTongSo" Path="ActualWidth"/>
+                                                                <Binding ElementName="TTCPGiaiDoan" Path="ActualWidth"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Grid.Style>
+                                            <TextBlock HorizontalAlignment="Center" Text="Kế hoạch sử dụng Quỹ dự trữ ngoại hối (NSĐB) được Thủ tướng Chính phủ phê duyệt (QĐ số.....) (*)"/>
+                                        </Grid>
+                                    </Canvas>
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                    BorderThickness="0 1 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock Name="HeaderGroup" HorizontalAlignment="Center" Text="{Binding}"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridColumn.HeaderTemplate>
+                </component:DataGridTextColumn>
+
+                <component:DataGridTextColumn 
+                                            x:Name="TTCPGiaiDoan"
+                                            Binding="{Binding NCVTTCP , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Giai đoạn (USD)"
+                                            Width="180"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            HeaderTemplate="{StaticResource RightHeader}"/>
+
+                <component:DataGridTextColumn 
+                                            x:Name="BQPTongSo"
+                                            Binding="{Binding NhiemVuChi , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Tổng số (USD)" 
+                                            Width="180"
+                                            IsReadOnly="True"
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                    <DataGridColumn.HeaderTemplate >
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+
+                                    <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                        <Grid>
+                                            <Grid.Style>
+                                                <Style TargetType="Grid">
+                                                    <Setter Property="Width">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                <Binding ElementName="BQPTongSo" Path="ActualWidth"/>
+                                                                <Binding ElementName="BQPGiaiDoan" Path="ActualWidth"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Grid.Style>
+                                            <TextBlock HorizontalAlignment="Center" Text="Kế hoạch sử dụng Quỹ dự trữ ngoại hối (NSĐB) được Bộ trưởng BQP phê duyệt (QĐ số......) (*)"/>
+                                        </Grid>
+                                    </Canvas>
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                    BorderThickness="0 1 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock Name="HeaderGroup" HorizontalAlignment="Center" Text="{Binding}"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridColumn.HeaderTemplate>
+                </component:DataGridTextColumn>
+
+                <component:DataGridTextColumn 
+                                            x:Name="BQPGiaiDoan"
+                                            Binding="{Binding NhiemVuChi , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Giai đoạn (USD)"
+                                            Width="180"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            HeaderTemplate="{StaticResource RightHeader}"/>
+
+                <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDuocCapTongSoUSD"
+                                            Binding="{Binding TongKinhPhiUSD , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Tổng số (USD)" 
+                                            Width="220"
+                                            IsReadOnly="True"
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                    <DataGridColumn.HeaderTemplate >
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+
+                                    <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                        <Grid>
+                                            <Grid.Style>
+                                                <Style TargetType="Grid">
+                                                    <Setter Property="Width">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                <Binding ElementName="KinhPhiDuocCapTongSoUSD" Path="ActualWidth"/>
+                                                                <Binding ElementName="KinhPhiDuocCapTongSoVND" Path="ActualWidth"/>
+                                                                <Binding ElementName="KinhPhiDuocCapCacNamTruocUSD" Path="ActualWidth"/>
+                                                                <Binding ElementName="KinhPhiDuocCapCacNamTruocVND" Path="ActualWidth"/>
+                                                                <Binding ElementName="KinhPhiDuocCapTheoQuyUSD" Path="ActualWidth"/>
+                                                                <Binding ElementName="KinhPhiDuocCapTheoQuyVND" Path="ActualWidth"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Grid.Style>
+                                            <TextBlock HorizontalAlignment="Center" Text="Kinh phí được cấp"/>
+                                        </Grid>
+                                    </Canvas>
+                                </Border>
+                                <Border
+                                    Grid.Row="1"
+                                    Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                    BorderThickness="0 1 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <TextBlock Name="HeaderGroup" HorizontalAlignment="Center" Text="{Binding}"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridColumn.HeaderTemplate>
+                </component:DataGridTextColumn>
+                <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDuocCapTongSoVND"
+                                            Binding="{Binding TongKinhPhiVND , StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Tổng số (VND)"
+                                            Width="220"
+                                            IsReadOnly="True"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            HeaderTemplate="{StaticResource CenterHeader}"/>
+                <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDuocCapCacNamTruocUSD"
+                                            Binding="{Binding KinhPhiUSD , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Header="Các năm trước (USD)"
+                                            Width="220"
+                                            IsReadOnly="True"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            HeaderTemplate="{StaticResource CenterHeader}"/>
+                <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDuocCapCacNamTruocVND"
+                                            Binding="{Binding KinhPhiVND , StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Header="Các năm trước (VND)"
+                                            Width="220"
+                                            IsReadOnly="True"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            HeaderTemplate="{StaticResource CenterHeader}"/>
+                <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDuocCapTheoQuyUSD"
+                                            Binding="{Binding KinhPhiToYUSD , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                                            Header="Từ đầu năm đến quý này (USD)"
+                                            Width="220"
+                                            IsReadOnly="True"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            HeaderTemplate="{StaticResource CenterHeader}"/>
+                <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDuocCapTheoQuyVND"
+                                            Binding="{Binding KinhPhiToYVND , StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Từ đầu năm đến quý này (VND)"
+                                            Width="220"
+                                            IsReadOnly="True"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            HeaderTemplate="{StaticResource RightHeader}"/>
+
+            <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDaGiaiNganTongSoUSD"
+                                            Binding="{Binding TongKinhPhiDaChiUSD , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Tổng số (USD)" 
+                                            Width="220"
+                                            IsReadOnly="True"
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                <DataGridColumn.HeaderTemplate >
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border
+                                    Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+
+                                <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                    <Grid>
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Width">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                            <Binding ElementName="KinhPhiDaGiaiNganTongSoUSD" Path="ActualWidth"/>
+                                                            <Binding ElementName="KinhPhiDaGiaiNganTongSoVND" Path="ActualWidth"/>
+                                                            <Binding ElementName="KinhPhiDaGiaiNganCacNamTruocUSD" Path="ActualWidth"/>
+                                                            <Binding ElementName="KinhPhiDaGiaiNganCacNamTruocVND" Path="ActualWidth"/>
+                                                            <Binding ElementName="KinhPhiDaGiaiNganTheoQuyUSD" Path="ActualWidth"/>
+                                                            <Binding ElementName="KinhPhiDaGiaiNganTheoQuyVND" Path="ActualWidth"/>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Grid.Style>
+                                        <TextBlock HorizontalAlignment="Center" Text="Kinh phí đã giải ngân (thanh toán, tạm ứng)"/>
+                                    </Grid>
+                                </Canvas>
+                            </Border>
+                            <Border
+                                    Grid.Row="1"
+                                    Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                    BorderThickness="0 1 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                <TextBlock Name="HeaderGroup" HorizontalAlignment="Center" Text="{Binding}"/>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </DataGridColumn.HeaderTemplate>
+            </component:DataGridTextColumn>
+            <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDaGiaiNganTongSoVND"
+                                            Binding="{Binding TongKinhPhiDaChiVND , StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}" 
+                                            Header="Tổng số (VND)"
+                                            Width="220"
+                                            IsReadOnly="True"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderTemplate="{StaticResource CenterHeader}"/>
+            <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDaGiaiNganCacNamTruocUSD"
+                                            Binding="{Binding KinhPhiDaChiUSD , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Các năm trước (USD)"
+                                            Width="220"
+                                            IsReadOnly="True"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                
+                                            HeaderTemplate="{StaticResource CenterHeader}"/>
+            <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDaGiaiNganCacNamTruocVND"
+                                            Binding="{Binding KinhPhiDaChiVND , StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Các năm trước (VND)"
+                                            Width="220"
+                                            IsReadOnly="True"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderTemplate="{StaticResource CenterHeader}"/>
+            <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDaGiaiNganTheoQuyUSD"
+                                            Binding="{Binding KinhPhiDaChiToYUSD , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Từ đầu năm đến quý này (USD)"
+                                            Width="220"
+                                            IsReadOnly="True"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderTemplate="{StaticResource CenterHeader}"/>
+            <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDaGiaiNganTheoQuyVND"
+                                            Binding="{Binding KinhPhiDaChiToYVND , StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Từ đầu năm đến quý này (VND)"
+                                            Width="220"
+                                            IsReadOnly="True"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            HeaderTemplate="{StaticResource RightHeader}"/>
+
+            <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDuocCapChuaChiUSD"
+                                            Binding="{Binding KinhPhiDuocCapChuaChiUSD , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Giá trị (USD)" 
+                                            Width="180"
+                                            IsReadOnly="True"
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                <DataGridColumn.HeaderTemplate >
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border
+                                    Padding="{Binding RelativeSource={RelativeSource Self}, Path=(materialDesign:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+
+                                <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                    <Grid>
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Width">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                            <Binding ElementName="KinhPhiDuocCapChuaChiUSD" Path="ActualWidth"/>
+                                                            <Binding ElementName="KinhPhiDuocCapChuaChiVND" Path="ActualWidth"/>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Grid.Style>
+                                        <TextBlock HorizontalAlignment="Center" Text="Kinh phí được cấp chưa chi đến quý này"/>
+                                    </Grid>
+                                </Canvas>
+                            </Border>
+                            <Border
+                                    Grid.Row="1"
+                                    Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                    BorderThickness="0 1 1 0"
+                                    BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                <TextBlock Name="HeaderGroup" HorizontalAlignment="Center" Text="{Binding}"/>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </DataGridColumn.HeaderTemplate>
+            </component:DataGridTextColumn>
+            <component:DataGridTextColumn 
+                                            x:Name="KinhPhiDuocCapChuaChiVND"
+                                            Binding="{Binding KinhPhiDuocCapChuaChiVND , StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Giá trị (VND)"
+                                            Width="180"
+                                            IsReadOnly="True"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}" 
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                                            ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                            HeaderTemplate="{StaticResource RightHeader}"/>
+            <DataGridTextColumn
+                                        x:Name="KeHoachSuDungQuy"
+                                        Header="Kế hoạch sử dụng Quỹ dự trữ ngoại hối (NSĐB) được BQP giao chưa giải ngân đến quý này (*) (USD)"
+                                        Width="220"
+                                        Binding="{Binding QuyGiaiNganTheoQuy , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingStyle}"
+                                        IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </component:ExpandedDataGrid>
+        <component:ExpandedDataGrid
+            Visibility="{Binding IsChecked, ElementName=RbTheoGiaiDoanIndex, Converter={StaticResource BooleanToVisibilityConverter}}"
+            x:Name="dgdRbTheoGiaiDoanIndex"
+            Grid.Row="2"
+            VerticalAlignment="Top"
+            BorderThickness="1"
+            AutoGenerateColumns="False"
+            CanUserResizeColumns="True"
+            HorizontalScrollBarVisibility="Auto"
+            FrozenColumnCount="1"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            GridLinesVisibility="All"
+            EnableHeaderDataGrid="True"
+            ColumnInfo="{Binding Columns}"
+            ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+            ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+            Style="{StaticResource MultilHeaderDataGrid}"
+            RowStyle="{StaticResource DataGridRowDetail}"
+            CellStyle="{StaticResource DataGridCellDetail}"
+            ItemsSource="{Binding Items}"
+            SelectedItem="{Binding SelectedItem}"
+            ext:DataGridBehavior.DisplayRowNumber="True">
+            <DataGrid.Resources>
+                <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}"/>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <component:DataGridTextColumn 
+                                        Binding="{Binding depth }" 
+                                        ColumnSpan="1"
+                                        Header="STT"
+                                        Width="60"
+                                        IsReadOnly="True"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailCenterStyle}"
+                                        HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                        Binding="{Binding sTenNoiDungChi }" 
+                                        ColumnSpan="1"
+                                        Header="Nội dung "
+                                        Width="500"
+                                        IsReadOnly="True"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                        Binding="{Binding sChuDauTu }" 
+                                        ColumnSpan="1"
+                                        Header="Đơn vị chủ hàng, chủ đầu tư"
+                                        Width="500"
+                                        IsReadOnly="True"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                        Binding="{Binding HopDongUSD , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}" 
+                                        ColumnSpan="2"
+                                        Header="Giá trị hợp đồng (USD)" 
+                                        ColumnSpanTitle="Giá trị hợp đồng mua sắm hoặc dự toán được duyệt"
+                                        Width="180"
+                                        IsReadOnly="True"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                        Binding="{Binding HopDongVND , StringFormat={}{0:N0},UpdateSourceTrigger=LostFocus, Converter={StaticResource NumberToStringEmptyConverter}}" 
+                                        Header="Giá trị hợp đồng (VND)"
+                                        ColumnSpan="0"
+                                        Width="180"
+                                        IsReadOnly="True"
+                                        StringFormat="{}{0:N0}"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+                <component:DataGridTextColumn 
+                                            Binding="{Binding NCVTTCP , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}" 
+                                            ColumnSpan="{Binding Data.CountGiaiDoanKeHoach, Source={StaticResource DataContextProxy}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                            Header="Tổng số TTCP (USD)" 
+                                            ColumnSpanTitle="Kế hoạch sử dụng Quỹ dự trữ ngoại hối (NSĐB) được Thủ tướng Chính phủ phê duyệt (QĐ số.....) (*)"
+                                            MinWidth="180" MaxWidth="180"
+                                            IsReadOnly="True"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKeHoachTTCPUsd1 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan1, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan1, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKeHoachTTCPUsd2 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan2, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan2, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKeHoachTTCPUsd3 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan3, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan3, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKeHoachTTCPUsd4 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan4, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan4, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKeHoachTTCPUsd5 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan5, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan5, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKeHoachTTCPUsd6 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan6, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan6, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKeHoachTTCPUsd7 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan7, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan7, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKeHoachTTCPUsd8 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan8, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan8, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKeHoachTTCPUsd9 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan9, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan9, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKeHoachTTCPUsd10 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan10, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan10, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <!--Kinh phí được cấp giai doan-->
+
+                <component:DataGridTextColumn 
+                                            Binding="{Binding fLuyKeKinhPhiDuocCap_USD , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}" 
+                                            ColumnSpan="{Binding Data.CountGiaiDoanKinhPhi, Source={StaticResource DataContextProxy}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                            Header="Tổng số kinh phí được cấp (USD)" 
+                                            ColumnSpanTitle="Kinh phí được cấp"
+                                            MinWidth="180" MaxWidth="180"
+                                            IsReadOnly="True"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding fLuyKeKinhPhiDuocCap_VND , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Tổng số kinh phí được cấp (VND)"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongUsd1 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan1, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan1, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongVnd1 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND1, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan1, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongUsd2 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan2, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan2, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongVnd2 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND2, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan2, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongUsd3 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan3, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan3, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongVnd3 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND3, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan3, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongUsd4 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan4, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan4, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongVnd4 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND4, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan4, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongUsd5 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan5, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan5, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongVnd5 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND5, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan5, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongUsd6 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan6, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan6, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongVnd6 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND6, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan6, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongUsd7 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan7, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan7, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongVnd7 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND7, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan7, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongUsd8 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan8, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan8, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongVnd8 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND8, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan8, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongUsd9 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan9, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan9, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongVnd9 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND9, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan9, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongUsd10 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan10, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan10, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FKinhPhiDuocCapTongVnd10 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND10, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan10, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+
+                <!--Kinh phí đã giải ngân (thanh toán, tạm ứng) giai doan-->
+
+                <component:DataGridTextColumn 
+                                            Binding="{Binding fDeNghiQTNamNay_USD , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}" 
+                                            ColumnSpan="{Binding Data.CountGiaiDoanQuyetToan, Source={StaticResource DataContextProxy}, Converter={StaticResource NumberIntToStringEmptyConverter}}"
+                                            Header="Tổng số kinh phí đã giải ngân (USD)" 
+                                            ColumnSpanTitle="Kinh phí đã giải ngân (thanh toán, tạm ứng)"
+                                            MinWidth="180" MaxWidth="180"
+                                            IsReadOnly="True"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding fDeNghiQTNamNay_VND , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="Tổng số kinh phí đã giải ngân (VND)"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongUsd1  , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan1, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan1, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongVnd1 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND1, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan1, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongUsd2 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan2, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan2, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongVnd2 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND2, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan2, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongUsd3 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan3, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan3, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongVnd3 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND3, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan3, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongUsd4 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan4, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan4, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongVnd4 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND4, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan4, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongUsd5 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan5, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan5, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongVnd5 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND5, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan5, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongUsd6 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan6, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan6, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongVnd6 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND6, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan6, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongUsd7 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan7, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan7, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongVnd7 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND7, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan7, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongUsd8 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan8, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan8, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongVnd8 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND8, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan8, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongUsd9 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan9, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan9, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongVnd9 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND9, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            Visibility="{Binding Data.VGiaiDoan9, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongUsd10 , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoan10, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan10, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                            Binding="{Binding FQuyetToanDuocDuyetTongVnd10 , UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                            Header="{Binding Data.GiaiDoanVND10, Source={StaticResource DataContextProxy}}"
+                                            MinWidth="180" MaxWidth="180"
+                                            ColumnSpan="0"
+                                            IsReadOnly="True"
+                                            StringFormat="{}{0:N0}"
+                                            Visibility="{Binding Data.VGiaiDoan10, Source={StaticResource DataContextProxy} , Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+
+
+                <component:DataGridTextColumn 
+                                        Binding="{Binding KinhPhiChuaQuyetToanUSD , StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                        ColumnSpan="2"
+                                        Header="Kinh phí chưa quyết toán(USD) " 
+                                        ColumnSpanTitle="Kinh phí chưa quyết toán"
+                                        MinWidth="180" MaxWidth="180"
+                                        IsReadOnly="True"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                <component:DataGridTextColumn 
+                                        Binding="{Binding KinhPhiChuaQuyetToanUSD , StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                        ColumnSpan="0"
+                                        Header="Kinh phí chưa quyết toán (VND) "
+                                        MinWidth="180" MaxWidth="180"
+                                        IsReadOnly="True"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+                
+                <component:DataGridTextColumn 
+                                        Binding="{Binding KeHoachGiaiNgan , StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"  
+                                        ColumnSpan="1"
+                                        Header="Kế hoạch chưa giải ngân "
+                                        Width="180"
+                                        IsReadOnly="True"
+                                        ElementStyle="{StaticResource DataGridTextColumnDetailStyle}"
+                                        EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}" />
+            </DataGrid.Columns>
+        </component:ExpandedDataGrid>
+    </Grid>
+</UserControl>
+

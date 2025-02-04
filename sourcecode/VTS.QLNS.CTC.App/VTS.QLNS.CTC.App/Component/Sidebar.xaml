@@ -1,0 +1,163 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.Component.Sidebar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Storyboard x:Key="OpenMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grdSidebar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="48"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="220"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grdSidebar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="220"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="48"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnOpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnCloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource CloseMenu}"/>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <Grid x:Name="grdSidebar" Width="220">
+        <Grid.Resources>
+            <CollectionViewSource x:Key="GroupMenu" Source="{Binding Documentation}">
+                <CollectionViewSource.GroupDescriptions>
+                    <PropertyGroupDescription PropertyName="GroupName"/>
+                </CollectionViewSource.GroupDescriptions>
+            </CollectionViewSource>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DockPanel Margin="5 10">
+            <Button
+                Margin="3 0"
+                Padding="0"
+                Width="32"
+                Height="32"
+                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                ToolTip="{Binding Name}">
+                <materialDesign:PackIcon Kind="{Binding IconKind}"></materialDesign:PackIcon>
+            </Button>
+            <StackPanel Orientation="Vertical" Margin="4 0 0 0">
+                <TextBlock FontWeight="Medium" Text="{Binding Name}" ext:TextBlockTransform.CharacterCasing="Upper"></TextBlock>
+                <TextBlock Text="{Binding Description}"></TextBlock>
+            </StackPanel>
+        </DockPanel>
+        <ListBox
+            x:Name="ListBox"
+            Grid.Row="1"
+            Padding="0"
+            IsSynchronizedWithCurrentItem="False"
+            ScrollViewer.VerticalScrollBarVisibility="Hidden"
+            SelectedItem="{Binding DocumentationSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding Source={StaticResource GroupMenu}}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                    <Setter Property="Visibility" Value="{Binding IsAuthorized, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Margin" Value="0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <StackPanel>
+                                            <StackPanel DataContext="{Binding Items}"
+                                                        Visibility="{Binding IsUseExpand, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                                                <TextBlock
+                                                    Margin="16 10 16 8"
+                                                    FontWeight="Medium"
+                                                    Text="{Binding GroupName}"
+                                                    ToolTip="{Binding GroupName}"
+                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                    Visibility="{Binding GroupName, Converter={StaticResource NullableToVisibilityConverter}}"
+                                                    TextWrapping="Wrap"
+                                                    ext:TextBlockTransform.CharacterCasing="Upper"/>
+                                                <ItemsPresenter />
+                                            </StackPanel>
+                                            <Expander IsExpanded="True" ExpandDirection="Down" Padding="0" Margin="0"
+                                                      DataContext="{Binding Items}"
+                                                      Visibility="{Binding IsUseExpand, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <Expander.Header>
+                                                    <TextBlock
+                                                        FontWeight="Medium"
+                                                        FontSize="11"
+                                                        Text="{Binding GroupName}"
+                                                        ToolTip="{Binding GroupName}"
+                                                        Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                        Visibility="{Binding GroupName, Converter={StaticResource NullableToVisibilityConverter}}"
+                                                        TextWrapping="Wrap"
+                                                        ext:TextBlockTransform.CharacterCasing="Upper"/>
+                                                </Expander.Header>
+                                                <ItemsPresenter />
+                                            </Expander>
+                                        </StackPanel>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListBox.GroupStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel ToolTip="{Binding Name}">
+                        <materialDesign:PackIcon
+                            Kind="{Binding IconKind}"
+                            VerticalAlignment="Center"
+                            Width="25"/>
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Border
+            Grid.Row="2"
+            BorderThickness="0 1 0 0"
+            BorderBrush="{DynamicResource MaterialDesignDivider}">
+            <StackPanel>
+                <Button
+                    Name="btnOpenMenu"
+                    Height="37"
+                    Style="{DynamicResource MaterialDesignToolForegroundButton}"
+                    HorizontalContentAlignment="Left"
+                    Visibility="Collapsed"
+                    Panel.ZIndex="0"
+                    Click="btnOpenMenu_Click">
+                    <StackPanel Orientation="Horizontal" Margin="6 4 4 4">
+                        <materialDesign:PackIcon Kind="ArrowRight" Width="20" Height="20"/>
+                    </StackPanel>
+                </Button>
+                <Button Name="btnCloseMenu"
+                    Height="37"
+                    Style="{DynamicResource MaterialDesignToolForegroundButton}"
+                    HorizontalContentAlignment="Left"
+                    Panel.ZIndex="0"
+                    Click="btnCloseMenu_Click">
+                    <StackPanel Orientation="Horizontal" Margin="6 4 4 4">
+                        <materialDesign:PackIcon Kind="ArrowLeft" Width="20" Height="20"/>
+                        <TextBlock Text="Thu gọn" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

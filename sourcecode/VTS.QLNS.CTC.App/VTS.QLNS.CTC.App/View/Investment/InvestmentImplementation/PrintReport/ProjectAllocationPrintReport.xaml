@@ -1,0 +1,265 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Investment.InvestmentImplementation.PrintReport.ProjectAllocationPrintReport"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:localEnum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:converters="clr-namespace:VTS.QLNS.CTC.App.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.InputBindings>
+        <KeyBinding Key="F3" Command="{Binding AddCommand}" />
+        <KeyBinding Key="F4" Command="{Binding DeleteCommand}" />
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}" />
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <materialDesign:PackIcon Kind="FormatListText" Height="32" Width="32" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontWeight="Bold" Text="{Binding Name}"></TextBlock>
+                <TextBlock Text="{Binding Description}"></TextBlock>
+                <Separator Background="{DynamicResource MaterialDesignDivider}" Margin="0 5 0 0"/>
+            </StackPanel>
+        </DockPanel>
+
+        <StackPanel 
+            Grid.Row="1"
+            Margin="0 5"
+            Orientation="Horizontal"
+            HorizontalAlignment="Left">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                    <Setter Property="Width" Value="150"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Style="{StaticResource SearchBarBtnStyle}" ToolTip="F5 (Refresh)" Command="{Binding RefreshCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Refresh" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="(F5)"/>
+                </StackPanel>
+            </Button>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+            <Button x:Name="btnPrint" Style="{StaticResource SearchBarBtnStyle}" Command="{Binding PrintBrowserCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Printer" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Export</TextBlock>
+                </StackPanel>
+            </Button>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+            <Button x:Name="btnShowCol" Style="{StaticResource SearchBarBtnStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                    <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Ẩn/hiện cột" />
+                    <materialDesign:PopupBox
+                        Margin="-10 0 0 0"
+                        HorizontalAlignment="Right"
+                        Name="pbDynamicColumn"
+                        StaysOpen="True">
+                        <materialDesign:PopupBox.ToggleContent>
+                            <materialDesign:PackIcon Kind="MenuDown"/>
+                        </materialDesign:PopupBox.ToggleContent>
+                    </materialDesign:PopupBox>
+                </StackPanel>
+            </Button>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+            <ComboBox
+                Name="cbFrozenColumn"
+                materialDesign:HintAssist.Hint="Cố định cột"
+                materialDesign:TextFieldAssist.HasClearButton="True"
+                DisplayMemberPath="DisplayItem"
+                SelectedValuePath="ValueItem"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}"/>
+            
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Left"
+            Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}" TargetType="{x:Type ComboBox}">
+                    <Setter Property="Width" Value="150" />
+                </Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+                    <Setter Property="Width" Value="250" />
+                    <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                    <Setter Property="Margin" Value="0 2 10 2" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+            </StackPanel.Resources>
+            <ComboBox
+                materialDesign:HintAssist.Hint="-- Đơn vị --"
+                materialDesign:TextFieldAssist.HasClearButton="True"
+                DisplayMemberPath="DisplayItem"
+                SelectedValuePath="ValueItem"  
+                SelectedItem="{Binding CbxLoaiDonViSelected}"
+                ItemsSource="{Binding DataDonVi}">
+            </ComboBox>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+            <TextBox 
+                materialDesign:HintAssist.Hint="-- Năm thực hiện --" 
+                Text="{Binding YearOfOrigination, Mode=TwoWay}"
+                Style="{StaticResource SearchBarHorizontalTextBoxStyle}"/>
+            <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+            <ComboBox
+              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+              materialDesign:HintAssist.Hint="-- Nguồn ngân sách --"
+              materialDesign:TextFieldAssist.HasClearButton="True"
+              SelectedItem="{Binding CbxNguonVonSelected}"
+              DisplayMemberPath="DisplayItem"
+              SelectedValuePath="ValueItem"
+              ItemsSource="{Binding CbxNguonVon}" />
+            <Button
+                Command="{Binding SearchCommand}"
+                Style="{StaticResource SearchBarBtnStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Search" />
+                    <TextBlock
+                        Padding="8,0,0,0"
+                        Style="{StaticResource SearchBarBtnTextStyle}"
+                        Text="Tìm kiếm" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <Grid 
+            Grid.Row="3"  
+            Margin="0 10 0 0">
+
+            <component:ExpandedDataGrid
+                x:Name="dgdDataProjectInformationPrintReport"
+                IsReadOnly="True"
+                FrozenColumnCount="3"
+                BorderThickness="1"
+                CanUserResizeColumns="True"
+                HorizontalScrollBarVisibility="Auto"
+                CanUserAddRows="False"
+                IsSynchronizedWithCurrentItem="True"
+                GridLinesVisibility="All"
+                AutoGenerateColumns="False"
+                ScrollViewer.CanContentScroll="True"
+                ColumnInfo="{Binding Columns}"
+                ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                Style="{StaticResource MaterialDesignDataGrid}"
+                RowStyle="{StaticResource DataGridRowDetail}"
+                ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SelectedItem, Mode=TwoWay}" >
+                <DataGrid.Resources>
+                    <helper:BindingProxy
+                    x:Key="DataContextProxy"
+                    Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Dự án,công trình - Đơn vị"
+                        Binding="{Binding SDuAnCongTrinh}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Số quyết định"
+                        Binding="{Binding SoQuyetDinhDauTu}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Ngày duyệt"
+                        Binding="{Binding NgayQuyetDinhDauTu, Converter={StaticResource DateTimeToStringConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Tiến độ"
+                        Binding="{Binding TienDo}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn
+                        Header="NSQP"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                        Binding="{Binding TMDT_NSQP, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn
+                        Header="NSNN"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                        Binding="{Binding TMDT_NSNN, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn
+                        Header="Khác"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                        Binding="{Binding TMDT_Khac, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn
+                        Header="Tổng"
+                        ElementStyle="{StaticResource DataGridTextColumnRightStyle}"
+                        Binding="{Binding Tong_TMDT, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Vốn đã bố trí hết năm trước"
+                        Binding="{Binding LuyKeVonNamTruoc, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Chỉ tiêu ngân sách năm"
+                        Binding="{Binding ChiTieuNganSachNam, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Thanh toán"
+                        Binding="{Binding ThanhToan, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Tạm ứng"
+                        Binding="{Binding TamUng, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Thu ứng"
+                        Binding="{Binding ThuUng, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Kế hoạch"
+                        Binding="{Binding KeHoachUngNgoaiChiTieu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Cấp ứng XDCB khác"
+                        Binding="{Binding CapUngNgoaiChiTieu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Thu ứng XDCB khác"
+                        Binding="{Binding ThuUngXDCB, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Số ứng còn phải thu tiếp"
+                        Binding="{Binding SoUngConPhaiThu, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Số chỉ tiêu còn lại chưa cấp"
+                        Binding="{Binding ChiTieuConLaiChuaCap, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn 
+                        ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                        Header="Số vốn còn phải bố trí tiếp"
+                        Binding="{Binding SoVonConBoTriTiep, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}">
+                    </materialDesign:DataGridTextColumn>
+                </DataGrid.Columns>
+            </component:ExpandedDataGrid>
+        </Grid>
+    </Grid>
+</UserControl>

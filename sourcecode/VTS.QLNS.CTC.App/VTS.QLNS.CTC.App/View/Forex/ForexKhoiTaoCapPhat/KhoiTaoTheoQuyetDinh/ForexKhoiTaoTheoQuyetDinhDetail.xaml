@@ -1,0 +1,878 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Forex.ForexKhoiTaoCapPhat.KhoiTaoTheoQuyetDinh.ForexKhoiTaoTheoQuyetDinhDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Forex.ForexKhoiTaoCapPhat.KhoiTaoTheoQuyetDinh"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+        xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+        xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+        xmlns:dc="clr-namespace:VTS.QLNS.CTC.App.ViewModel.Forex.ForexKhoiTaoCapPhat.KhoiTaoTheoQuyetDinh"
+        xmlns:enum="clr-namespace:VTS.QLNS.CTC.Utility.Enum;assembly=VTS.QLNS.CTC.Utility"
+        xmlns:extensions="clr-namespace:VTS.QLNS.CTC.App.Extensions"      
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        mc:Ignorable="d"
+        xmlns:detail="clr-namespace:VTS.QLNS.CTC.App.ViewModel.Forex.ForexKhoiTaoCapPhat.KhoiTaoTheoQuyetDinh"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        d:DataContext="{d:DesignInstance Type=detail:ForexKhoiTaoTheoQuyetDinhDetailViewModel}"
+        Title="{Binding Title}" Height="450" Width="800">
+    <Window.InputBindings>
+        <!--<KeyBinding Key="F6" Command="{Binding OpenReferencePopupCommand}" CommandParameter="{Binding ElementName=DgdNhKtKhoiTaoTheoQuyetDinhDetail, Path=.}" />-->
+        <!--<KeyBinding Key="F3" Command="{Binding AddCommand}"/>-->
+        <KeyBinding Key="F4" Command="{Binding DeleteCommand}"/>
+        <KeyBinding Key="F10" Command="{Binding SaveCommand}"/>
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}"/>
+    </Window.InputBindings>
+
+    <materialDesign:DialogHost
+        Identifier="KhoiTaoQuyetDinhDetailDialog"
+        DialogTheme="Inherit">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel 
+                Grid.Row="0"
+                Orientation="Vertical">
+                <DockPanel>
+                    <materialDesign:PackIcon Kind="Dollar" Style="{StaticResource DialogScreenIconStyle}"/>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="Ngày khởi tạo: {0} | Năm khởi tạo: {1} | Đơn vị: {2} - {3}">
+                                    <Binding Path="Model.DNgayKhoiTao" Converter="{StaticResource DateTimeToStringConverter}" />
+                                    <Binding Path="Model.INamKhoiTao" />
+                                    <Binding Path="Model.IIdMaDonVi" />
+                                    <Binding Path="Model.STenDonVi" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                </DockPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Margin="0 5">
+                <StackPanel Orientation="Horizontal">
+                    <!--<Button 
+                        ext:Permission.Identifier="BUDGET_ESTIMATE_RECEIVED_DIVISION_DETAIL_BTN_ADD"
+                        Style="{StaticResource SearchBarBtnStyle}"
+                        Command="{Binding AddCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tạo mới (F3)"/>
+                        </StackPanel>
+                    </Button>-->
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button 
+                        ext:Permission.Identifier="BUDGET_ESTIMATE_RECEIVED_DIVISION_DETAIL_BTN_DELETE"
+                        Style="{StaticResource SearchBarBtnStyle}" 
+                        Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=DgdDivisionDetail, Path=.}"
+                        ToolTip="Xóa dữ liệu">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Delete" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xóa (F4)"/>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button 
+                        Style="{StaticResource SearchBarBtnStyle}" 
+                        IsEnabled="{Binding IsSaveData}"
+                        Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu dữ liệu (F10)"/>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button 
+                        Style="{StaticResource SearchBarBtnStyle}"
+                        ToolTip="Refresh"
+                        Command="{Binding RefreshCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tải lại (F5)"/>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button x:Name="btnShowCol" Style="{StaticResource SearchBarBtnStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PlusMinusVariant" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Ẩn/hiện cột" />
+                            <materialDesign:PopupBox
+                                Name="pbDynamicColumn"
+                                Margin="-10 0 0 0"
+                                HorizontalAlignment="Right"
+                                StaysOpen="True">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Kind="MenuDown"/>
+                                </materialDesign:PopupBox.ToggleContent>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Button>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <ComboBox
+                        Name="cbFrozenColumn"
+                        materialDesign:HintAssist.Hint="Cố định cột"
+                        DisplayMemberPath="DisplayItem"
+                        SelectedValuePath="ValueItem"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                    <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                    <Button 
+                        Style="{StaticResource SearchBarBtnStyle}" 
+                        Command="{Binding CloseCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CloseOutline" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Đóng"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+
+            <component:ExpandedDataGrid 
+                x:Name="DgdNhKtKhoiTaoTheoQuyetDinhDetail"
+                Grid.Row="2"
+                VerticalAlignment="Top"
+                BorderThickness="1"
+                AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
+                FrozenColumnCount="7"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                GridLinesVisibility="All"
+                EnableHeaderDataGrid="True"
+                ColumnInfo="{Binding Columns}"
+                ElementFrozenColumn="{Binding ElementName=cbFrozenColumn, Path=., Mode=TwoWay}"
+                ElementDynamicColumn="{Binding ElementName=pbDynamicColumn, Path=., Mode=TwoWay}"
+                Style="{StaticResource MaterialDesignDataGrid}"
+                RowStyle="{StaticResource DataGridRowDetail}"
+                CellStyle="{StaticResource DataGridCellDetail}"
+                
+                extensions:SelectedCellChangedProperty.Command="{Binding SelectedCellChangeCommand}"
+                extensions:GridAutoGeneratingColumnBehaviour.Command="{Binding AutoGeneratingColumnsCommand}"
+                
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem}"
+                ext:DataGridBehavior.DisplayRowNumber="True"
+               >
+                <DataGrid.Resources>
+                    <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn 
+                            Header="STT"
+                            Width="100"
+                            MinWidth="100"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                            Binding="{Binding SMaNoiDung}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn 
+                            Header="Nội dung"
+                            Width="250"
+                            MinWidth="250"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                            Binding="{Binding STenNoiDung}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn 
+                            Header="Loại"
+                            Width="150"
+                            MinWidth="150"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                            Binding="{Binding SLoai}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn 
+                            Header="Mã nhiệm vụ chi"
+                            Width="150"
+                            MinWidth="150"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                            Binding="{Binding SMaNhiemVuChi}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn 
+                            Header="Số quyết định đầu tư"
+                            Width="150"
+                            MinWidth="150"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                            Binding="{Binding SSoQuyetDinhDauTu}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn 
+                            Header="Số hợp đồng"
+                            Width="150"
+                            MinWidth="150"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                            Binding="{Binding SSoHopDong}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn 
+                            Header="Số quyết định khác"
+                            Width="150"
+                            MinWidth="150"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                            Binding="{Binding SSoQuyetDinhKhac}">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn 
+                            Header="Chi phí"
+                            Width="150"
+                            MinWidth="150"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderCenter}"
+                            Binding="{Binding STenChiPhiDetail}">
+                    </DataGridTextColumn>
+                    <!--<component:DataGridTextColumn
+                            x:Name="FGiaTriNoiDungUSD"
+                            Header="USD"
+                            Width="150"
+                            MinWidth="150"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FGiaTriNoiDungUSD, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="FGiaTriNoiDungUSD" Path="ActualWidth"/>
+                                                                    <Binding ElementName="FGiaTriNoiDungVND" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text="Giá trị"/>
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" TextAlignment="Center" Text="{Binding}"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            x:Name="FGiaTriNoiDungVND"
+                            Header="VND"
+                            Width="150"
+                            MinWidth="150"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FGiaTriNoiDungVND, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderTemplate="{StaticResource RightHeader}"/>-->
+
+
+                    <component:DataGridTextColumn
+                            x:Name="FQTKinhPhiDuyetCacNamTruocUSD"
+                            Header="USD"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FQTKinhPhiDuyetCacNamTruocUSD, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="FQTKinhPhiDuyetCacNamTruocUSD" Path="ActualWidth"/>
+                                                                    <Binding ElementName="FQTKinhPhiDuyetCacNamTruocVND" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text="Quyết toán kinh phí được duyệt các năm trước (ô 5-6 trong QTNĐ)"/>
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" TextAlignment="Center" Text="{Binding}"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            x:Name="FQTKinhPhiDuyetCacNamTruocVND"
+                            Header="VND"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FQTKinhPhiDuyetCacNamTruocVND, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderTemplate="{StaticResource RightHeader}"/>
+
+                    <component:DataGridTextColumn
+                            x:Name="FDeNghiQTNamNayUSD"
+                            Header="USD"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FDeNghiQTNamNayUSD, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="FDeNghiQTNamNayUSD" Path="ActualWidth"/>
+                                                                    <Binding ElementName="FDeNghiQTNamNayVND" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text="Kinh phí đề nghị quyết toán trong năm (ô 13-14 trong QTNĐ)"/>
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" TextAlignment="Center" Text="{Binding}"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            x:Name="FDeNghiQTNamNayVND"
+                            Header="VND"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FDeNghiQTNamNayVND, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderTemplate="{StaticResource RightHeader}"/>
+
+                    <component:DataGridTextColumn
+                            x:Name="FDeNghiChuyenNamSauUSD"
+                            Header="USD"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FDeNghiChuyenNamSauUsd, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="FDeNghiChuyenNamSauUSD" Path="ActualWidth"/>
+                                                                    <Binding ElementName="FDeNghiChuyenNamSauVND" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text="Kinh phí đề nghị chuyển năm sau thanh toán, quyết toán (ô 15-16 trong QTNĐ) "/>
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" TextAlignment="Center" Text="{Binding}"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            x:Name="FDeNghiChuyenNamSauVND"
+                            Header="VND"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FDeNghiChuyenNamSauVnd, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderTemplate="{StaticResource RightHeader}"/>
+                    <component:DataGridTextColumn
+                            x:Name="FLuyKeKinhPhiDuocCapUSD"
+                            Header="USD"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FLuyKeKinhPhiDuocCapUSD, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="FLuyKeKinhPhiDuocCapUSD" Path="ActualWidth"/>
+                                                                    <Binding ElementName="FLuyKeKinhPhiDuocCapVND" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text="Lũy kế kinh phí được cấp từ khởi đầu đến cuối năm nay (ô 21-22 trong QTNĐ) "/>
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" TextAlignment="Center" Text="{Binding}"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            x:Name="FLuyKeKinhPhiDuocCapVND"
+                            Header="VND"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FLuyKeKinhPhiDuocCapVND, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderTemplate="{StaticResource RightHeader}"/>
+
+                    <component:DataGridTextColumn
+                            x:Name="FLuyKeKinhPhiDaGiaiNganTrongNamNayUSD"
+                            Header="USD"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FLuyKeKinhPhiDaGiaiNganTrongNamNayUsd, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="FLuyKeKinhPhiDaGiaiNganTrongNamNayUSD" Path="ActualWidth"/>
+                                                                    <Binding ElementName="FLuyKeKinhPhiDaGiaiNganTrongNamNayVND" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text="Lũy kế số kinh phí đã giải ngân trong năm nay"/>
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" TextAlignment="Center" Text="{Binding}"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            x:Name="FLuyKeKinhPhiDaGiaiNganTrongNamNayVND"
+                            Header="VND"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FLuyKeKinhPhiDaGiaiNganTrongNamNayVnd, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderTemplate="{StaticResource RightHeader}"/>
+
+                    <component:DataGridTextColumn
+                            x:Name="FLuyKeKinhPhiDaGiaiNganKhoiDauDenHetNamNayUSD"
+                            Header="USD"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FLuyKeKinhPhiDaGiaiNganKhoiDauDenHetNamNayUsd, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="FLuyKeKinhPhiDaGiaiNganKhoiDauDenHetNamNayUSD" Path="ActualWidth"/>
+                                                                    <Binding ElementName="FLuyKeKinhPhiDaGiaiNganKhoiDauDenHetNamNayVND" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text="Lũy kế số kinh phí đã giải ngân từ khởi đầu đến cuối năm nay "/>
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" TextAlignment="Center" Text="{Binding}"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            x:Name="FLuyKeKinhPhiDaGiaiNganKhoiDauDenHetNamNayVND"
+                            Header="VND"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FLuyKeKinhPhiDaGiaiNganKhoiDauDenHetNamNayVnd, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderTemplate="{StaticResource RightHeader}"/>
+
+                    <component:DataGridTextColumn
+                            x:Name="FLuyKeSoDuTamUngKinhPhiKhoiDauDenHetNamNayUSD"
+                            Header="USD"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            Binding="{Binding FLuyKeSoDuTamUngKinhPhiKhoiDauDenHetNamNayUsd, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="FLuyKeSoDuTamUngKinhPhiKhoiDauDenHetNamNayUSD" Path="ActualWidth"/>
+                                                                    <Binding ElementName="FLuyKeSoDuTamUngKinhPhiKhoiDauDenHetNamNayVND" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text="Luỹ kế số dư tạm ứng kinh phí từ khởi đầu đến cuối năm nay (tạm ứng không thu hồi)"/>
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" TextAlignment="Center" Text="{Binding}"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            x:Name="FLuyKeSoDuTamUngKinhPhiKhoiDauDenHetNamNayVND"
+                            Header="VND"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FLuyKeSoDuTamUngKinhPhiKhoiDauDenHetNamNayVnd, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderTemplate="{StaticResource RightHeader}"/>
+
+                    <component:DataGridTextColumn
+                            x:Name="FLuyKeSoDuTamUngCheDoKhoiDauDenHetNamNayUSD"
+                            Header="USD"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            Binding="{Binding FLuyKeSoDuTamUngCheDoKhoiDauDenHetNamNayUsd, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="FLuyKeSoDuTamUngCheDoKhoiDauDenHetNamNayUSD" Path="ActualWidth"/>
+                                                                    <Binding ElementName="FLuyKeSoDuTamUngCheDoKhoiDauDenHetNamNayVND" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text="Lũy kế số dư tạm ứng theo chế độ đến cuối năm nay (tạm ứng chưa thu hồi) "/>
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" TextAlignment="Center" Text="{Binding}"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            x:Name="FLuyKeSoDuTamUngCheDoKhoiDauDenHetNamNayVND"
+                            Header="VND"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FLuyKeSoDuTamUngCheDoKhoiDauDenHetNamNayVnd, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderTemplate="{StaticResource RightHeader}"/>
+                    <component:DataGridTextColumn
+                            x:Name="FKinhPhiThuaNopNsnnUSD"
+                            Header="USD"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            Binding="{Binding FKinhPhiThuaNopNsnnUSD, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="FKinhPhiThuaNopNsnnUSD" Path="ActualWidth"/>
+                                                                    <Binding ElementName="FKinhPhiThuaNopNsnnVND" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text="Kinh phí thừa hết nhiệm vụ chi nộp trả NSNN"/>
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" TextAlignment="Center" Text="{Binding}"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            x:Name="FKinhPhiThuaNopNsnnVND"
+                            Header="VND"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FKinhPhiThuaNopNsnnVND, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderTemplate="{StaticResource RightHeader}"/>
+                    <component:DataGridTextColumn
+                            x:Name="FConLaiChuaGiaiNganUSD"
+                            Header="USD"
+                            Width="200"
+                            MinWidth="200"
+                            StringFormat="{}{0:N0}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            Binding="{Binding FConLaiChuaGiaiNganUSD, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N2}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}">
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Border Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                        <Canvas Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                            <Grid>
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource MultipleWidthConverter}">
+                                                                    <Binding ElementName="FConLaiChuaGiaiNganUSD" Path="ActualWidth"/>
+                                                                    <Binding ElementName="FConLaiChuaGiaiNganVND" Path="ActualWidth"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <TextBlock HorizontalAlignment="Center" Text="Số kinh phí còn lại chưa giải ngân"/>
+                                            </Grid>
+                                        </Canvas>
+                                    </Border>
+                                    <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <TextBlock Name="HeaderGroup" TextAlignment="Center" Text="{Binding}"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                    </component:DataGridTextColumn>
+                    <component:DataGridTextColumn
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            x:Name="FConLaiChuaGiaiNganVND"
+                            Header="VND"
+                            Width="160"
+                            MinWidth="160"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding FConLaiChuaGiaiNganVND, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}, Converter={StaticResource NumberToStringEmptyConverter}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderTemplate="{StaticResource RightHeader}"/>
+                </DataGrid.Columns>
+
+            </component:ExpandedDataGrid>
+
+            <component:ProgressDialog Grid.RowSpan="3" />
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

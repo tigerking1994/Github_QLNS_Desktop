@@ -1,0 +1,246 @@
+<UserControl
+    x:Class="VTS.QLNS.CTC.App.View.Budget.DemandCheck.Check.PrintReport.PrintCommunicateSettlementLNS"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Budget.Settlement.PrintReport"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid
+        Width="700"
+        Height="590"
+        Margin="20,10,20,10">
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="Printer" Style="{StaticResource DialogScreenIconStyle}" />
+                <StackPanel
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock Style="{StaticResource DialogScreenHeaderStyle}">In thông tri quyết toán thường xuyên</TextBlock>
+                    <TextBlock>Chọn thông số in thông tri quyết toán</TextBlock>
+                </StackPanel>
+            </StackPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}" />
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox
+                            Width="200"
+                            Margin="0,0,20,0"
+                            VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Số chứng từ"
+                            IsEnabled="False"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="QT-001" />
+                        <DatePicker
+                            Width="200"
+                            Language="vi-VN" 
+                            materialDesign:HintAssist.Hint="Ngày chứng từ"
+                            IsEnabled="False"
+                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                            Text="4/9/2021" />
+                    </StackPanel>
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                        <TextBox
+                            Width="200"
+                            Margin="0,0,20,0"
+                            VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Số quyết định"
+                            IsEnabled="False"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="QĐ-001" />
+                        <DatePicker
+                            Width="200"
+                            Language="vi-VN" 
+                            materialDesign:HintAssist.Hint="Ngày quyết định"
+                            IsEnabled="False"
+                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                            Text="4/9/2021" />
+                    </StackPanel>
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                        <TextBox
+                            Width="420"
+                            VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Đơn vị"
+                            IsEnabled="False"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="01 - Phòng tham mưu" />
+                    </StackPanel>
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                        <TextBox
+                            Width="420"
+                            VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Thời gian"
+                            IsEnabled="False"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="Tháng 4" />
+                    </StackPanel>
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                        <TextBox
+                            Width="420"
+                            Height="80"
+                            VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Mô tả chi tiết"
+                            IsEnabled="False"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="Chi tiết chứng từ"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                    <Separator
+                        Width="420"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Left"
+                        Background="{DynamicResource MaterialDesignDivider}" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox
+                            Width="420"
+                            VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Tiêu đề 1"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="Thông tri" />
+                    </StackPanel>
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                        <TextBox
+                            Width="420"
+                            Height="80"
+                            VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Tiêu đề 2"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="Xác nhận quyết toán"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                        <ComboBox
+                            Width="420"
+                            materialDesign:HintAssist.Hint="Kiểu giấy in"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBoxItem Content="Mặc định" />
+                            <ComboBoxItem Content="Theo tiểu mục" />
+                            <ComboBoxItem Content="Theo mục" />
+                            <ComboBoxItem Content="Theo LNS" />
+                        </ComboBox>
+                    </StackPanel>
+                </StackPanel>
+                <materialDesign:ColorZone Grid.Column="1">
+                    <StackPanel Orientation="Vertical">
+                        <materialDesign:ColorZone Mode="PrimaryMid">
+                            <StackPanel Margin="8" Orientation="Horizontal">
+                                <CheckBox Margin="0,0,5,0" Style="{StaticResource MaterialDesignLightCheckBox}" />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Text="Chọn LNS (0/0)"
+                                    TextWrapping="Wrap" />
+                                <Border
+                                    MaxHeight="30"
+                                    Margin="5,0,0,0"
+                                    Background="White"
+                                    ToolTip="Enter to search">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Button
+                                            x:Name="SearchButton"
+                                            Width="30"
+                                            Height="30"
+                                            Style="{DynamicResource MaterialDesignToolButton}">
+                                            <materialDesign:PackIcon Kind="Magnify" Opacity=".56" />
+                                        </Button>
+
+                                        <TextBox
+                                            x:Name="SearchBox"
+                                            Grid.Column="1"
+                                            MinWidth="200"
+                                            VerticalAlignment="Center"
+                                            materialDesign:HintAssist.Hint="Search"
+                                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                            BorderThickness="0"
+                                            Foreground="Black"
+                                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </materialDesign:ColorZone>
+                        <ListView Height="420" ItemsSource="{Binding Units}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <RadioButton
+                                        Content="{Binding UnitName}"
+                                        GroupName="Unit"
+                                        IsChecked="{Binding Selected}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </materialDesign:ColorZone>
+            </Grid>
+            <Separator Margin="0,10,0,0" Background="{DynamicResource MaterialDesignDivider}" />
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Grid.Column="0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <Button Style="{StaticResource MaterialDesignRaisedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileExcel" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Xuất Excel</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="10,0,0,0" Style="{StaticResource MaterialDesignRaisedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Signal" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Chữ ký</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <Button
+                        Command="{x:Static wpf:DialogHost.CloseDialogCommand}"
+                        IsDefault="True"
+                        Style="{StaticResource MaterialDesignRaisedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Printer" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">In báo cáo</TextBlock>
+                        </StackPanel>
+                        <Button.CommandParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button
+                        Margin="10,0,0,0"
+                        Command="{x:Static wpf:DialogHost.CloseDialogCommand}"
+                        IsCancel="True"
+                        Style="{StaticResource MaterialDesignOutlinedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CloseOutline" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                        </StackPanel>
+                        <Button.CommandParameter>
+                            <system:Boolean>False</system:Boolean>
+                        </Button.CommandParameter>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>

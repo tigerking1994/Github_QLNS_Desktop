@@ -1,0 +1,760 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Budget.Settlement.Import.ArmyImport"
+             x:Name="ArmyImportWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Budget.Settlement.Import"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:import="clr-namespace:VTS.QLNS.CTC.App.ViewModel.Budget.Settlement.Import" d:DataContext="{d:DesignInstance Type=import:ArmyImportViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="1200"
+             WindowState="Maximized"
+             Title="Import dữ liệu quyết toán quân số">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+        <DockPanel
+            Grid.Row="0">
+            <materialDesign:PackIcon
+                Kind="MicrosoftExcel"
+                Style="{StaticResource DialogScreenIconStyle}" />
+            <StackPanel
+                Orientation="Vertical"
+                VerticalAlignment="Center"
+                Margin="10 0">
+                <TextBlock
+                    Text="IMPORT DỮ LIỆU QUYẾT TOÁN QUÂN SỐ"
+                    FontWeight="Bold" />
+                <TextBlock
+                    Text="Chọn file Excel" />
+            </StackPanel>
+        </DockPanel>
+        <Separator
+            Grid.Row="1"
+            Background="{DynamicResource MaterialDesignDivider}" />
+        <Grid
+            Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="*" />
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border
+                    BorderThickness="1"
+                    BorderBrush="{DynamicResource MaterialDesignDivider}"
+                    Margin="0 10 0 0"
+                    Padding="5 0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="*" />
+                            <ColumnDefinition
+                                Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox
+                            Grid.Column="0"
+                            IsEnabled="False"
+                            materialDesign:HintAssist.Hint="Lựa chọn file Excel"
+                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                            BorderThickness="0"
+                            VerticalAlignment="Center"
+                            Text="{Binding FileName}" />
+                        <Button
+                            Style="{DynamicResource MaterialDesignToolButton}"
+                            Grid.Column="1"
+                            Command="{Binding UploadFileCommand}">
+                            <materialDesign:PackIcon
+                                Kind="FileUpload"
+                                Margin="8 0 0 0" />
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <Grid
+                    Grid.Row="1"
+                    Margin="0 10 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="1*" />
+                        <ColumnDefinition
+                            Width="1*" />
+                        <ColumnDefinition
+                            Width="1*" />
+                        <ColumnDefinition
+                            Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ComboBox
+                        Grid.Column="0"
+                        materialDesign:HintAssist.Hint="Chọn tháng"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                        DisplayMemberPath="DisplayItem"
+                        SelectedValuePath="ValueItem"
+                        SelectedItem="{Binding MonthSelected}"
+                        ItemsSource="{Binding Months}" />
+                    <ComboBox
+                        Grid.Column="1"
+                        Margin="10 0 0 0"
+                        materialDesign:HintAssist.Hint="Chọn đơn vị"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                        DisplayMemberPath="DisplayItem"
+                        SelectedValuePath="ValueItem"
+                        SelectedItem="{Binding AgencySelected}"
+                        ItemsSource="{Binding Agencies}" />
+                    <!--<DatePicker 
+Grid.Column="2"
+Language="vi-VN" 
+Margin="10 0 0 0"
+materialDesign:HintAssist.Hint="Ngày chứng từ" 
+SelectedDate="{Binding VoucherDate}"
+Text="{Binding VoucherDate}"
+Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />-->
+                    <StackPanel
+                        Grid.Column="3"
+                        Orientation="Horizontal">
+                        <Button
+                            Margin="10 0 0 0"
+                            Width="120"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Command="{Binding ProcessFileCommand}">
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Kind="FileCheck" />
+                                <TextBlock
+                                    Style="{StaticResource SearchBarBtnTextStyle}"
+                                    Text="Kiểm tra" />
+                            </StackPanel>
+                        </Button>
+                        <Button
+                            Margin="5 0 0 0"
+                            Width="120"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Command="{Binding ResetDataCommand}">
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Kind="Refresh" />
+                                <TextBlock
+                                    Style="{StaticResource SearchBarBtnTextStyle}"
+                                    Text="Hủy bỏ" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            <Grid
+                Grid.Row="2"
+                Margin="0 10 0 0">
+                <StackPanel
+                    Orientation="Horizontal">
+                    <RadioButton
+                        x:Name="RbArmyVoucherDetail"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        IsChecked="True"
+                        Content="Thông tin chứng từ" />
+                    <RadioButton
+                        x:Name="RbError"
+                        Style="{StaticResource MaterialDesignTabRadioButton}"
+                        IsChecked="False"
+                        Content="Lỗi" />
+                </StackPanel>
+            </Grid>
+            <Grid
+                Grid.Row="3"
+                Margin="0 5 0 0">
+                <DataGrid
+                    Visibility="{Binding IsChecked, ElementName=RbArmyVoucherDetail, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    AutoGenerateColumns="False"
+                    CanUserResizeColumns="True"
+                    BorderThickness="1"
+                    HorizontalScrollBarVisibility="Auto"
+                    FrozenColumnCount="2"
+                    CanUserAddRows="False"
+                    IsReadOnly="True"
+                    GridLinesVisibility="All"
+                    RowStyle="{StaticResource DataGridRowDetail}"
+                    ItemsSource="{Binding ArmyVoucherDetails}">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn
+                            Header="Trạng thái">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl
+                                        x:Name="content" />
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding ImportStatus}"
+                                            Value="True">
+                                            <Setter
+                                                TargetName="content"
+                                                Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <materialDesign:PackIcon
+                                                            Kind="CheckCircle"
+                                                            Foreground="Green"
+                                                            HorizontalAlignment="Center" />
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding ImportStatus}"
+                                            Value="False">
+                                            <Setter
+                                                TargetName="content"
+                                                Property="ContentTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <materialDesign:PackIcon
+                                                            Kind="CloseCircle"
+                                                            Foreground="Red"
+                                                            HorizontalAlignment="Center" />
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn
+                            Header="Xâu nối mã"
+                            Binding="{Binding XauNoiMa}" />
+                        <DataGridTextColumn
+                            Header="Nội dung"
+                            Binding="{Binding MoTa}" />
+                        <DataGridTextColumn
+                            Header="Tổng số"
+                            Binding="{Binding STongSo}"
+                            FontWeight="Bold"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}" />
+                        <component:DataGridTextColumn
+                            x:Name="SumSyQuan"
+                            Header="(+)"
+                            Width="60"
+                            IsReadOnly="True"
+                            FontWeight="Bold"
+                            Binding="{Binding SumSyQuan, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                            <Canvas
+                                                Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                                <Grid>
+                                                    <Grid.Style>
+                                                        <Style
+                                                            TargetType="Grid">
+                                                            <Setter
+                                                                Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding
+                                                                        Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding
+                                                                            ElementName="SumSyQuan"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RTuong"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RDaiTa"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RThuongTa"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RTrungTa"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RThieuTa"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RDaiUy"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RThuongUy"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RTrungUy"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RThieuUy"
+                                                                            Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <TextBlock
+                                                        HorizontalAlignment="Center"
+                                                        Text="Sĩ quan" />
+                                                </Grid>
+                                            </Canvas>
+                                        </Border>
+                                        <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock
+                                                Name="HeaderGroup"
+                                                Text="{Binding}" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn
+                            x:Name="RTuong"
+                            Header="Tg"
+                            Binding="{Binding RTuong, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="RDaiTa"
+                            Header="24"
+                            Binding="{Binding RDaiTa, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}"/>
+                        <component:DataGridTextColumn
+                            x:Name="RThuongTa"
+                            Header="23"
+                            Binding="{Binding RThuongTa, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}"/>
+                        <component:DataGridTextColumn
+                            x:Name="RTrungTa"
+                            Header="22"
+                            Binding="{Binding RTrungTa, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="RThieuTa"
+                            Header="21"
+                            Binding="{Binding RThieuTa, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}"/>
+                        <component:DataGridTextColumn
+                            x:Name="RDaiUy"
+                            Header="14"
+                            Binding="{Binding RDaiUy, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}"/>
+                        <component:DataGridTextColumn
+                            x:Name="RThuongUy"
+                            Header="13"
+                            Binding="{Binding RThuongUy, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="RTrungUy"
+                            Header="12"
+                            Binding="{Binding RTrungUy, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}"/>
+                        <component:DataGridTextColumn
+                            x:Name="RThieuUy"
+                            Header="11"
+                            Binding="{Binding RThieuUy, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource RightHeader}"/>
+
+                        <!--<DataGridTextColumn
+                            Header="Cộng"
+                            Binding="{Binding SumSyQuan, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}" />-->
+                        <!--<DataGridTextColumn
+                            Header="TSQ"
+                            Binding="{Binding TSQ, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}" />-->
+
+                        <component:DataGridTextColumn
+                            x:Name="SumQNCN"
+                            Header="(+)"
+                            IsReadOnly="True"
+                            Width="60"
+                            FontWeight="Bold"
+                            StringFormat="{}{0:N0}"
+                            Binding="{Binding SumQNCN, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                            <Canvas
+                                                Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                                <Grid>
+                                                    <Grid.Style>
+                                                        <Style
+                                                            TargetType="Grid">
+                                                            <Setter
+                                                                Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding
+                                                                        Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding
+                                                                            ElementName="SumQNCN"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="SoThuongTaQNCN"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="SoTrungTaQNCN"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="SoThieuTaQNCN"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="SoDaiUyQNCN"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="SoThuongUyQNCN"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="SoTrungUyQNCN"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="SoThieuUyQNCN"
+                                                                            Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <TextBlock
+                                                        HorizontalAlignment="Center"
+                                                        Text="Quân nhân chuyên nghiệp" />
+                                                </Grid>
+                                            </Canvas>
+                                        </Border>
+                                        <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock
+                                                Name="HeaderGroup"
+                                                Text="{Binding}" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn
+                            x:Name="SoThuongTaQNCN"
+                            Header="23"
+                            Binding="{Binding SoThuongTaQNCN, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="SoTrungTaQNCN"
+                            Header="22"
+                            Binding="{Binding SoTrungTaQNCN, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="SoThieuTaQNCN"
+                            Header="21"
+                            Binding="{Binding SoThieuTaQNCN, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="SoDaiUyQNCN"
+                            Header="14"
+                            Binding="{Binding SoDaiUyQNCN, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="SoThuongUyQNCN"
+                            Header="13"
+                            Binding="{Binding SoThuongUyQNCN, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="SoTrungUyQNCN"
+                            Header="12"
+                            Binding="{Binding SoTrungUyQNCN, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="SoThieuUyQNCN"
+                            Header="11"
+                            Binding="{Binding SoThieuUyQNCN, StringFormat={}{0:N0}}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            HeaderTemplate="{StaticResource RightHeader}" />
+
+
+                        <component:DataGridTextColumn
+                            x:Name="SumBS"
+                            Header="(+)"
+                            Width="60"
+                            IsReadOnly="True"
+                            FontWeight="Bold"
+                            Binding="{Binding SumBS, UpdateSourceTrigger=LostFocus, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}">
+                            <DataGridColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding), Converter={StaticResource HeaderPaddingConverter}}">
+                                            <Canvas
+                                                Height="{Binding ElementName=HeaderGroup, Path=ActualHeight}">
+                                                <Grid>
+                                                    <Grid.Style>
+                                                        <Style
+                                                            TargetType="Grid">
+                                                            <Setter
+                                                                Property="Width">
+                                                                <Setter.Value>
+                                                                    <MultiBinding
+                                                                        Converter="{StaticResource MultipleWidthConverter}">
+                                                                        <Binding
+                                                                            ElementName="SumBS"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RThuongSi"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RTrungSi"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RHaSi"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RBinhNhat"
+                                                                            Path="ActualWidth" />
+                                                                        <Binding
+                                                                            ElementName="RBinhNhi"
+                                                                            Path="ActualWidth" />
+                                                                    </MultiBinding>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <TextBlock
+                                                        HorizontalAlignment="Center"
+                                                        Text="Hạ sĩ quan, binh sĩ" />
+                                                </Grid>
+                                            </Canvas>
+                                        </Border>
+                                        <Border
+                                            Grid.Row="1"
+                                            Padding="{Binding RelativeSource={RelativeSource Self}, Path=(wpf:DataGridAssist.ColumnHeaderPadding)}"
+                                            BorderThickness="0 1 1 0"
+                                            BorderBrush="{Binding HorizontalGridLinesBrush, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <TextBlock
+                                                Name="HeaderGroup"
+                                                Text="{Binding}" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridColumn.HeaderTemplate>
+                        </component:DataGridTextColumn>
+                        <component:DataGridTextColumn
+                            x:Name="RThuongSi"
+                            Header="H3"
+                            Binding="{Binding RThuongSi, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="RTrungSi"
+                            Header="H2"
+                            Binding="{Binding RTrungSi, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="RHaSi"
+                            Header="H1"
+                            Binding="{Binding RHaSi, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="RBinhNhat"
+                            Header="B1"
+                            Binding="{Binding RBinhNhat, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            HeaderTemplate="{StaticResource CenterHeader}" />
+                        <component:DataGridTextColumn
+                            x:Name="RBinhNhi"
+                            Header="B2"
+                            Binding="{Binding RBinhNhi, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"
+                            HeaderStyle="{StaticResource DataGridColumnHeaderNoBorder}"
+                            HeaderTemplate="{StaticResource RightHeader}" />
+
+
+                        <!--<DataGridTextColumn
+                            Header="Cộng"
+                            Binding="{Binding SumBS, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}" />-->
+                        
+                        
+                        <!--<DataGridTextColumn
+                            Header="QNCN"
+                            Binding="{Binding RQncn, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}" />-->
+                        <DataGridTextColumn
+                            Header="CCQP"
+                            Binding="{Binding RCcqp, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}" />
+                        <DataGridTextColumn
+                            Header="CNQP"
+                            Binding="{Binding RCnvqp, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}" />
+                        <DataGridTextColumn
+                            Header="VCQP"
+                            Binding="{Binding RVcqp, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}" />
+                        <DataGridTextColumn
+                            Header="Khác"
+                            Binding="{Binding RLdhd, StringFormat={}{0:N0}}"
+                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <DataGrid
+                    Visibility="{Binding IsChecked, ElementName=RbError, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    AutoGenerateColumns="False"
+                    CanUserResizeColumns="True"
+                    BorderThickness="1"
+                    HorizontalScrollBarVisibility="Auto"
+                    FrozenColumnCount="1"
+                    CanUserAddRows="False"
+                    IsReadOnly="True"
+                    GridLinesVisibility="All"
+                    ItemsSource="{Binding ImportErrors}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Header="Sheet"
+                            Binding="{Binding SheetName}" />
+                        <DataGridTextColumn
+                            Header="Dòng"
+                            Binding="{Binding Row}" />
+                        <DataGridTextColumn
+                            Header="Cột"
+                            Binding="{Binding ColumnName}" />
+                        <DataGridTextColumn
+                            Header="Chi tiết lỗi"
+                            Binding="{Binding Error}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Grid>
+        <StackPanel
+            Grid.Row="3"
+            Orientation="Horizontal"
+            Margin="0 15 0 0"
+            HorizontalAlignment="Right">
+            <Button
+                IsDefault="True"
+                Margin="5 0 0 0"
+                IsEnabled="{Binding IsSaveData}"
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                Command="{Binding SaveCommand}">
+                <StackPanel
+                    Orientation="Horizontal">
+                    <materialDesign:PackIcon
+                        Kind="ContentSave" />
+                    <TextBlock
+                        Style="{StaticResource SearchBarBtnTextStyle}"
+                        Text="Lưu dữ liệu" />
+                </StackPanel>
+            </Button>
+            <Button
+                IsCancel="True"
+                Margin="5 0 0 0"
+                Style="{StaticResource MaterialDesignOutlinedButton}"
+                Command="{Binding CloseCommand}"
+                CommandParameter="{Binding ElementName=ArmyImportWindow}">
+                <StackPanel
+                    Orientation="Horizontal">
+                    <materialDesign:PackIcon
+                        Kind="CloseOutline" />
+                    <TextBlock
+                        Style="{StaticResource SearchBarBtnTextStyle}"
+                        Text="Đóng" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <component:ProgressDialog />
+    </Grid>
+</Window>

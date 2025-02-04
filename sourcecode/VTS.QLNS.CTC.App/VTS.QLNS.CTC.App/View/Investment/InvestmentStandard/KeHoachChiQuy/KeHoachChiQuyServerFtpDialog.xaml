@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="VTS.QLNS.CTC.App.View.Investment.InvestmentStandard.KeHoachChiQuy.KeHoachChiQuyServerFtpDialog"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Investment.InvestmentStandard.KeHoachChiQuy"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:ext="clr-namespace:VTS.QLNS.CTC.App.Extensions"
+             xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+             xmlns:custom="clr-namespace:VTS.QLNS.CTC.Custom;assembly=VTS.QLNS.CTC.Custom">
+
+    <Grid Margin="16">
+        <StackPanel Orientation="Vertical" >
+            <DockPanel>
+                <materialDesign:PackIcon Kind="PlaylistPlus" Style="{StaticResource DialogScreenIconStyle}"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                    <TextBlock  Text="Dữ liệu từ ftp Server" FontWeight="Bold"></TextBlock>
+                </StackPanel>
+            </DockPanel>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <Grid MinHeight="160">
+                <Grid Margin="0 8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                            <custom:AutoCompleteComboBox
+                                x:Uid="cbxDonViQuanLy"
+                                Margin="0 2 0 2"
+                                Width="510"
+                                materialDesign:HintAssist.Hint="Đơn vị"
+                                DisplayMemberPath="DisplayItem"
+                                TextSearch.TextPath="DisplayItem"
+                                SelectedValuePath="ValueItem"
+                                SelectedItem="{Binding CbxLoaiDonViSelected}"
+                                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                ItemsSource="{Binding CbxLoaiDonVi}" 
+                                IsEnabled="{Binding IsInsert}"/>
+                            <TextBox
+                                Margin="10 2 20 2"
+                                Width="250"
+                                materialDesign:HintAssist.Hint="Năm kế hoạch"
+                                IsEnabled="{Binding IsInsert}"
+                                Text="{Binding INamKeHoach}"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                            <ComboBox
+                                Width="250"
+                                Margin="0 2 0 2"
+                                IsEnabled="{Binding IsInsert}"
+                                DisplayMemberPath="DisplayItem"
+                                SelectedValuePath="ValueItem"
+                                materialDesign:HintAssist.Hint="Quý"
+                                SelectedItem="{Binding CbxQuySelected}"
+                                ItemsSource="{Binding CbxQuy}"
+                                Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                        </StackPanel>
+                    <DataGrid
+                        x:Name="dgdDataPlanManagerIndex"
+                        Grid.Row="1"
+                        Margin="0 5 0 0"
+                        FrozenColumnCount="3"
+                        BorderThickness="1"
+                        CanUserResizeColumns="True"
+                        HorizontalScrollBarVisibility="Auto"
+                        CanUserAddRows="False"
+                         MaxHeight="300"
+                        IsSynchronizedWithCurrentItem="True"
+                        GridLinesVisibility="All"
+                        AutoGenerateColumns="False"
+                        RowStyle="{StaticResource DataGridRowIndex}"
+                        Style="{StaticResource MaterialDesignDataGrid}"
+                        ScrollViewer.CanContentScroll="True"
+                        ItemsSource="{Binding LstFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding FileSelected, Mode=TwoWay}">
+                        <DataGrid.Resources>
+                            <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn
+                                    Binding="{Binding BIsCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                                    EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                            </DataGridCheckBoxColumn>
+                            <materialDesign:DataGridTextColumn 
+                            x:Name="STT"
+                            ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                            Header="STT"
+                            Binding="{Binding IStt}">
+                            </materialDesign:DataGridTextColumn>
+                            <materialDesign:DataGridTextColumn 
+                            x:Name="tenfile"
+                            ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                            Header="Tên file"
+                            Binding="{Binding SNameFile}">
+                            </materialDesign:DataGridTextColumn>
+                            <materialDesign:DataGridTextColumn 
+                            x:Name="duongdan"
+                            ElementStyle="{StaticResource DataGridTextColumnStyle}" 
+                            Header="Đường dẫn"
+                            Binding="{Binding SUrl}">
+                            </materialDesign:DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Grid>
+            <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            <StackPanel Orientation="Horizontal" Margin="0 15 0 0" HorizontalAlignment="Right">
+                <Button 
+                        Margin="10 0 0 0"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding GetFileFtpCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Download" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lấy dữ liệu"/>
+                    </StackPanel>
+                </Button>
+                <Button 
+                        Margin="10 0 0 0"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding DownloadFileFtpServer}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Download" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tải dữ liệu"/>
+                    </StackPanel>
+                </Button>
+                <Button
+                    IsCancel="True"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseOutline" />
+                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                    </StackPanel>
+                    <Button.CommandParameter>
+                        <system:Boolean>False</system:Boolean>
+                    </Button.CommandParameter>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,51 @@
+﻿<Window x:Class="VTS.QLNS.CTC.Update.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.Update"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="190" Width="400" ResizeMode="NoResize"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen">
+    <materialDesign:DialogHost
+        Identifier="RootDialog"
+        DialogTheme="Inherit">
+        <materialDesign:ColorZone
+              Mode="SecondaryMid" Height="190">
+            <Grid Margin="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock HorizontalAlignment="Center" Text="CẬP NHẬT PHIÊN BẢN" FontSize="15"/>
+                <StackPanel Margin="0 15 0 5" Grid.Row="1" Height="20">
+                    <DockPanel>
+                        <TextBlock Text="Copied bytes: "/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="CopiedLength" Text="0" VerticalAlignment="Bottom"/>
+                        </StackPanel>
+                    </DockPanel>
+                    <TextBlock HorizontalAlignment="Right" Text="{Binding Progress}"/>
+                </StackPanel>
+                <ProgressBar Height="20" Grid.Row="2" Name="pgbar1"/>
+                <StackPanel Margin="0 30 0 5" Grid.Row="3" Height="20">
+                    <DockPanel>
+                        <TextBlock Text="Copied files: "/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="CopiedFiles" Text="0"/>
+                            <TextBlock Text="/"/>
+                            <TextBlock x:Name="ToTalFiles" Text="0"/>
+                        </StackPanel>
+                    </DockPanel>
+                    <TextBlock HorizontalAlignment="Right" Text="{Binding Progress}"/>
+                </StackPanel>
+                <ProgressBar Height="20" Grid.Row="4" Name="pgbar2"/>
+            </Grid>
+        </materialDesign:ColorZone>
+    </materialDesign:DialogHost>
+</Window>

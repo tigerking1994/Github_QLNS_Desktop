@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace VTS.QLNS.CTC.App.View.Investment.MediumTermPlan.QLDuAn
+{
+    /// <summary>
+    /// Interaction logic for QLDADetail.xaml
+    /// </summary>
+    public partial class QLDADetail : Window
+    {
+        public QLDADetail()
+        {
+            InitializeComponent();
+        }
+    }
+}

@@ -1,0 +1,248 @@
+﻿<Window x:Class="VTS.QLNS.CTC.App.View.Forex.ForexPlan.PlanDetail.DmTiGiaDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+        xmlns:local="clr-namespace:VTS.QLNS.CTC.App.View.Investment.MediumTermPlan.QLDuAn"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:component="clr-namespace:VTS.QLNS.CTC.App.Component"
+        xmlns:custom="clr-namespace:VTS.QLNS.CTC.Custom;assembly=VTS.QLNS.CTC.Custom"
+        xmlns:i1="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:helper="clr-namespace:VTS.QLNS.CTC.App.Helper"
+        Style="{StaticResource MaterialDesignWindow}" 
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Icon="/favicon.ico"
+        Title="{Binding Title}"
+        mc:Ignorable="d">
+    <Window.InputBindings>
+        <KeyBinding Key="F3" Command="{Binding AddTiGiaCommand}" CommandParameter="{Binding ElementName=dgdData, Path=.}"/>
+        <KeyBinding Key="F4" Command="{Binding DeleteTiGiaCommand}" CommandParameter="{Binding ElementName=dgdData, Path=.}"/>
+        <KeyBinding Key="F10" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=dgdData, Path=.}"/>
+    </Window.InputBindings>
+    <materialDesign:DialogHost
+        Identifier="DmTiGiaDialog"
+        DialogTheme="Inherit">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <DockPanel>
+                    <materialDesign:PackIcon Kind="DriveDocument" Style="{StaticResource DialogScreenIconStyle}"/>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0">
+                        <TextBlock Text="{Binding Title}" FontWeight="Bold"></TextBlock>
+                        <TextBlock Text="{Binding Description}"></TextBlock>
+                    </StackPanel>
+                </DockPanel>
+                <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+            </StackPanel>
+            <ScrollViewer Grid.Row="1" Margin="-4 0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                            <Setter Property="Margin" Value="4 2 4 2" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                        <Style TargetType="DatePicker" BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                            <Setter Property="Margin" Value="4 2 4 2" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                        <Style TargetType="custom:AutoCompleteComboBox" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <Setter Property="materialDesign:HintAssist.IsFloating" Value="True" />
+                            <Setter Property="Margin" Value="4 2 4 2" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </Grid.Resources>
+                    <StackPanel
+                        Grid.Row="5"
+                        Grid.ColumnSpan="3"
+                        Margin="10 0 4 100">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0 3 0 0">
+                                <Button
+                                    Style="{StaticResource SearchBarBtnStyle}" 
+                                    Command="{Binding AddTiGiaCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Plus" />
+                                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Tạo mới (F3)"/>
+                                    </StackPanel>
+                                </Button>
+                                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                                <Button 
+                                    Style="{StaticResource SearchBarBtnStyle}"
+                                    Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=dgdData, Path=.}"
+                                    ToolTip="Lưu dữ liệu">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="ContentSave"/>
+                                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Lưu dữ liệu (F10)"/>
+                                    </StackPanel>
+                                </Button>
+                                <Separator Style="{StaticResource SearchBarHorizontalDividerStyle}" />
+                                <Button 
+                                    Style="{StaticResource SearchBarBtnStyle}"
+                                    Command="{Binding DeleteTiGiaCommand}" CommandParameter="{Binding ElementName=dgdData, Path=.}"
+                                    ToolTip="Xóa dữ liệu">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Delete" />
+                                        <TextBlock Style="{StaticResource SearchBarBtnTextStyle}" Text="Xóa (F4)"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                            <Border>
+                                <DataGrid 
+                                    x:Name="dgdDataTiGiaDetail"
+                                    Margin="0 5 0 0"
+                                    BorderThickness="1"
+                                    CanUserResizeColumns="True"
+                                    CanUserAddRows="False"
+                                    AutoGenerateColumns="False"
+                                    FrozenColumnCount="1"
+                                    VerticalAlignment="Top"
+                                    GridLinesVisibility="All"
+                                    HorizontalScrollBarVisibility="Auto"
+                                    Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                    Style="{StaticResource MaterialDesignDataGrid}"
+                                    CellStyle="{StaticResource DataGridCellDetail}"
+                                    RowStyle="{StaticResource DataGridRowDetail}"
+                                    SelectedItem="{Binding SelectedItems}"
+                                    ItemsSource="{Binding ItemsTiGia}">
+                                    <DataGrid.Resources>
+                                        <helper:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+                                    </DataGrid.Resources>
+                                    <DataGrid.Columns>
+                                        <DataGridCheckBoxColumn 
+                                            IsReadOnly="False"
+                                            x:Name="chkbx"
+                                            Binding="{Binding Selected,UpdateSourceTrigger=PropertyChanged}" 
+                                            ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                                            <!--<DataGridCheckBoxColumn.Header>
+                                                <Border Background="Transparent">
+                                                    <CheckBox IsChecked="{Binding Data.IsAllItemsSelected, UpdateSourceTrigger=PropertyChanged, Source={StaticResource DataContextProxy}}" />
+                                                </Border>
+                                            </DataGridCheckBoxColumn.Header>-->
+                                            <DataGridCheckBoxColumn.HeaderStyle>
+                                                <Style
+                                                    TargetType="{x:Type DataGridColumnHeader}"
+                                                    BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridCheckBoxColumn.HeaderStyle>
+                                        </DataGridCheckBoxColumn>
+                                        <DataGridTextColumn
+                                            x:Name="MaTiTGia"
+                                            Width="Auto"
+                                            Header="Mã tỉ giá"
+                                            Binding="{Binding SMaTiGia, UpdateSourceTrigger=LostFocus}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                                        <DataGridTextColumn
+                                            x:Name="TiGia"
+                                            Width="Auto"
+                                            Header="Tên tỉ giá"
+                                            Binding="{Binding STenTiGia, UpdateSourceTrigger=LostFocus}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                                        <DataGridTemplateColumn 
+                                            x:Name="MaTienTe1" 
+                                            Header="Mã Tiền tệ 1" 
+                                            Width="Auto">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <DataTemplate.Resources>
+                                                        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {ComponentResourceKey ResourceId=MaterialDataGridComboBoxColumnEditingStyle, TypeInTargetAssembly={x:Type ComboBox}}}" />
+                                                    </DataTemplate.Resources>
+                                                    <ComboBox
+                                                        IsEditable="True"
+                                                        DisplayMemberPath="DisplayItem"
+                                                        SelectedValuePath="ValueItem"
+                                                        SelectedValue="{Binding SMaTienTe1, UpdateSourceTrigger=LostFocus}"
+                                                        ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CbxLoaiTienTe}">
+                                                    </ComboBox>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn 
+                                            x:Name="MaTienTe2" 
+                                            Header="Mã Tiền tệ 2" 
+                                            Width="Auto">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <DataTemplate.Resources>
+                                                        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {ComponentResourceKey ResourceId=MaterialDataGridComboBoxColumnEditingStyle, TypeInTargetAssembly={x:Type ComboBox}}}" />
+                                                    </DataTemplate.Resources>
+                                                    <ComboBox
+                                                        IsEditable="True"
+                                                        DisplayMemberPath="DisplayItem"
+                                                        SelectedValuePath="ValueItem"
+                                                        SelectedValue="{Binding SMaTienTe2, UpdateSourceTrigger=LostFocus}"
+                                                        ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CbxLoaiTienTe}">
+                                                    </ComboBox>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <component:DataGridTextColumn
+                                            x:Name="FTiGiaHoiDoai"
+                                            Width="Auto"
+                                            Header="Tỉ giá hối đoái"
+                                            StringFormat="{}{0:n1}"
+                                            Binding="{Binding FTiGiaHoiDoai, UpdateSourceTrigger=LostFocus}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                                        <component:DataGridTextColumn
+                                            x:Name="DThangLapTiGia"
+                                            Width="Auto"
+                                            Header="Ngày lập"
+                                            IsReadOnly="True"
+                                            Binding="{Binding DThangLapTiGia, Converter={StaticResource DateTimeToStringConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                            ElementStyle="{StaticResource DataGridTextColumnDetailRightStyle}"
+                                            EditingElementStyle="{StaticResource DataGridTextColumnEditingRightCell}"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+            <StackPanel Grid.Row="2">
+                <Separator Background="{DynamicResource MaterialDesignDivider}"/>
+                <StackPanel Orientation="Horizontal" Margin="0 10 0 0" HorizontalAlignment="Right">
+                    <Button 
+                        Margin="5 0 0 0"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding VerifyCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Xác nhận</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button
+                        IsCancel="True"
+                        Margin="5 0 0 0"
+                        Style="{StaticResource MaterialDesignOutlinedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CloseOutline" />
+                            <TextBlock Style="{StaticResource SearchBarBtnTextStyle}">Đóng</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>
